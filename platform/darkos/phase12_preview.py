@@ -46,7 +46,7 @@ def check_tree(text,main):
     if any(pid in descendants and name not in ALLOWED for pid,_,name in parsed):raise ValueError('Unrecognized frontend child; cancel')
     if any(name in {'retroarch','retroarch32','retroarch64','Xorg','Xwayland','weston','ppsspp','ppsspp64'} for _,_,name in parsed):raise ValueError('Emulator/other compositor active; cancel')
 
-def command(bundle,unit,probe,seconds=10,input_profile=False,library_root=None,audio_mode="silence",audio_volume=0,calibrated_audio=False):
+def command(bundle,unit,probe,seconds=10,input_profile=False,library_root=None,audio_mode="silence",audio_volume=0,calibrated_audio=False,context=None,view="emotional",unknown_time=False,isolated=False):
     bundle=safe_path(bundle)
     library_root=safe_path(library_root) if library_root else bundle/'empty'
     if audio_mode not in {'silence','minimal','ambient'} or not 0<=audio_volume<=25:raise ValueError('Quiet preview audio only')
@@ -56,30 +56,37 @@ def command(bundle,unit,probe,seconds=10,input_profile=False,library_root=None,a
           '--property=Type=exec','--property=User=ark','--property=WorkingDirectory='+str(bundle),
           '--property=Restart=no','--property=TimeoutStartSec=20','--property=TimeoutStopSec=30',
           '--property=ExecStopPost='+RESTORE]
+    if view not in {'resume','emotional'}:raise ValueError('Unknown view')
+    if context and not re.fullmatch(r'demo-[a-z0-9-]+\.toml',context):raise ValueError('Unsafe context name')
+    stem=unit if isolated else 'preview'
+    quit_name=unit+'.quit.request' if isolated else 'quit.request'
     if probe:return args+['/usr/bin/true']
     # Runtime cap applies ONLY to a --trial preview that cannot start any emulator.
     args += ['--property=ExecStartPre=+/usr/bin/systemctl stop '+UNIT,
              '--property=RuntimeMaxSec='+str(seconds+15),
              '--property=ReadOnlyPaths='+str(library_root),
              '--property=Environment=SLINT_BACKEND=linuxkms-software SLINT_SCALE_FACTOR=1 XDG_RUNTIME_DIR=/run/user/1000',
-             '--property=StandardOutput=append:'+str(bundle/'preview.stdout'),
-             '--property=StandardError=append:'+str(bundle/'preview.stderr'),
+             '--property=StandardOutput=append:'+str(bundle/(stem+'.stdout')),
+             '--property=StandardError=append:'+str(bundle/(stem+'.stderr')),
              str(bundle/'emotional-ui'),'--trial','--library-root',str(library_root),
-             '--db',str(bundle/'preview.sqlite'),'--view','emotional','--audio-mode',audio_mode,'--audio-volume',str(audio_volume),
-             '--smoke-log',str(bundle/'preview-events.toml'),'--quit-file',str(bundle/'quit.request')]
+             '--db',str(bundle/'preview.sqlite'),'--view',view,'--audio-mode',audio_mode,'--audio-volume',str(audio_volume),
+             '--smoke-log',str(bundle/(stem+'-events.toml')),'--quit-file',str(bundle/quit_name)]
     if seconds<=30:args += ['--smoke-test','--smoke-seconds',str(seconds)]
     if input_profile:args += ['--input-profile',str(bundle/'input.toml')]
     if calibrated_audio:args += ['--audio-assets',str(bundle)]
+    if context:args += ['--config',str(bundle/context)]
+    if unknown_time:args += ['--unknown-time']
     return args
 
 def run(args):
     return subprocess.run(args,capture_output=True,text=True,timeout=95)
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('bundle',type=Path);p.add_argument('--unit',required=True);p.add_argument('--probe',action='store_true');p.add_argument('--input-profile',action='store_true');p.add_argument('--library-root',type=Path);p.add_argument('--audio-mode',default='silence');p.add_argument('--audio-volume',type=int,default=0);p.add_argument('--calibrated-audio',action='store_true');p.add_argument('--seconds',type=int,default=10);p.add_argument('--execute',action='store_true');p.add_argument('--supervised',action='store_true');p.add_argument('--second-session-confirmed',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('bundle',type=Path);p.add_argument('--unit',required=True);p.add_argument('--context');p.add_argument('--view',default='emotional');p.add_argument('--unknown-time',action='store_true');p.add_argument('--isolated',action='store_true');p.add_argument('--probe',action='store_true');p.add_argument('--input-profile',action='store_true');p.add_argument('--library-root',type=Path);p.add_argument('--audio-mode',default='silence');p.add_argument('--audio-volume',type=int,default=0);p.add_argument('--calibrated-audio',action='store_true');p.add_argument('--seconds',type=int,default=10);p.add_argument('--execute',action='store_true');p.add_argument('--supervised',action='store_true');p.add_argument('--second-session-confirmed',action='store_true');a=p.parse_args()
     manifest=verify_bundle(a.bundle)
     if a.calibrated_audio:check_audio_bank(manifest)
-    args=command(a.bundle,a.unit,a.probe,a.seconds,a.input_profile,a.library_root,a.audio_mode,a.audio_volume,a.calibrated_audio)
+    if a.context and a.context not in manifest['files']:raise SystemExit('Context is not covered by manifest')
+    args=command(a.bundle,a.unit,a.probe,a.seconds,a.input_profile,a.library_root,a.audio_mode,a.audio_volume,a.calibrated_audio,a.context,a.view,a.unknown_time,a.isolated)
     if not a.execute:print(json.dumps({'dry_run':True,'argv':args}));return
     if not a.supervised or not a.second_session_confirmed or not os.environ.get('SSH_CONNECTION'):raise SystemExit('Current supervision and independently tested SSH session required')
     state=run(['systemctl','show',UNIT,'-p','ActiveState','-p','MainPID'])
@@ -96,7 +103,7 @@ def main():
     if not a.probe and a.seconds>30:
         def request_quit():
             try:
-                with (a.bundle/'quit.request').open('x') as f:f.write('preview deadline\n')
+                with (a.bundle/(a.unit+'.quit.request' if a.isolated else 'quit.request')).open('x') as f:f.write('preview deadline\n')
             except FileExistsError:pass
         deadline=threading.Timer(a.seconds,request_quit);deadline.daemon=True;deadline.start()
     start=time.monotonic()
@@ -106,7 +113,7 @@ def main():
     after=run(['systemctl','show',UNIT,'-p','ActiveState','-p','MainPID'])
     properties=run(['systemctl','show',a.unit,'-p','Result','-p','ExecMainStatus','-p','ExecStopPost','-p','ActiveState'])
     report=dict(kind='phase12-probe' if a.probe else 'phase12-preview',unit=a.unit,exit_code=result.returncode,elapsed_ms=round((time.monotonic()-start)*1000,3),stdout=result.stdout,stderr=result.stderr,after=after.stdout,unit_properties=properties.stdout,physical_image_verified=False,restoration_visible_verified=False)
-    target=a.bundle/('probe-result.json' if a.probe else 'preview-result.json')
+    target=a.bundle/(a.unit+'-result.json' if a.isolated else ('probe-result.json' if a.probe else 'preview-result.json'))
     with target.open('x') as f:json.dump(report,f,indent=2);f.write('\n')
     print(json.dumps(report,indent=2))
     if result.returncode or 'ActiveState=active' not in after.stdout:raise SystemExit(1)
