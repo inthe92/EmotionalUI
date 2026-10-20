@@ -1,0 +1,128 @@
+import "../../assets/fonts/DejaVuSerif.ttf";
+export struct MomentPalette { paper:color, ink:color, quiet:color, mark:color }
+export global MomentDesign {
+    out property <[MomentPalette]> palettes:[
+        {paper:#efe6d7,ink:#302a27,quiet:#66564e,mark:#884334},
+        {paper:#dce3d5,ink:#26332a,quiet:#455d4b,mark:#365d48},
+        {paper:#29252b,ink:#f2e7d5,quiet:#c9b8aa,mark:#e3b07d},
+        {paper:#202b2c,ink:#ede8d9,quiet:#b9c5bd,mark:#a9c7b2}
+    ];
+    out property <length> inset:28px;
+    out property <duration> focus-time:140ms;
+    out property <duration> palette-time:220ms;
+}
+component Artwork inherits Image {
+    in property <int> index;
+    source:root.index==0?@image-url("../../assets/illustrations/world-0.svg"):root.index==1?@image-url("../../assets/illustrations/world-1.svg"):root.index==2?@image-url("../../assets/illustrations/world-2.svg"):root.index==3?@image-url("../../assets/illustrations/world-3.svg"):root.index==4?@image-url("../../assets/illustrations/world-4.svg"):@image-url("../../assets/illustrations/world-5.svg");
+    image-fit:cover;
+}
+// A broken horizon, shared as a small signature rather than a product logo.
+component Notch inherits Rectangle {
+    in property <color> ink;
+    background:transparent;
+    Rectangle {x:0px;y:6px;width:22px;height:2px;background:root.ink;}
+    Rectangle {x:29px;y:0px;width:2px;height:14px;background:root.ink;}
+    Rectangle {x:38px;y:6px;width:9px;height:2px;background:root.ink;}
+}
+component ActionLine inherits Rectangle {
+    in property <string> label;
+    in property <color> ink;
+    in property <color> accent;
+    in property <bool> focused;
+    in property <bool> enabled:true;
+    in property <bool> reduced;
+    in property <bool> pressed;
+    callback chosen();
+    background:transparent;
+    property <length> indent:root.focused&&!root.reduced?4px:0px;
+    animate indent {duration:root.reduced?0ms:MomentDesign.focus-time;easing:ease-out;}
+    Text {x:indent;y:0px;width:parent.width - 4px;height:parent.height - 5px;text:root.label;overflow:elide;vertical-alignment:center;color:root.ink;font-size:18px;font-weight:root.focused?600:400;}
+    Rectangle {x:0px;y:parent.height - 3px;width:root.focused?parent.width:24px;height:root.focused?2px:1px;background:root.focused?root.accent:root.ink.with-alpha(0.35);}
+    Rectangle {visible:root.focused;x:-9px;y:parent.height/2 - 3px;width:3px;height:6px;background:root.accent;}
+    TouchArea {enabled:root.enabled;clicked=>{root.chosen();}}
+}
+export component Concepts inherits Rectangle {
+    in property <int> direction:1;
+    in property <int> mood;
+    in property <bool> animate-palette;
+    in property <bool> reduced;
+    in property <int> selected;
+    in property <int> count;
+    in property <string> title;
+    in property <string> detail;
+    in property <string> alternative;
+    in property <string> play;
+    in property <string> clock;
+    in property <string> atmosphere;
+    in property <string> caption;
+    in property <int> artwork;
+    in property <bool> art-available:true;
+    in property <bool> blocked;
+    in property <bool> confirmed;
+    in property <float> reveal:1;
+    in property <bool> rain;
+    in property <int> season;
+    callback activated(int);
+    property <color> paper:MomentDesign.palettes[root.mood].paper;
+    property <color> ink:MomentDesign.palettes[root.mood].ink;
+    property <color> quiet:MomentDesign.palettes[root.mood].quiet;
+    property <color> mark:MomentDesign.palettes[root.mood].mark;
+    animate paper,ink,quiet,mark {duration:root.reduced||!root.animate-palette?0ms:MomentDesign.palette-time;}
+    background:paper;
+    if root.direction==1: Rectangle {
+        background:root.paper;
+        Notch {x:42px;y:30px;width:47px;height:14px;ink:root.mark;}
+        Text {x:474px;y:26px;width:124px;text:root.clock;horizontal-alignment:right;color:root.quiet;font-size:15px;}
+        Text {x:42px;y:75px;width:550px;text:root.caption;color:root.quiet;font-size:13px;}
+        Rectangle {x:42px;y:121px;width:2px;height:166px;background:root.mark;}
+        Text {x:62px;y:119px;width:500px;height:124px;text:root.title;wrap:word-wrap;overflow:elide;color:root.ink;font-family:"DejaVu Serif";font-size:34px;}
+        Text {x:62px;y:254px;width:474px;height:40px;text:root.detail;wrap:word-wrap;overflow:elide;color:root.quiet;font-size:14px;}
+        ActionLine {x:62px;y:309px;width:266px;height:43px;label:root.play+"  →";ink:root.ink;accent:root.mark;focused:root.selected==0;enabled:root.count>0&&!root.blocked;reduced:root.reduced;pressed:root.confirmed;chosen=>{root.activated(0);}}
+        Text {x:42px;y:383px;text:"OTRO CAMINO";color:root.quiet;font-size:11px;letter-spacing:1px;}
+        ActionLine {x:42px;y:400px;width:342px;height:34px;label:root.count>1?root.alternative:"Aparecerá una nueva aventura";ink:root.ink;accent:root.mark;focused:root.selected==1;enabled:root.count>1&&!root.blocked;reduced:root.reduced;chosen=>{root.activated(1);}}
+        ActionLine {x:448px;y:400px;width:150px;height:34px;label:"Biblioteca";ink:root.ink;accent:root.mark;focused:root.selected==2;enabled:!root.blocked;reduced:root.reduced;chosen=>{root.activated(2);}}
+    }
+    if root.direction==2: Rectangle {
+        Image {width:640px;height:480px;source:@image-url("../../assets/illustrations/living-scene.svg");}
+        // Ambient tint is static between context changes; never a full-screen blur.
+        Rectangle {width:640px;height:263px;background:(root.season==3?#b78d65:root.paper).with-alpha(root.mood<2?0.16:0.34);}
+        Rectangle {x:35px;y:24px;width:560px;height:35px;background:#1c2a29;}
+        Notch {x:49px;y:34px;width:47px;height:14px;ink:#f0e4cc;}
+        Text {x:112px;y:33px;width:340px;text:root.caption;overflow:elide;color:#f0e4cc;font-size:13px;}
+        Text {x:493px;y:33px;width:82px;text:root.clock;horizontal-alignment:right;color:#f0e4cc;font-size:14px;}
+        if root.rain: Rectangle {background:transparent;for i in 8: Rectangle {x:85px+i*59px;y:95px+(i/2)*11px;width:1px;height:38px;background:#e1e8de65;}}
+        Rectangle {x:35px;y:267px;width:560px;height:213px;background:#1c2a29;
+            Text {x:20px;y:18px;width:512px;height:71px;text:root.title;wrap:word-wrap;overflow:elide;color:#f0e4cc;font-family:"DejaVu Serif";font-size:28px;}
+            ActionLine {x:20px;y:96px;width:260px;height:37px;label:root.play+"  →";ink:#f0e4cc;accent:#dec18e;focused:root.selected==0;enabled:root.count>0&&!root.blocked;reduced:root.reduced;chosen=>{root.activated(0);}}
+            Rectangle {x:20px;y:148px;width:320px;height:45px;background:#ffffff0d;border-width:1px;border-color:#f0e4cc32;
+                ActionLine {x:12px;y:4px;width:294px;height:34px;label:root.count>1?root.alternative:"Otro camino, más adelante";ink:#f0e4cc;accent:#dec18e;focused:root.selected==1;enabled:root.count>1&&!root.blocked;reduced:root.reduced;chosen=>{root.activated(1);}}
+            }
+            ActionLine {x:376px;y:153px;width:164px;height:35px;label:"Biblioteca";ink:#f0e4cc;accent:#dec18e;focused:root.selected==2;enabled:!root.blocked;reduced:root.reduced;chosen=>{root.activated(2);}}
+        }
+    }
+    if root.direction==3: Rectangle {
+        background:root.paper;
+        Notch {x:28px;y:29px;width:47px;height:14px;ink:root.mark;}
+        Text {x:92px;y:29px;text:"UN MOMENTO";letter-spacing:1.4px;color:root.quiet;font-size:11px;}
+        Text {x:493px;y:26px;width:118px;text:root.clock;horizontal-alignment:right;color:root.quiet;font-size:15px;}
+        Rectangle {x:28px;y:60px;width:584px;height:1px;background:root.mark.with-alpha(0.5);}
+        Text {x:28px;y:83px;width:300px;height:39px;text:root.caption;wrap:word-wrap;overflow:elide;color:root.mark;font-size:13px;}
+        Text {x:28px;y:133px+3px*(1-root.reveal);width:306px;height:143px;text:root.title;wrap:word-wrap;overflow:elide;color:root.ink;font-family:"DejaVu Serif";font-size:29px;}
+        Text {x:28px;y:290px;width:300px;height:47px;text:root.detail;wrap:word-wrap;overflow:elide;color:root.quiet;font-size:13px;}
+        Rectangle {x:366px;y:84px;width:246px;height:253px;background:root.mark.with-alpha(0.12);
+            if root.art-available && root.count>0: Artwork {width:parent.width;height:parent.height;index:root.artwork;opacity:0.86+0.14*root.reveal;}
+            if !root.art-available || root.count==0: Rectangle {
+                Rectangle {x:56px;y:52px;width:132px;height:132px;border-radius:66px;background:root.mark.with-alpha(0.16);}
+                Notch {x:98px;y:111px;width:47px;height:14px;ink:root.mark;}
+                Text {x:20px;y:204px;width:206px;text:"Un lugar por descubrir";horizontal-alignment:center;color:root.ink;font-size:12px;}
+            }
+            Rectangle {x:-9px;y:24px;width:18px;height:3px;background:root.paper;}
+            Rectangle {x:-9px;y:35px;width:18px;height:3px;background:root.paper;}
+        }
+        ActionLine {x:28px;y:359px;width:300px;height:41px;label:root.play+"  →";ink:root.ink;accent:root.mark;focused:root.selected==0;enabled:root.count>0&&!root.blocked;reduced:root.reduced;pressed:root.confirmed;chosen=>{root.activated(0);}}
+        Text {x:366px;y:365px;width:246px;height:35px;text:root.atmosphere;wrap:word-wrap;overflow:elide;color:root.quiet;font-size:11px;}
+        Rectangle {x:28px;y:418px;width:584px;height:1px;background:root.mark.with-alpha(0.35);}
+        ActionLine {x:28px;y:431px;width:344px;height:32px;label:root.count>1?"También · "+root.alternative:"Todavía hay caminos por descubrir";ink:root.ink;accent:root.mark;focused:root.selected==1;enabled:root.count>1&&!root.blocked;reduced:root.reduced;chosen=>{root.activated(1);}}
+        ActionLine {x:451px;y:431px;width:161px;height:32px;label:"Biblioteca";ink:root.ink;accent:root.mark;focused:root.selected==2;enabled:!root.blocked;reduced:root.reduced;chosen=>{root.activated(2);}}
+    }
+}

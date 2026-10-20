@@ -1,0 +1,49 @@
+{
+  "generator": "tools/compose_audio.py",
+  "sample_rate": 22050,
+  "sample_libraries": [],
+  "resources": [
+    {
+      "file": "assets/audio/runtime/umbral.wav",
+      "samples": 220500,
+      "seconds": 10.0,
+      "peak": 0.1588994106396504,
+      "sha256": "7f88bc80a35f6a978117cf28581356e42069ec817cb9c33291510a1bb5bae194"
+    },
+    {
+      "file": "assets/audio/runtime/brasa.wav",
+      "samples": 308700,
+      "seconds": 14.0,
+      "peak": 0.14373960599562138,
+      "sha256": "8418c76850320a4d08fd327ab9743b01b1b7b066ded59392a5acab61a40b4692"
+    },
+    {
+      "file": "assets/audio/runtime/rastro.wav",
+      "samples": 264600,
+      "seconds": 12.0,
+      "peak": 0.1450781686980272,
+      "sha256": "a11cabe80c3b78f3afa68bb37d8e7535095313800db9940cc9e49c25a803c227"
+    },
+    {
+      "file": "assets/audio/runtime/rain.wav",
+      "samples": 396900,
+      "seconds": 18.0,
+      "peak": 0.1342205671935508,
+      "sha256": "92ee0b7d6319c69b37eedcf2e9bb404435bf033ff2a46796aaa6d28814c9df70"
+    },
+    {
+      "file": "assets/audio/runtime/air.wav",
+      "samples": 352800,
+      "seconds": 16.0,
+      "peak": 0.019177963328130626,
+      "sha256": "e803c60cfbe0e0d9ad57cf1e317ae19159f6a531f923d1529c87f9d80c855ae8"
+    },
+    {
+      "file": "assets/audio/previews/la-habitacion-permanece.wav",
+      "samples": 2205000,
+      "seconds": 100.0,
+      "peak": 0.1588994106396504,
+      "sha256": "cd4aa41cedfbdfbdcc5d6bd86f2dd5bf40f04db7ff33a11b275dee0f06940e2e"
+    }
+  ]
+}

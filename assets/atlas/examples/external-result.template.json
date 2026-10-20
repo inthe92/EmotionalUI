@@ -1,0 +1,13 @@
+[
+  {
+    "id": "atlas:snes:000001",
+    "editorial": {
+      "calm": {
+        "value": null,
+        "confidence": 0,
+        "source": "pilot-editorial-proposals",
+        "note": "Plantilla, no una respuesta real de un modelo. Investigar y citar una fuente registrada; mantener desconocido si no hay evidencia."
+      }
+    }
+  }
+]

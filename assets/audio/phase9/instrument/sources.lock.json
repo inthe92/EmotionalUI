@@ -1,0 +1,84 @@
+{
+  "repository": "https://github.com/sgossner/VSCO-2-CE",
+  "commit": "440300901dfe9275fd84e0b7763af1f8443ae62e",
+  "license": "CC0-1.0",
+  "files": [
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/LICENSE",
+      "sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673",
+      "bytes": 6555,
+      "cache_file": "LICENSE"
+    },
+    {
+      "path": "Readme.txt",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Readme.txt",
+      "sha256": "101ddb88eb013900cc911834ecbdfbd49497bcd913bf09417160b9677952bb38",
+      "bytes": 1838,
+      "cache_file": "Readme.txt"
+    },
+    {
+      "path": "Keys/Upright Piano/Info.txt",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Info.txt",
+      "sha256": "a3bd9d49720187b10269e78b091316d043dcd7b059ec77edb582195152aaf1ce",
+      "bytes": 220,
+      "cache_file": "Info.txt"
+    },
+    {
+      "path": "Keys/Upright Piano/MappingChart.txt",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/MappingChart.txt",
+      "sha256": "9ccfbdee3d58873e9632ba188ed5837979948eb7868e824ec24e0d3eb4e3fda8",
+      "bytes": 338,
+      "cache_file": "MappingChart.txt"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_014.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_014.wav",
+      "sha256": "f3d00b63bb178680fdd4d9ed7ea43d1df1cf29e00b567ccb022c2bd411a20607",
+      "bytes": 2270980,
+      "cache_file": "Player_dyn1_rr1_014.wav"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_016.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_016.wav",
+      "sha256": "f1a3a542cf70a13aa865ce130d50d72cd735449e605d1c5a45dc06b5a60b27fd",
+      "bytes": 3546940,
+      "cache_file": "Player_dyn1_rr1_016.wav"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_018.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_018.wav",
+      "sha256": "01387cb5318c5abf11410ae8e2f4ef6aa83ec03254b4bccfe865aba262a2e412",
+      "bytes": 3002200,
+      "cache_file": "Player_dyn1_rr1_018.wav"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_020.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_020.wav",
+      "sha256": "08242e8d1c865c8cdc794cc7921d3d9663bedb5a12bfefe0de13aaa86fd23133",
+      "bytes": 3134164,
+      "cache_file": "Player_dyn1_rr1_020.wav"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_022.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_022.wav",
+      "sha256": "660e57ad8fd868ed9c56fe36e4862a6aff1cb65b7838a568d4c4f2f0865ad1ab",
+      "bytes": 4126858,
+      "cache_file": "Player_dyn1_rr1_022.wav"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_024.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_024.wav",
+      "sha256": "916c3ec2d61fb421e74fb4866ef75d3ef17e9d88e9dc858da24159846489d33f",
+      "bytes": 2222998,
+      "cache_file": "Player_dyn1_rr1_024.wav"
+    },
+    {
+      "path": "Keys/Upright Piano/Player_dyn1_rr1_026.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Keys/Upright%20Piano/Player_dyn1_rr1_026.wav",
+      "sha256": "254be5d34270e5eb78bbda3f7425c3e82b9596845db2c065b13179f23c23196b",
+      "bytes": 3558112,
+      "cache_file": "Player_dyn1_rr1_026.wav"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "sample_instrument": "VSCO 2 CE Upright Piano, Simon Dalzell / Ivy Audio; Versilian Studios",
+  "sample_license": "CC0-1.0",
+  "score_license": "GPL-3.0-only",
+  "sample_commit": "440300901dfe9275fd84e0b7763af1f8443ae62e",
+  "rate": 22050,
+  "numpy_version": "2.3.5",
+  "python_version": "3.12.14",
+  "ffmpeg_version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "score_sha256": "f0ec42674381ce6cc5d0843c4cd45f7131679f8e9e7184c3b22d64fccb8e9c09",
+  "resources": [
+    {
+      "file": "refugio/runtime/umbral.wav",
+      "sha256": "1fb6b69cf54993d2b3462cad474fbbae5bff97ec53808b6a393223515c770bd2",
+      "seconds": 16.0,
+      "peak": 0.12936833496077713,
+      "zero_percent": 9.64654195011338
+    },
+    {
+      "file": "refugio/runtime/brasa.wav",
+      "sha256": "2dfdabcf7906e4e8342c74f33521cf405c615a256074480f8576f5d4f5b01fa0",
+      "seconds": 18.0,
+      "peak": 0.07624812728312566,
+      "zero_percent": 10.287981859410431
+    },
+    {
+      "file": "refugio/runtime/rastro.wav",
+      "sha256": "dc7bf0c50b610c34ea38df8826d75b48730d8720fcc1d2d1d9dbad62d2d7920b",
+      "seconds": 14.0,
+      "peak": 0.09542960181708059,
+      "zero_percent": 11.903790087463557
+    },
+    {
+      "file": "refugio/refugio.wav",
+      "sha256": "d4398c369bd5430bc3e74f272ec2efc82d97099620e05185a0963c1c0f8e0a84",
+      "seconds": 112.0,
+      "peak": 0.12936833496077713,
+      "zero_percent": 61.66233398121153
+    },
+    {
+      "file": "silencio/runtime/umbral.wav",
+      "sha256": "d4e546f93062ae7904583595c030b052e050d52d26b03ce066f3a324009e78ad",
+      "seconds": 16.0,
+      "peak": 0.08901673821602647,
+      "zero_percent": 10.924319727891156
+    },
+    {
+      "file": "silencio/runtime/brasa.wav",
+      "sha256": "cd7e95cf9f1d56a78d29eb5cc2c22de982599a4c3963091f3bbb8c445542ea0d",
+      "seconds": 18.0,
+      "peak": 0.07150562874728407,
+      "zero_percent": 10.64777021919879
+    },
+    {
+      "file": "silencio/runtime/rastro.wav",
+      "sha256": "101ce18c5a3b70d1b2c727dd421768434a2bd7f41fa785211e3a226d695dad3b",
+      "seconds": 14.0,
+      "peak": 0.06520091087301935,
+      "zero_percent": 8.933268545513444
+    },
+    {
+      "file": "silencio/silencio.wav",
+      "sha256": "9527b8a80fd0638714d97e1c0a35f1120170e918bce1c71b7fba12afcaea26aa",
+      "seconds": 128.0,
+      "peak": 0.08901673821602647,
+      "zero_percent": 66.33995890022676
+    }
+  ]
+}

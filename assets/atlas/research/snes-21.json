@@ -1,0 +1,436 @@
+{
+  "scope": "Assistant analysis of primary publisher pages accessed 2026-10-18. All emotional values are proposals; no human review. No reproduced descriptions. Work-level not ROM identification.",
+  "games": [
+    {
+      "id": "atlas:snes:000001",
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_world.html",
+      "facts": "Mario and Luigi cross stages, use Yoshi and a cape, and solve stage obstacles.",
+      "mechanics": [
+        "stage platforming",
+        "cape flight",
+        "Yoshi riding"
+      ],
+      "attributes": {
+        "intensity": 60,
+        "pace": 65,
+        "exploration": 65,
+        "short_sessions": 75,
+        "resume_ease": 75,
+        "calm": 45
+      },
+      "rationale": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling.",
+      "explanation": "Una aventura por etapas, con caminos que invitan a explorar."
+    },
+    {
+      "id": "atlas:snes:000002",
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_yossy.html",
+      "facts": "Yoshi uses eggs and transformations across six worlds; Nintendo describes hand-drawn picture-book visuals.",
+      "mechanics": [
+        "egg aiming",
+        "transformations",
+        "stage platforming"
+      ],
+      "attributes": {
+        "calm": 65,
+        "intensity": 50,
+        "exploration": 70,
+        "pace": 55,
+        "short_sessions": 70,
+        "resume_ease": 70
+      },
+      "rationale": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention.",
+      "explanation": "Un viaje de dibujo y exploración, con pequeños retos por el camino."
+    },
+    {
+      "id": "atlas:snes:000003",
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_kart.html",
+      "facts": "Kart races and battles, eight drivers and items that affect opponents.",
+      "mechanics": [
+        "kart racing",
+        "item combat",
+        "versus battle"
+      ],
+      "attributes": {
+        "intensity": 75,
+        "pace": 85,
+        "short_sessions": 90,
+        "resume_ease": 85,
+        "mental_demand": 55,
+        "calm": 25
+      },
+      "rationale": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred.",
+      "explanation": "Carreras e imprevistos para una visita breve y con ritmo."
+    },
+    {
+      "id": "atlas:snes:000004",
+      "url": "https://www.nintendo.co.jp/clvs/soft/zelda.html",
+      "facts": "Fields and dungeons, tools including bow and bombs, and puzzles solved with different actions.",
+      "mechanics": [
+        "field exploration",
+        "dungeon puzzles",
+        "tool acquisition"
+      ],
+      "attributes": {
+        "exploration": 90,
+        "mystery": 80,
+        "mental_demand": 70,
+        "pace": 55,
+        "intensity": 55,
+        "resume_ease": 50,
+        "calm": 50
+      },
+      "rationale": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break.",
+      "explanation": "Campos y mazmorras para descubrir caminos y resolver enigmas."
+    },
+    {
+      "id": "atlas:snes:000005",
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_metroid.html",
+      "facts": "Samus explores Zebes; equipment found along the route expands movement and attack options.",
+      "mechanics": [
+        "connected exploration",
+        "ability-gated routes",
+        "equipment discovery"
+      ],
+      "attributes": {
+        "exploration": 95,
+        "mystery": 90,
+        "tension": 75,
+        "intensity": 70,
+        "mental_demand": 65,
+        "pace": 60,
+        "resume_ease": 40,
+        "calm": 25
+      },
+      "rationale": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game.",
+      "explanation": "Un planeta por explorar, con rutas que cambian al encontrar nuevas habilidades."
+    },
+    {
+      "id": "atlas:snes:000006",
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_fox.html",
+      "facts": "Flight combat with teammates and manoeuvres such as rolling and reverse thrust, in polygonal space.",
+      "mechanics": [
+        "flight combat",
+        "team support",
+        "flight manoeuvres"
+      ],
+      "attributes": {
+        "intensity": 85,
+        "pace": 90,
+        "tension": 75,
+        "short_sessions": 75,
+        "resume_ease": 65,
+        "calm": 20
+      },
+      "rationale": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration.",
+      "explanation": "Combate y maniobras de vuelo para un momento de acción concentrada."
+    },
+    {
+      "id": "atlas:snes:000007",
+      "url": "https://www.nintendo.co.jp/clvs/soft/f_zero.html",
+      "facts": "Four machines race on fifteen circuits with damaging barriers and slippery surfaces.",
+      "mechanics": [
+        "hover racing",
+        "circuit hazards",
+        "vehicle choice"
+      ],
+      "attributes": {
+        "intensity": 85,
+        "pace": 95,
+        "mental_demand": 65,
+        "short_sessions": 90,
+        "resume_ease": 80,
+        "calm": 15
+      },
+      "rationale": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities.",
+      "explanation": "Circuitos y precisión al volante para una sesión con energía."
+    },
+    {
+      "id": "atlas:snes:000009",
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Pilotwings-775615.html",
+      "facts": "Flight exercises use a biplane, skydiving, hang-glider and rocket belt; precision landing matters.",
+      "mechanics": [
+        "flight exercises",
+        "precision landing",
+        "vehicle variety"
+      ],
+      "attributes": {
+        "calm": 65,
+        "intensity": 40,
+        "mental_demand": 65,
+        "pace": 45,
+        "short_sessions": 85,
+        "resume_ease": 75,
+        "exploration": 40
+      },
+      "rationale": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless.",
+      "explanation": "Pequeños ejercicios de vuelo que dejan espacio a la precisión."
+    },
+    {
+      "id": "atlas:snes:000011",
+      "url": "https://www.nintendo.co.jp/wii/vc/vc_kb/vc_kb_02.html",
+      "facts": "Kirby is struck into enemies to turn them into stars; the last enemy becomes a cup, with strokes counted as score.",
+      "mechanics": [
+        "aimed shots",
+        "hole puzzles",
+        "stroke scoring"
+      ],
+      "attributes": {
+        "calm": 65,
+        "mental_demand": 75,
+        "intensity": 35,
+        "pace": 35,
+        "short_sessions": 85,
+        "resume_ease": 75
+      },
+      "rationale": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation.",
+      "explanation": "Un pequeño problema de trayectorias para pensar antes de lanzar."
+    },
+    {
+      "id": "atlas:snes:000012",
+      "url": "https://www.nintendo.co.jp/clvs/soft/makaimura.html",
+      "facts": "Arthur uses multiple weapons and a double jump against monsters; terrain changes and difficulty is explicitly discussed.",
+      "mechanics": [
+        "double jumping",
+        "weapon combat",
+        "changing terrain"
+      ],
+      "attributes": {
+        "intensity": 95,
+        "tension": 90,
+        "pace": 80,
+        "mental_demand": 65,
+        "calm": 10,
+        "short_sessions": 60,
+        "resume_ease": 60
+      },
+      "rationale": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates.",
+      "explanation": "Acción exigente entre criaturas y escenarios cambiantes."
+    },
+    {
+      "id": "atlas:snes:000013",
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Demon-s-Crest--949463.html",
+      "facts": "Firebrand flies, breathes fire and assumes six forms; the quest has three endings.",
+      "mechanics": [
+        "flight",
+        "form abilities",
+        "multiple endings"
+      ],
+      "attributes": {
+        "exploration": 80,
+        "mystery": 80,
+        "tension": 70,
+        "intensity": 70,
+        "pace": 60,
+        "resume_ease": 45,
+        "calm": 25
+      },
+      "rationale": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion.",
+      "explanation": "Formas y caminos por descubrir en una aventura de atmósfera oscura."
+    },
+    {
+      "id": "atlas:snes:000016",
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Breath-of-Fire--938491.html",
+      "facts": "Ryu can transform into a powerful beast and is accompanied by seven companions with animal powers.",
+      "mechanics": [
+        "party adventure",
+        "beast transformation",
+        "companion powers"
+      ],
+      "attributes": {
+        "exploration": 70,
+        "mystery": 60,
+        "mental_demand": 70,
+        "intensity": 50,
+        "pace": 40,
+        "resume_ease": 35,
+        "calm": 50
+      },
+      "rationale": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence.",
+      "explanation": "Una aventura de compañeros y transformaciones para seguir con tiempo."
+    },
+    {
+      "id": "atlas:snes:000021",
+      "url": "https://www.nintendo.co.jp/clvs/soft/kirby.html",
+      "facts": "Six different modes, helpers with different abilities, and subgames based on timed or rapid button presses.",
+      "mechanics": [
+        "multiple adventure modes",
+        "ability helpers",
+        "timing subgames"
+      ],
+      "attributes": {
+        "calm": 60,
+        "intensity": 50,
+        "pace": 60,
+        "short_sessions": 85,
+        "resume_ease": 80,
+        "exploration": 60
+      },
+      "rationale": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge.",
+      "explanation": "Pequeñas aventuras y habilidades distintas para elegir tu propio ritmo."
+    },
+    {
+      "id": "atlas:snes:000022",
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Breath-of-Fire-II--798907.html",
+      "facts": "A wide world, missing family, allies, shaman fusion and dragon transformations.",
+      "mechanics": [
+        "world exploration",
+        "party abilities",
+        "dragon transformation"
+      ],
+      "attributes": {
+        "exploration": 85,
+        "mystery": 80,
+        "mental_demand": 75,
+        "intensity": 55,
+        "pace": 40,
+        "resume_ease": 30,
+        "calm": 40
+      },
+      "rationale": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break.",
+      "explanation": "Un mundo amplio y una búsqueda que empieza con una desaparición."
+    },
+    {
+      "id": "atlas:snes:000026",
+      "url": "https://www.nintendo.co.jp/clvs/soft/panel.html",
+      "facts": "Swap horizontal neighbours; align at least three panels and continue chains while panels disappear.",
+      "mechanics": [
+        "panel swapping",
+        "active chains",
+        "versus mode"
+      ],
+      "attributes": {
+        "intensity": 75,
+        "mental_demand": 90,
+        "pace": 85,
+        "short_sessions": 90,
+        "resume_ease": 85,
+        "calm": 30
+      },
+      "rationale": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions.",
+      "explanation": "Puzles de cadenas activas que piden atención y rapidez."
+    },
+    {
+      "id": "atlas:snes:000027",
+      "url": "https://www.nintendo.com/en-gb/News/2010/Weekly-download-news-252582.html",
+      "facts": "SNES third-person shooting against outlaws and robots, including large bosses and two-player co-op.",
+      "mechanics": [
+        "aimed shooting",
+        "boss encounters",
+        "two-player cooperation"
+      ],
+      "attributes": {
+        "intensity": 90,
+        "pace": 85,
+        "tension": 75,
+        "short_sessions": 80,
+        "resume_ease": 75,
+        "calm": 15
+      },
+      "rationale": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action.",
+      "explanation": "Forajidos, robots y acción concentrada para probar otro ritmo."
+    },
+    {
+      "id": "atlas:snes:000028",
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_donkey_kong.html",
+      "facts": "Donkey and Diddy exchange the lead, overcome obstacles and ride animals with distinct abilities.",
+      "mechanics": [
+        "character switching",
+        "stage platforming",
+        "animal abilities"
+      ],
+      "attributes": {
+        "intensity": 65,
+        "pace": 70,
+        "exploration": 65,
+        "calm": 45,
+        "short_sessions": 75,
+        "resume_ease": 75
+      },
+      "rationale": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty.",
+      "explanation": "Dos compañeros y habilidades animales para cruzar nuevos obstáculos."
+    },
+    {
+      "id": "atlas:snes:000032",
+      "url": "https://www.nintendo.com/en-gb/News/2007/Big-bang-on-Virtual-Console--249484.html",
+      "facts": "Grid puzzles reveal pictures, with a save function for returning to unfinished puzzles.",
+      "mechanics": [
+        "picture logic puzzles",
+        "grid deduction",
+        "puzzle saving"
+      ],
+      "attributes": {
+        "calm": 80,
+        "mental_demand": 85,
+        "intensity": 20,
+        "pace": 20,
+        "short_sessions": 90,
+        "resume_ease": 90
+      },
+      "rationale": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file.",
+      "explanation": "Un dibujo escondido entre números para resolver sin prisa."
+    },
+    {
+      "id": "atlas:snes:000046",
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/EarthBound-771110.html",
+      "facts": "Ness travels through towns with companions, explores and shops; battles combine weapons and psychic powers.",
+      "mechanics": [
+        "town exploration",
+        "party battles",
+        "psychic abilities"
+      ],
+      "attributes": {
+        "exploration": 85,
+        "mystery": 75,
+        "mental_demand": 65,
+        "pace": 45,
+        "intensity": 55,
+        "calm": 50,
+        "resume_ease": 40
+      },
+      "rationale": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels.",
+      "explanation": "Pueblos y encuentros extraños en una aventura de compañeros."
+    },
+    {
+      "id": "atlas:snes:000047",
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Harvest-Moon--788055.html",
+      "facts": "Grow crops, raise animals and visit a town for tools and supplies.",
+      "mechanics": [
+        "crop tending",
+        "animal care",
+        "town supplies"
+      ],
+      "attributes": {
+        "calm": 80,
+        "intensity": 25,
+        "pace": 40,
+        "mental_demand": 60,
+        "resume_ease": 65,
+        "exploration": 45,
+        "short_sessions": 65
+      },
+      "rationale": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred.",
+      "explanation": "Una granja que cuidar, entre pequeños trabajos y decisiones cotidianas."
+    },
+    {
+      "id": "atlas:snes:000048",
+      "url": "https://www.nintendo.co.jp/wii/vc/vc_sh/vc_sh_01.html",
+      "facts": "Move blocks by sucking and spitting them to build routes towards rainbow pieces; levels allow different solutions.",
+      "mechanics": [
+        "block relocation",
+        "route construction",
+        "level puzzles"
+      ],
+      "attributes": {
+        "calm": 70,
+        "mental_demand": 90,
+        "exploration": 65,
+        "intensity": 30,
+        "pace": 30,
+        "short_sessions": 80,
+        "resume_ease": 80
+      },
+      "rationale": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response.",
+      "explanation": "Construir un camino con bloques, probando una idea cada vez."
+    }
+  ]
+}

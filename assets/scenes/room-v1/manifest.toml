@@ -1,0 +1,46 @@
+version = 1
+id = "quiet-room-v1"
+status = "art-candidate-not-hardware-approved"
+width = 640
+height = 480
+master = "master.png"
+viewport_height = 287
+max_decoded_master_bytes = 1228800
+preload = "one-embedded-master"
+cache = "one-shared-image-no-six-full-frame-copies"
+geometry = "fixed-camera-desk-window-chair-lamp-plant"
+[window]
+x = 94
+y = 18
+width = 288
+height = 187
+[[moments]]
+id = "morning"
+hours = "06:00-10:59"
+phase = 0
+[[moments]]
+id = "noon"
+hours = "11:00-13:59"
+phase = 1
+[[moments]]
+id = "afternoon"
+hours = "14:00-16:59"
+phase = 2
+[[moments]]
+id = "dusk"
+hours = "17:00-19:59"
+phase = 3
+[[moments]]
+id = "night"
+hours = "20:00-23:59"
+phase = 4
+[[moments]]
+id = "late"
+hours = "00:00-05:59"
+phase = 5
+[layers]
+lighting = "Slint tint, cloud and lamp; 220ms finite interpolation"
+weather = ["clear", "cloud", "rain", "fog", "snow", "unknown"]
+season = "window tint; northern hemisphere; no long seasonal animation"
+editorial = "small static ornaments; provisional"
+unknown = "neutral noon; no weather, season or decoration inferred"

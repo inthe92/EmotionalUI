@@ -1,0 +1,19 @@
+# This profile deliberately has no guessed button codes. Identify/calibrate first.
+enabled = false
+device_name = "retrogame_joypad"
+# device_path is optional: identity discovery handles eventN changing after reboot.
+# device_path = "/dev/input/event4"
+[mapping]
+buttons = []
+axes = []
+# [[mapping.buttons]]
+# code = <observed Linux EV_KEY code>
+# action = "confirm"
+# [[mapping.axes]]
+# code = <observed Linux ABS code>
+# min = <measured minimum>
+# max = <measured maximum>
+# negative = "left"
+# positive = "right"
+# engage_percent = 35
+# release_percent = 20

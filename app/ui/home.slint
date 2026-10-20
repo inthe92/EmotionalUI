@@ -1,0 +1,321 @@
+import { SystemControls } from "system-controls.slint";
+export { Design } from "design.slint";
+import { Design, Glass } from "design.slint";
+import { Integrated, AtmosphereDesign, SectionDock, SectionHeader, AmbientPanel } from "integrated.slint";
+import { Concepts, MomentDesign } from "concepts.slint";
+component HeroStory inherits Rectangle {
+    background:transparent;
+    in property <string> title;
+    in property <string> detail;
+    in property <string> tag;
+    in property <int> artwork;
+    in property <bool> artwork-visible:true;
+    in property <color> ink;
+    in property <color> muted;
+    in property <color> accent;
+    Rectangle {x:376px;y:12px;width:204px;height:198px;background:transparent;visible:root.artwork-visible;
+        Image {width:parent.width;height:parent.height;source:root.artwork==0?@image-url("../../assets/illustrations/world-0.svg"):root.artwork==1?@image-url("../../assets/illustrations/world-1.svg"):root.artwork==2?@image-url("../../assets/illustrations/world-2.svg"):root.artwork==3?@image-url("../../assets/illustrations/world-3.svg"):root.artwork==4?@image-url("../../assets/illustrations/world-4.svg"):@image-url("../../assets/illustrations/world-5.svg");image-fit:contain;image-rendering:smooth;}
+    }
+    Text {x:22px;y:20px;width:342px;text:root.tag;overflow:elide;color:root.accent;font-size:Design.secondary-size;font-weight:600;}
+    Text {x:22px;y:48px;width:342px;height:68px;text:root.title;wrap:word-wrap;overflow:elide;color:root.ink;font-size:Design.title-size;font-weight:700;}
+    Text {x:22px;y:119px;width:336px;height:37px;text:root.detail;wrap:word-wrap;overflow:elide;color:root.muted;font-size:Design.body-size;}
+}
+component Choice inherits Glass {
+    surface:@image-url("../../assets/illustrations/glass-small.svg");
+    in property <string> title;
+    in property <string> detail;
+    in property <color> muted;
+    in property <bool> available:true;
+    callback activated();
+    property <length> lift:self.selected ? -2px : 0px;
+    out property <length> growth:self.selected && !self.reduced ? Design.focus-growth : 0px;
+    animate growth {duration:root.reduced ? 0ms : Design.focus-time;easing:ease-out;}
+    animate lift {duration:root.reduced ? 0ms : Design.focus-time;easing:ease-out;}
+    Text {x:16px;y:12px+root.lift;width:parent.width - 32px;height:24px;text:root.title;color:root.ink;font-size:Design.action-size;font-weight:600;overflow:elide;}
+    Text {x:16px;y:38px+root.lift;text:root.detail;color:root.muted;font-size:Design.secondary-size;}
+    TouchArea {enabled:root.available;clicked=>{root.activated();}}
+}
+export component Home inherits Window {
+    title:"EmotionalUI · menos buscar, más jugar";
+    preferred-width:640px;preferred-height:480px;
+    min-width:640px;max-width:640px;min-height:480px;max-height:480px;
+    background:root.base;
+    default-font-family:root.concept==4?AtmosphereDesign.family:"sans-serif";
+    in property <int> concept:4;
+    in property <bool> resume-view;
+    in property <int> dock-cursor:-1;
+    in property <bool> system-focused;
+    in property <bool> system-open;
+    callback system-toggle();
+    out property <int> active-section:root.menu-open?3:root.library-open?2:root.resume-view?0:1;
+    callback navigate(int);
+    in property <bool> has-recent;
+    in property <int> resume-count;
+    in property <string> resume-two;
+    in property <string> resume-three;
+    in property <int> resume-two-artwork;
+    in property <int> resume-three-artwork;
+    in property <string> resume-detail;
+    in property <string> editorial-reason;
+    in property <string> hero-category;
+    in property <bool> game-options-open;
+    in property <int> game-option-index;
+    in property <string> game-option-title;
+    in property <string> game-option-reason;
+    in property <[string]> game-option-labels;
+    callback game-option-select(int);
+    in property <string> recent-title;
+    in property <int> recent-artwork;
+    in property <string> statistics;
+    in property <bool> demo-history;
+    in property <bool> statistics-on;
+    in property <bool> personalized;
+    in property <bool> neutral;
+    in property <bool> ambient-motion;
+    in property <bool> history-panel;
+    in property <bool> clear-armed;
+    in property <int> scene-phase;
+    in property <int> scene-season:4;
+    in property <int> scene-weather;
+    in property <int> scene-decoration;
+    in property <image> local-cover;
+    in property <image> alternative-cover;
+    in property <bool> alternative-art-available;
+    in property <image> resume-two-cover;
+    in property <bool> resume-two-art-available;
+    in property <image> resume-three-cover;
+    in property <bool> resume-three-art-available;
+    in property <bool> trial-mode:false;
+    in property <bool> local-art-available:false;
+    in-out property <string> local-art-id;
+    in-out property <int> artwork-generation:0;
+    in property <bool> art-available:true;
+    in property <string> editorial-caption;
+    in property <bool> rain:false;
+    in property <int> season:0;
+    in property <int> mood:2;
+    in property <bool> reduced:false;
+    in property <bool> animate-palette:false;
+    in property <int> selected:0;
+    in property <int> recommendation-count:3;
+    in property <string> greeting;
+    in property <string> atmosphere;
+    in property <string> clock;
+    in property <string> date;
+    in property <string> hero-title;
+    in property <string> hero-detail;
+    in property <string> hero-tag;
+    in property <string> play-label;
+    in property <int> artwork-index:0;
+    in property <string> previous-title;
+    in property <string> previous-detail;
+    in property <string> previous-tag;
+    in property <int> previous-artwork:0;
+    in property <string> alt-one;
+    in property <string> alt-one-detail;
+    in property <string> alt-two;
+    in property <string> alt-two-detail;
+    in property <string> message;
+    in property <bool> confirmed:false;
+    in-out property <int> confirmation-generation:0;
+    in-out property <int> reveal-generation:0;
+    in-out property <float> reveal:1;
+    in property <bool> library-open:false;
+    in property <[string]> library-titles;
+    in property <int> library-offset:-1;
+    in property <bool> imported:false;
+    in property <int> library-index:0;
+    in property <bool> menu-open:false;
+    in property <int> menu-index:0;
+    in property <bool> sound-on:false;
+    in property <bool> audio-open:false;
+    in property <int> audio-index;
+    in property <int> audio-master;
+    in property <string> audio-mode;
+    in property <string> audio-status;
+    in property <[string]> audio-values;
+    in property <bool> pan-enabled:true;
+    in-out property <bool> motion-ready:false;
+    // Finite Rust motion is driven by the shared design duration, with no idle animation.
+    in-out property <float> pan-target:0;
+    in-out property <float> pan-position:0;
+    in-out property <float> section-target:0;
+    in-out property <float> section-position:0;
+    in-out property <int> motion-generation:0;
+    out property <string> section-title:root.resume-view?"Continuar":"Descubre";
+    out property <float> discovery-main:min(1,max(0,root.section-position/0.78));
+    out property <int> prepared-art-width:(root.resume-view?AtmosphereDesign.resume-art-width:AtmosphereDesign.discover-art-width)/1px;
+    out property <int> prepared-art-height:(root.resume-view?AtmosphereDesign.resume-art-height:AtmosphereDesign.discover-art-height)/1px;
+    out property <int> prepared-tile-width:AtmosphereDesign.tile-art-width/1px;
+    out property <int> prepared-tile-height:AtmosphereDesign.tile-art-height/1px;
+    out property <duration> section-duration:AtmosphereDesign.section-time;
+    out property <float> discovery-secondary:min(1,max(0,(root.section-position - AtmosphereDesign.secondary-start)/(1-AtmosphereDesign.secondary-start)));
+    in property <bool> sound-available:false;
+    in property <bool> native-controls:false;
+    callback key-action(string);
+    callback released(string);
+    callback input-reset();
+    callback activate(int);
+    callback dismiss();
+    callback menu-select(int);
+    callback audio-select(int,int);
+    property <color> base:root.concept==4?AtmosphereDesign.base:root.concept>0?MomentDesign.palettes[mood].paper:Design.palettes[mood].base;
+    property <color> ink:root.concept==4?AtmosphereDesign.ink:root.concept>0?MomentDesign.palettes[mood].ink:Design.palettes[mood].ink;
+    property <color> muted:root.concept==4?AtmosphereDesign.muted:root.concept>0?MomentDesign.palettes[mood].quiet:Design.palettes[mood].muted;
+    property <color> accent:root.concept==4?AtmosphereDesign.mark:root.concept>0?MomentDesign.palettes[mood].mark:Design.palettes[mood].accent;
+    // Dark/light semantic pairs switch together, preserving text contrast.
+    animate base,ink,muted,accent {duration:root.reduced || !root.animate-palette ? 0ms : Design.palette-time;}
+    animate reveal {duration:root.reduced ? 0ms : Design.content-time;easing:ease-out;}
+    forward-focus:keys;
+    keys:=FocusScope {
+        key-pressed(event)=>{root.key-action(event.text);accept}
+        key-released(event)=>{root.released(event.text);accept}
+        focus-lost(reason)=>{root.input-reset();}
+    }
+    Rectangle {width:640px;height:480px;background:transparent;visible:root.concept==0;
+    Image {width:640px;height:480px;source:@image-url("../../assets/illustrations/ambient.svg");}
+    Text {x:Design.margin;y:21px;text:"emotional";color:root.ink;font-size:Design.brand-size;font-weight:700;letter-spacing:0.5px;}
+    Rectangle {x:123px;y:29px;width:5px;height:5px;border-radius:3px;background:root.accent;}
+    Text {x:146px;y:25px;text:root.imported?"Tu colección":"Colección de muestra";color:root.muted;font-size:Design.secondary-size;}
+    Text {x:504px;y:22px;width:112px;text:root.clock;horizontal-alignment:right;color:root.ink;font-size:Design.brand-size;font-weight:500;}
+    Text {x:Design.margin;y:63px;width:592px;height:32px;text:root.greeting;overflow:elide;color:root.ink;font-size:Design.greeting-size;font-weight:600;}
+    Text {x:Design.margin;y:99px;width:592px;height:17px;text:root.atmosphere + (root.date==""?"":"   ·   " + root.date);overflow:elide;color:root.muted;font-size:Design.secondary-size;}
+    Glass {
+        x:Design.margin;y:127px;width:592px;height:222px;ink:root.ink;accent:root.accent;reduced:root.reduced;selected:root.selected==0 && root.recommendation-count>0 && !root.library-open && !root.menu-open;
+        HeroStory {width:parent.width;height:parent.height;y:-4px*root.reveal;opacity:1-root.reveal;visible:root.previous-title!=""&&root.reveal<1&&!root.reduced;title:root.previous-title;detail:root.previous-detail;tag:root.previous-tag;artwork:root.previous-artwork;ink:root.ink;muted:root.muted;accent:root.accent;}
+        HeroStory {width:parent.width;height:parent.height;y:4px*(1-root.reveal);opacity:root.reveal;title:root.hero-title;detail:root.hero-detail;tag:root.hero-tag;artwork:root.artwork-index;artwork-visible:root.recommendation-count>0;ink:root.ink;muted:root.muted;accent:root.accent;}
+        Rectangle {property <length> inset:root.confirmed&&!root.reduced?Design.confirmation-inset:0px;x:22px+inset;y:167px+inset/2;width:188px - 2*inset;height:37px - inset;border-radius:AtmosphereDesign.radius-m;background:root.accent;
+            border-width:root.selected==0 && root.recommendation-count>0?Design.focus-width:0px;border-color:root.ink;
+            animate inset {duration:root.reduced?0ms:Design.confirmation-travel;}
+            opacity:root.recommendation-count>0?1:0.4;
+            Text {text:root.play-label + "  →";color:root.base;font-size:Design.action-size;font-weight:600;vertical-alignment:center;horizontal-alignment:center;}
+            TouchArea {enabled:root.recommendation-count>0&&!root.library-open&&!root.menu-open;clicked=>{root.activate(0);}}
+        }
+        Text {x:226px;y:178px;text:root.recommendation-count>0?(root.native-controls?"A · elegir":"Z · elegir"):"";color:root.muted;font-size:Design.secondary-size;}
+    }
+    Text {x:Design.margin;y:358px;text:root.recommendation-count>1?"Quizá también":"Tu próximo camino empieza aquí";color:root.muted;font-size:Design.secondary-size;}
+    choice-one:=Choice {x:Design.margin - self.growth;y:379px - self.growth;width:288px+2*self.growth;height:66px+2*self.growth;title:root.alt-one;detail:root.alt-one-detail;selected:root.selected==1;ink:root.ink;muted:root.muted;accent:root.accent;reduced:root.reduced;available:root.recommendation-count>1&&!root.library-open&&!root.menu-open;opacity:root.recommendation-count>1?1:0;activated=>{root.activate(1);}}
+    choice-two:=Choice {x:328px - self.growth;y:379px - self.growth;width:288px+2*self.growth;height:66px+2*self.growth;title:root.alt-two;detail:root.alt-two-detail;selected:root.selected==2;ink:root.ink;muted:root.muted;accent:root.accent;reduced:root.reduced;available:root.recommendation-count>2&&!root.library-open&&!root.menu-open;opacity:root.recommendation-count>2?1:0;activated=>{root.activate(2);}}
+    Text {x:Design.margin;y:459px;text:root.native-controls?"A elegir    X otro camino    Y biblioteca":"Z elegir    N otro camino    A biblioteca";color:root.muted;font-size:Design.secondary-size;}
+    Text {x:499px;y:459px;text:root.native-controls?"Start · menú":"S · menú";color:root.muted;font-size:Design.secondary-size;}
+    Rectangle {
+        x:24px;y:310px;width:592px;height:42px;border-radius:AtmosphereDesign.radius-m;background:root.base;border-width:1px;border-color:root.accent;
+        visible:root.message!="" && !root.library-open && !root.menu-open;
+        Text {x:14px;width:parent.width - 28px;height:parent.height;text:root.message;overflow:elide;vertical-alignment:center;color:root.ink;font-size:Design.toast-size;}
+    }
+    }
+    if root.concept==4: Integrated {
+        show-content:!root.library-open&&!root.menu-open;
+        heading:root.section-title;
+        width:640px;height:480px;pan:root.pan-position*1px;resume:root.resume-view;resume-count:root.resume-count;resume-two:root.resume-two;resume-three:root.resume-three;has-recent:root.has-recent;recent-title:root.recent-title;recent-artwork:root.recent-artwork;statistics:root.statistics;demo-history:root.demo-history;
+        resume-two-artwork:root.resume-two-artwork;resume-three-artwork:root.resume-three-artwork;resume-detail:root.resume-detail;editorial-reason:root.editorial-reason;category:root.hero-category;demo-art:!root.imported&&root.art-available;
+        section-position:root.section-position;discovery-main:root.discovery-main;discovery-secondary:root.discovery-secondary;
+        title:root.hero-title;detail:root.hero-detail;artwork:root.artwork-index;alternative:root.alt-one;clock:root.clock;date:root.date;play:root.play-label;count:root.recommendation-count;selected:root.selected;phase:root.scene-phase;weather:root.scene-weather;season:root.scene-season;decoration:root.scene-decoration;
+        reduced:root.reduced;ambient-motion:root.ambient-motion;blocked:root.library-open||root.menu-open||root.game-options-open||root.dock-cursor>=0||root.system-focused||root.system-open;confirmed:root.confirmed;art-available:root.art-available || root.local-art-available;alternative-cover:root.alternative-cover;alternative-art-available:root.alternative-art-available;resume-two-cover:root.resume-two-cover;resume-two-art-available:root.resume-two-art-available;resume-three-cover:root.resume-three-cover;resume-three-art-available:root.resume-three-art-available;trial-mode:root.trial-mode;local-cover:root.local-cover;local-art-available:root.local-art-available;reveal:root.reveal;activated(i)=>{root.activate(i);}
+    }
+    if root.concept>0 && root.concept<4: Concepts {
+        width:640px;height:480px;direction:root.concept;mood:root.mood;animate-palette:root.animate-palette;reduced:root.reduced;selected:root.selected;count:root.recommendation-count;
+        title:root.hero-title;detail:root.hero-detail;alternative:root.alt-one;play:root.play-label;clock:root.clock;atmosphere:root.atmosphere;caption:root.editorial-caption;artwork:root.artwork-index;art-available:root.art-available;
+        blocked:root.menu-open||root.library-open;confirmed:root.confirmed;reveal:root.reveal;rain:root.rain;season:root.season;activated(i)=>{root.activate(i);}
+    }
+    if root.concept>0 && root.concept!=4 && root.message!="" && !root.menu-open && !root.library-open: Rectangle {
+        x:root.concept==4?24px:28px;y:root.concept==4?90px:64px;width:root.concept==4?592px:584px;height:root.concept==4?20px:45px;background:root.base;border-width:root.concept==4?0px:1px;border-color:root.accent;
+        Text {x:12px;width:parent.width - 24px;height:parent.height;text:root.message;overflow:elide;vertical-alignment:center;color:root.ink;font-size:13px;}
+    }
+    // Persistent layers allow both entry and exit animation without timers blocking input.
+    Rectangle {
+        property <float> show:root.concept!=4&&(root.library-open||root.menu-open)?1:0;
+        opacity:show;visible:show>0;
+        width:640px;height:480px;background:#00000070;
+        animate show {duration:root.reduced?0ms:Design.panel-time;}
+        TouchArea {enabled:root.library-open||root.menu-open;clicked=>{root.dismiss();}}
+    }
+    AmbientPanel {
+        property <float> show:root.library-open?1:0;
+        opacity:show;visible:show>0;
+        animate show {duration:root.reduced?0ms:Design.panel-time;easing:ease-out;}
+        x:24px;y:(root.concept==4?104px:60px)+(1-show)*8px;width:592px;height:root.concept==4?296px:392px;border-radius:root.concept==4?AtmosphereDesign.radius-l:Design.panel-radius;background:root.concept==4?transparent:root.base;border-width:1px;border-color:root.accent;
+        TouchArea {enabled:root.library-open;}
+        if root.library-titles.length==0: Text {x:16px;y:24px;width:560px;height:60px;text:root.history-panel?"Todavía no hay sesiones registradas.":"Tu biblioteca está vacía. Los juegos disponibles aparecerán aquí.";wrap:word-wrap;font-size:15px;color:AtmosphereDesign.muted;}
+        Text {visible:root.concept!=4;x:22px;y:19px;text:root.history-panel?"Tu historial":"Tu biblioteca";font-size:Design.greeting-size;font-weight:600;color:root.ink;}
+        Text {visible:root.concept!=4;x:22px;y:54px;text:root.native-controls?"A elegir   ·   B volver":"Z elegir   ·   X volver";font-size:Design.secondary-size;color:root.muted;}
+        for name[index] in root.library-titles : Rectangle {x:12px;y:(root.concept==4?12px:85px)+index*44px;width:568px;height:40px;border-radius:AtmosphereDesign.radius-m;background:root.dock-cursor<0&&root.library-index==index+root.library-offset?root.accent.with-alpha(0.14):transparent;border-width:root.dock-cursor<0&&root.library-index==index+root.library-offset?Design.focus-width:0px;border-color:root.accent;
+            Text {x:16px;width:parent.width - 32px;text:name;wrap:word-wrap;color:root.ink;vertical-alignment:center;height:parent.height;font-size:name.character-count>65?AtmosphereDesign.tile-size:Design.action-size;}
+            TouchArea {enabled:root.library-open;clicked=>{root.activate(10+index+root.library-offset);}}
+        }
+    }
+    AmbientPanel {
+        property <float> show:root.menu-open&&!root.audio-open?1:0;
+        opacity:show;visible:show>0;
+        animate show {duration:root.reduced?0ms:Design.panel-time;easing:ease-out;}
+        x:root.concept==4?24px:64px;y:(root.concept==4?104px:93px)+(1-show)*8px;width:root.concept==4?592px:512px;height:root.concept==4?296px:300px;border-radius:root.concept==4?AtmosphereDesign.radius-l:Design.panel-radius;background:root.concept==4?transparent:root.base;border-width:1px;border-color:root.accent;
+        TouchArea {enabled:root.menu-open&&!root.audio-open;}
+        Text {visible:root.concept!=4;x:26px;y:24px;text:"A tu manera";font-size:Design.panel-title-size;font-weight:600;color:root.ink;}
+        for label[index] in (root.concept==4?["Movimiento reducido", "Sonido", "Estadísticas", "Personalización", "Ambiente neutro", "Movimiento ambiental", "Consultar historial", root.clear-armed?"Confirmar borrado":"Borrar historial", "Volver a la consola", "Esta partida"]:["Movimiento reducido", "Sonido", "Volver a la consola"]) : Rectangle {
+            x:12px;y:(root.concept==4?8px:74px)+index*(root.concept==4?28px:56px);width:root.concept==4?568px:476px;height:root.concept==4?28px:48px;border-radius:AtmosphereDesign.radius-m;
+            background:root.dock-cursor<0&&root.menu-index==index?root.accent.with-alpha(0.14):transparent;
+            border-width:root.dock-cursor<0&&root.menu-index==index?Design.focus-width:0px;border-color:root.accent;
+            Text {x:12px;y:0px;width:300px;height:parent.height;text:label;color:root.ink;font-size:root.concept==4?15px:Design.action-size;vertical-alignment:center;}
+            Text {x:384px;y:0px;width:168px;height:parent.height;horizontal-alignment:right;vertical-alignment:center;font-size:Design.secondary-size;color:root.muted;
+                text:index==0?(root.reduced?"Activado":"Desactivado"):index==1&&root.concept==4?root.audio-mode:index==1?(root.sound-available?(root.sound-on?"Activado":"Desactivado"):"No disponible"):root.concept!=4?(root.native-controls?"A · salir":"Z · salir"):index==2?(root.statistics-on?"Activadas":"Desactivadas"):index==3?(root.personalized?"Activada":"Desactivada"):index==4?(root.neutral?"Activado":"Desactivado"):index==5?(root.ambient-motion?"Activada":"Desactivada"):"";}
+            TouchArea {enabled:root.menu-open&&!root.audio-open;clicked=>{root.menu-select(index);}}
+        }
+        Text {visible:root.concept!=4;x:26px;y:262px;text:root.native-controls?"A elegir   ·   B volver":"Z elegir   ·   X volver";font-size:Design.secondary-size;color:root.muted;}
+
+    }
+    Rectangle {
+        property <float> show:root.audio-open?1:0;
+        opacity:show;visible:show>0;
+        animate show {duration:root.reduced?0ms:180ms;easing:ease-out;}
+        x:24px;y:104px+(1-show)*8px;width:592px;height:296px;border-radius:AtmosphereDesign.radius-l;background:AtmosphereDesign.sheet;border-width:1px;border-color:AtmosphereDesign.mark;
+        TouchArea {enabled:root.audio-open;}
+        Text {visible:false;x:16px;y:8px;text:"Sonido, a tu ritmo";font-size:24px;color:AtmosphereDesign.ink;}
+        Text {x:16px;y:8px;width:560px;text:root.audio-status;overflow:elide;font-size:12px;color:AtmosphereDesign.muted;}
+        for label[index] in ["Ambiente", "Volumen general", "Música", "Sonido de la habitación", "Sonidos de interfaz", "Volumen de interfaz", "Volver"] : Rectangle {
+            x:12px;y:40px+index*32px;width:568px;height:28px;border-radius:AtmosphereDesign.radius-m;
+            background:root.audio-index==index?AtmosphereDesign.mark.with-alpha(0.14):transparent;
+            border-width:root.audio-index==index?2px:0px;border-color:AtmosphereDesign.mark;
+            Text {x:12px;height:parent.height;text:label;font-size:15px;color:AtmosphereDesign.ink;vertical-alignment:center;}
+            Text {x:360px;width:192px;height:parent.height;text:root.audio-values[index];font-size:13px;color:AtmosphereDesign.muted;vertical-alignment:center;horizontal-alignment:right;}
+            TouchArea {enabled:root.audio-open;clicked=>{root.audio-select(index,self.mouse-x<parent.width/2?-1:1);}}
+        }
+        Text {x:16px;y:272px;text:"← / → ajustar   ·   A elegir   ·   B volver";font-size:12px;color:AtmosphereDesign.muted;}
+    }
+
+    if root.game-options-open: Rectangle {
+      x:24px;y:104px;width:592px;height:296px;border-radius:AtmosphereDesign.radius-l;background:AtmosphereDesign.sheet;border-width:1px;border-color:AtmosphereDesign.mark;
+      TouchArea {}
+      Text {x:16px;y:8px;width:560px;height:40px;text:root.game-option-title;wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:18px;color:AtmosphereDesign.ink;}
+      for label[index] in root.game-option-labels: Rectangle {
+        x:12px;y:56px+index*28px;width:568px;height:28px;border-radius:AtmosphereDesign.radius-m;
+        background:root.game-option-index==index?AtmosphereDesign.mark.with-alpha(0.14):transparent;
+        border-width:root.game-option-index==index?2px:0px;border-color:AtmosphereDesign.mark;
+        Text {x:12px;width:450px;height:parent.height;text:label;font-size:15px;color:AtmosphereDesign.ink;vertical-alignment:center;}
+        TouchArea {clicked=>{root.game-option-select(index);}}
+      }
+      Text {x:16px;y:232px;width:560px;height:40px;text:root.game-option-reason;wrap:word-wrap;font-size:12px;color:AtmosphereDesign.muted;}
+      Text {x:16px;y:276px;text:"A elegir   ·   B volver";font-size:12px;color:AtmosphereDesign.muted;}
+    }
+
+    if root.concept==4: SectionHeader {
+        x:0px;y:0px;width:640px;height:100px;
+        title:root.audio-open?"Sonido":root.game-options-open?"Esta partida":root.menu-open?"Ajustes":root.library-open?(root.history-panel?"Historial":"Biblioteca"):root.section-title;
+        subtitle:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?"A tu manera.":root.library-open?(root.history-panel?"Tus momentos de juego.":"Toda tu colección, a tu ritmo."):root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
+        clock:root.clock;date:root.date;
+    }
+    if root.concept==4: SectionDock {
+        x:AtmosphereDesign.dock-x;y:AtmosphereDesign.dock-y;
+        active:root.active-section;cursor:root.dock-cursor;
+        blocked:root.audio-open||root.game-options-open||root.system-open;
+        chosen(index)=>{root.navigate(index);}
+    }
+
+    if root.concept==4: SystemControls {
+        x:0px;y:0px;
+        focused:root.system-focused;expanded:root.system-open;reduced:root.reduced;
+        blocked:root.audio-open||root.game-options-open;
+        toggled=>{root.system-toggle();}
+        settings=>{root.system-toggle();root.navigate(3);}
+    }
+
+}

@@ -1,0 +1,17 @@
+# Continuar inteligente
+
+Hasta tres juegos disponibles, calculados antes de entrar en el event loop; al cambiar foco no hay ranking ni SQL. Una tarjeta protagonista conserva la habitación y CTA originales. Dos entradas de 32 px se sitúan debajo; con un solo juego se mantiene el tamaño anterior. Cruceta: protagonista → secundarias → biblioteca; izquierda/derecha entre secundarias. L/R conserva las dos vistas.
+
+`core/continuity.rs::rank` es una función pura. Indexa actividad por ID y ordena con desempate por ordinal y luego ID. Solo incluye juegos disponibles con ejecución confirmada o fijación explícita; retira completados y retirados. Una fijación sin historial no crea una sesión ni prueba que el juego esté empezado.
+
+Pesos predeterminados: sesión 12, duración 24, regreso voluntario confirmado 12, recencia 18, guardado confirmado 14, afinidad explícita 30. Configuración `[continuity]` en TOML: session, duration, return_visit, recency, saved, explicit (0–1000). No hay pesos de popularidad.
+
+Duración: contribución positiva hasta tres duraciones objetivo; se usa session_minutes editorial cuando se conoce y, si no, el valor neutral existente del catálogo. Número de sesiones limitado a ocho; guardado confirmado suma una sola vez. Recencia aporta como máximo 18 y no elimina partidas antiguas. Fechas plausibles y no futuras, o distancia ordinal cuando no hay reloj fiable. Sesiones breves también aportan; no se convierten en abandono. La fijación precede a los scores. Retirada/completado excluyen hasta que el usuario los corrija.
+
+`launch_log` alimenta Evidence sin modificar el supervisor. Se distinguen intentos fallidos, ejecución sostenida, duración y terminación con error. Los registros activity anteriores se reutilizan sin duplicar sesiones ya representadas por launch_log. Una salida correcta NO confirma guardado ni salida voluntaria: ambos siguen en None. La función admite esas evidencias para integraciones futuras fiables, pero no existe todavía una fuente física que las produzca.
+
+Start → Esta partida ofrece fijar/desfijar, retirar/recuperar, completar/en curso y preferencia explícita positiva/negativa/neutra. D es un atajo de teclado configurable. Desde biblioteca se puede recuperar un juego aunque no esté en Continuar. Fijar vuelve a habilitarlo y desmarca completado de forma explícita. Ninguna acción elimina archivos. B devuelve al contexto y foco; si un juego desaparece, el foco va a biblioteca. Los cambios se escriben en el worker SQLite, fuera del callback. La UI solo confirma en memoria tras aceptar la petición de escritura; un error de persistencia se notifica.
+
+`continuity_preferences` es una tabla aditiva en la base existente, separada de metadatos importados, activity y launch_log. `progress.completed` mantiene la finalización explícita anterior. Borrar historial conserva decisiones manuales y audio; una partida fijada puede permanecer aunque ya no haya sesiones. Preferencias de interés también se usan en Descubrir; desactivar personalización anula ese peso, sin deshacer retiradas/completados de Continuar.
+
+Límites: no se detectan saves, no se comprueba intención psicológica ni se predice abandono. Una ejecución con error no se considera sesión satisfactoria por sí sola; el usuario puede fijarla desde biblioteca. Las estadísticas siguen basándose en datos fechados fiables, sin inventar una última sesión para ejecuciones sin reloj.

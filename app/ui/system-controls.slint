@@ -1,0 +1,38 @@
+import { AtmosphereDesign, AmbientPanel } from "integrated.slint";
+export component SystemControls inherits Rectangle {
+    in property <bool> focused;
+    in property <bool> expanded;
+    in property <bool> reduced;
+    in property <bool> blocked;
+    callback toggled();
+    callback settings();
+    width:640px;height:480px;background:transparent;
+    if root.expanded: Rectangle {width:640px;height:480px;background:#080a0870;TouchArea {clicked=>{root.toggled();}}}
+    AmbientPanel {
+        x:440px;y:16px;width:176px;height:28px;radius:self.height/2;
+        focused:root.focused;surface:AtmosphereDesign.status-material;
+        for icon[index] in [@image-url("../../assets/icons/wifi.svg"),@image-url("../../assets/icons/battery.svg"),@image-url("../../assets/icons/bluetooth.svg"),@image-url("../../assets/icons/sound.svg"),@image-url("../../assets/icons/brightness.svg")]: Image {
+            x:16px+index*32px;y:6px;width:16px;height:16px;source:icon;colorize:AtmosphereDesign.muted;
+            // Unknown is not off: the expanded panel explicitly says unverified.
+        }
+        TouchArea {enabled:!root.blocked;clicked=>{root.toggled();}}
+    }
+    AmbientPanel {
+        property <float> show:root.expanded?1:0;
+        animate show {duration:root.reduced?0ms:160ms;easing:ease-out;}
+        x:344px;y:44px+(1-self.show)*4px;width:272px;height:268px;
+        visible:self.show>0;opacity:self.show;radius:AtmosphereDesign.radius-l;
+        TouchArea {enabled:root.expanded;}
+        Text {x:16px;y:12px;width:240px;height:20px;text:"Controles del sistema";font-size:15px;font-weight:600;color:AtmosphereDesign.ink;}
+        for label[index] in ["Wi-Fi","Bluetooth","Volumen","Brillo","Batería"]: Rectangle {
+            x:16px;y:40px+index*28px;width:240px;height:28px;background:transparent;
+            Text {x:0px;width:112px;height:parent.height;text:label;font-size:13px;color:AtmosphereDesign.muted;vertical-alignment:center;}
+            Text {x:112px;width:128px;height:parent.height;text:"Sin verificar";font-size:11px;color:AtmosphereDesign.muted;horizontal-alignment:right;vertical-alignment:center;}
+        }
+        Text {x:16px;y:184px;width:240px;height:32px;text:"Indicadores sin conexión al sistema.\nNo se cambia ninguna configuración.";font-size:11px;color:AtmosphereDesign.muted;wrap:word-wrap;}
+        Rectangle {x:16px;y:220px;width:240px;height:32px;border-radius:self.height/2;background:AtmosphereDesign.active;border-width:2px;border-color:AtmosphereDesign.mark;
+            Text {width:parent.width;height:parent.height;text:"A  ·  Ajustes completos";font-size:13px;font-weight:600;color:AtmosphereDesign.ink;horizontal-alignment:center;vertical-alignment:center;}
+            TouchArea {enabled:root.expanded;clicked=>{root.settings();}}
+        }
+    }
+}

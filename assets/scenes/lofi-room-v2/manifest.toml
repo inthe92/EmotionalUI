@@ -1,0 +1,48 @@
+version = 1
+id = "lofi-room-v2"
+status = "reference-adapted-candidate-not-final"
+width = 640
+height = 480
+master = "master.png"
+viewport_height = 480
+max_decoded_master_bytes = 1228800
+reading_mask = "reading-mask.svg"
+reference = "User attached Foto 1.jpg; see docs/visual-correction/reference.json"
+preload = "one-embedded-master"
+cache = "one-shared-image-no-six-full-frame-copies"
+geometry = "reference-camera-window-lake-mountain-lantern-desk-bed-plants"
+[window]
+x = 334
+y = 104
+width = 178
+height = 208
+[[moments]]
+id = "morning"
+hours = "06:00-10:59"
+phase = 0
+[[moments]]
+id = "noon"
+hours = "11:00-13:59"
+phase = 1
+[[moments]]
+id = "afternoon"
+hours = "14:00-16:59"
+phase = 2
+[[moments]]
+id = "dusk"
+hours = "17:00-19:59"
+phase = 3
+[[moments]]
+id = "night"
+hours = "20:00-23:59"
+phase = 4
+[[moments]]
+id = "late"
+hours = "00:00-05:59"
+phase = 5
+[layers]
+lighting = "Slint tint, cloud and lamp; 220ms finite interpolation"
+weather = ["clear", "cloud", "rain", "fog", "snow", "unknown"]
+season = "window tint; northern hemisphere; no long seasonal animation"
+editorial = "small static ornaments; provisional"
+unknown = "neutral noon; no weather, season or decoration inferred"

@@ -1,0 +1,299 @@
+import "../../assets/fonts/DejaVuSans.ttf";
+import "../../assets/fonts/DejaVuSans-Bold.ttf";
+export global AtmosphereDesign {
+    out property <string> family:"DejaVu Sans";
+    out property <color> base:#181713;
+    out property <color> ink:#f5ebd8;
+    out property <color> muted:#ded2be;
+    out property <color> mark:#ead1a4;
+    out property <color> glass:#28241de8;
+    out property <color> sheet:#201e19fa;
+    // Nine-slice preserves circular corners without rounded child clipping,
+    // whose software-rendered gradients leave corner artifacts in Slint 1.13.
+    out property <image> material:@image-url("../../assets/illustrations/room-material.png",nine-slice(14));
+    out property <image> tile-material:@image-url("../../assets/illustrations/room-tile.png",nine-slice(10));
+    out property <image> action-material:@image-url("../../assets/illustrations/room-action.png");
+    out property <image> status-material:@image-url("../../assets/illustrations/room-status.png");
+    out property <image> dock-material:@image-url("../../assets/illustrations/room-dock.png");
+    out property <brush> fallback:@linear-gradient(125deg,#494338,#252c25);
+    out property <color> border:#e9d6b447;
+    out property <color> rim:#fff0cc1c;
+    out property <color> active:#ead1a421;
+    out property <color> shadow:#05050330;
+    out property <length> shadow-blur:0px;
+    out property <length> margin:24px;
+    out property <length> pad:16px;
+    out property <length> gap:12px;
+    out property <length> radius-l:16px;
+    out property <length> radius-m:12px;
+    out property <length> radius-s:8px;
+    out property <length> radius-xs:6px;
+    out property <length> radius:self.radius-l;
+    out property <length> art-radius:self.radius-m;
+    out property <length> resume-art-width:124px;
+    out property <length> resume-art-height:176px;
+    out property <length> discover-art-width:320px;
+    out property <length> discover-art-height:232px;
+    out property <length> tile-art-width:64px;
+    out property <length> tile-art-height:40px;
+    out property <length> focus-width:2px;
+    out property <length> section-title-size:44px;
+    out property <length> title-size:22px;
+    out property <length> long-title-size:19px;
+    out property <length> tile-size:14px;
+    out property <length> body-size:13px;
+    out property <length> small-size:11px;
+    out property <length> meta-size:10px;
+    out property <length> clock-size:24px;
+    out property <length> action-size:15px;
+    out property <length> action-width:188px;
+    out property <length> action-height:36px;
+    out property <length> action-radius:self.action-height/2;
+    out property <length> action-icon:20px;
+    out property <length> dock-width:344px;
+    out property <length> dock-height:52px;
+    out property <length> dock-bottom:12px;
+    out property <length> dock-x:(640px - self.dock-width)/2;
+    out property <length> dock-y:480px - self.dock-bottom - self.dock-height;
+    out property <length> dock-radius:self.dock-height/2;
+    out property <length> dock-icon:16px;
+    out property <duration> transition:180ms;
+    out property <duration> section-time:220ms;
+    out property <duration> press-time:80ms;
+    // The section follows cubic ease-out: 0.75 is reached after ~81 ms at 220 ms.
+    out property <float> secondary-start:0.75;
+}
+component Cover inherits Image {
+    in property <int> index;
+    source:root.index==0?@image-url("../../assets/illustrations/world-0.svg"):root.index==1?@image-url("../../assets/illustrations/world-1.svg"):root.index==2?@image-url("../../assets/illustrations/world-2.svg"):root.index==3?@image-url("../../assets/illustrations/world-3.svg"):root.index==4?@image-url("../../assets/illustrations/world-4.svg"):@image-url("../../assets/illustrations/world-5.svg");
+    image-fit:cover;
+}
+component EditorialArtwork inherits Rectangle {
+    in property <length> radius:AtmosphereDesign.art-radius;
+    in property <image> prepared;
+    in property <bool> available;
+    in property <bool> demo;
+    in property <int> index;
+    in property <string> title;
+    in property <string> category;
+    border-radius:root.radius;clip:true;background:AtmosphereDesign.fallback;
+    if root.available: Image {width:parent.width;height:parent.height;source:root.prepared;image-fit:contain;}
+    if !root.available&&root.demo: Cover {width:parent.width;height:parent.height;index:root.index;}
+    if !root.available&&!root.demo: Text {x:16px;y:16px;width:parent.width - 32px;height:parent.height - 64px;text:root.title;wrap:word-wrap;vertical-alignment:center;horizontal-alignment:center;font-family:AtmosphereDesign.family;font-size:parent.width>180px?AtmosphereDesign.long-title-size:AtmosphereDesign.small-size;font-weight:600;color:AtmosphereDesign.ink;}
+    if !root.available&&!root.demo: Text {x:16px;y:parent.height - 36px;width:parent.width - 32px;height:16px;text:root.category=="Sin clasificar"?"":root.category;horizontal-alignment:center;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
+}
+export component AmbientPanel inherits Rectangle {
+    in property <bool> focused;
+    in property <image> surface:AtmosphereDesign.material;
+    in property <length> radius:AtmosphereDesign.radius-l;
+    background:transparent;
+    border-radius:root.radius;
+    border-width:root.focused?AtmosphereDesign.focus-width:1px;
+    border-color:root.focused?AtmosphereDesign.mark:AtmosphereDesign.border;
+    Image {x:2px;y:2px;width:parent.width - 4px;height:parent.height - 4px;source:root.surface;image-fit:fill;}
+    Rectangle {x:max(AtmosphereDesign.pad,root.radius);y:1px;width:parent.width - 2*max(AtmosphereDesign.pad,root.radius);height:1px;background:AtmosphereDesign.rim;}
+}
+component GameTitle inherits Text {
+    in property <bool> compact:false;
+    font-family:AtmosphereDesign.family;
+    font-size:root.compact?AtmosphereDesign.long-title-size:AtmosphereDesign.title-size;
+    font-weight:600;color:AtmosphereDesign.ink;wrap:word-wrap;
+}
+component AmbientAction inherits Rectangle {
+    in property <string> label;
+    in property <bool> focused;
+    in property <bool> reduced;
+    in property <bool> pressed;
+    in property <bool> enabled:true;
+    callback chosen();
+    width:AtmosphereDesign.action-width;height:AtmosphereDesign.action-height;
+    border-radius:AtmosphereDesign.action-radius;
+    background:transparent;
+    border-width:root.focused?AtmosphereDesign.focus-width:1px;
+    border-color:root.focused?AtmosphereDesign.mark:AtmosphereDesign.border;
+    Image {x:2px;y:2px;width:parent.width - 4px;height:parent.height - 4px;source:AtmosphereDesign.action-material;image-fit:fill;}
+    Rectangle {x:2px;y:2px;width:parent.width - 4px;height:parent.height - 4px;border-radius:AtmosphereDesign.action-radius - 2px;background:AtmosphereDesign.mark;opacity:root.focused?0.08:0;}
+    property <length> inset:root.pressed&&!root.reduced?1px:0px;
+    animate inset {duration:root.reduced?0ms:AtmosphereDesign.press-time;easing:ease-out;}
+    Rectangle {x:12px+root.inset;y:(parent.height - AtmosphereDesign.action-icon)/2;width:AtmosphereDesign.action-icon;height:AtmosphereDesign.action-icon;border-radius:AtmosphereDesign.action-icon/2;background:root.focused?AtmosphereDesign.mark:AtmosphereDesign.muted;
+        Text {width:parent.width;height:parent.height;text:"A";font-family:AtmosphereDesign.family;font-size:12px;font-weight:700;color:AtmosphereDesign.base;horizontal-alignment:center;vertical-alignment:center;}
+    }
+    Text {x:40px+root.inset;width:parent.width - 52px;height:parent.height;text:root.label;font-family:AtmosphereDesign.family;color:AtmosphereDesign.ink;font-size:AtmosphereDesign.action-size;font-weight:600;vertical-alignment:center;horizontal-alignment:center;}
+    TouchArea {enabled:root.enabled;clicked=>{root.chosen();}}
+}
+component CompactGame inherits AmbientPanel {
+    radius:AtmosphereDesign.radius-m;
+    surface:AtmosphereDesign.tile-material;
+    in property <string> title;
+    in property <image> prepared;
+    in property <bool> available;
+    in property <bool> demo;
+    in property <int> index;
+    in property <bool> enabled:true;
+    callback chosen();
+    property <bool> has-art:root.available||root.demo;
+    if root.has-art: EditorialArtwork {x:8px;y:(parent.height - AtmosphereDesign.tile-art-height)/2;width:AtmosphereDesign.tile-art-width;height:AtmosphereDesign.tile-art-height;radius:max(0px,root.radius - 8px);prepared:root.prepared;available:root.available;demo:root.demo;index:root.index;}
+    Text {x:root.has-art?84px:16px;y:4px;width:parent.width - self.x - 12px;height:parent.height - 8px;text:root.title;wrap:word-wrap;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:root.title.character-count>36?AtmosphereDesign.body-size:AtmosphereDesign.tile-size;font-weight:600;color:AtmosphereDesign.ink;}
+    TouchArea {enabled:root.enabled;clicked=>{root.chosen();}}
+}
+export component SectionDock inherits AmbientPanel {
+    in property <int> active;
+    in property <int> cursor:-1;
+    in property <bool> blocked;
+    focused:false;surface:AtmosphereDesign.dock-material;radius:AtmosphereDesign.dock-radius;
+    callback chosen(int);
+    width:AtmosphereDesign.dock-width;height:AtmosphereDesign.dock-height;
+    for label[index] in ["Continuar","Descubre","Biblioteca","Ajustes"]: Rectangle {
+        x:12px+index*80px;y:4px;width:80px;height:44px;border-radius:self.height/2;
+        property <bool> active:index==root.active;
+        property <bool> key-focus:index==root.cursor&&!root.blocked;
+        background:self.active?AtmosphereDesign.active:transparent;
+        border-width:self.key-focus?AtmosphereDesign.focus-width:0px;border-color:AtmosphereDesign.mark;
+        Image {x:(parent.width - AtmosphereDesign.dock-icon)/2;y:4px;width:AtmosphereDesign.dock-icon;height:AtmosphereDesign.dock-icon;source:index==0?@image-url("../../assets/icons/continue.svg"):index==1?@image-url("../../assets/icons/discover.svg"):index==2?@image-url("../../assets/icons/library.svg"):@image-url("../../assets/icons/settings.svg");colorize:parent.active||parent.key-focus?AtmosphereDesign.mark:AtmosphereDesign.muted;}
+        Text {y:24px;width:parent.width;height:14px;text:label;horizontal-alignment:center;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:parent.active?AtmosphereDesign.ink:AtmosphereDesign.muted;}
+        if self.active: Rectangle {x:32px;y:40px;width:16px;height:2px;border-radius:self.height/2;background:AtmosphereDesign.mark;}
+        TouchArea {enabled:!root.blocked;clicked=>{root.chosen(index);}}
+    }
+}
+export component SectionHeader inherits Rectangle {
+    in property <string> title;
+    in property <string> subtitle;
+    in property <string> clock;
+    in property <string> date;
+    background:transparent;
+    Text {x:AtmosphereDesign.margin;y:16px;width:384px;height:56px;text:root.title;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.section-title-size;font-weight:700;color:AtmosphereDesign.ink;}
+    Text {x:AtmosphereDesign.margin;y:76px;width:388px;height:20px;text:root.subtitle;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+    Text {x:536px;y:52px;width:80px;height:28px;text:root.clock;horizontal-alignment:right;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.clock-size;font-weight:700;color:AtmosphereDesign.ink;}
+    Text {x:392px;y:60px;width:132px;height:16px;text:root.date;horizontal-alignment:right;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
+}
+export component RoomScene inherits Rectangle {
+    in property <int> phase;
+    in property <length> pan:0px;
+    in property <int> weather;
+    in property <int> season;
+    in property <int> decoration;
+    in property <bool> reduced;
+    background:#18211e;clip:true;
+    Image {x:-4px+root.pan;y:-3px;width:648px;height:486px;source:@image-url("../../assets/scenes/checkpoint-room-v1/master.png");image-fit:contain;}
+    // A single camera, master and geometry. Dusk is the reference illumination.
+    property <color> tint:root.phase==0?#d3d8bd30:root.phase==1?#e4e6d138:root.phase==2?#c6ae8620:root.phase==3?#00000000:root.phase==4?#101b365a:#10232c80;
+    property <float> lamp:root.phase==3?0.08:root.phase==4?0.14:root.phase==5?0.03:0;
+    property <float> cloud:root.weather==1?0.08:root.weather==2?0.15:root.weather==3?0.2:0;
+    animate tint,lamp,cloud {duration:root.reduced?0ms:220ms;}
+    Rectangle {x:0px;y:0px;width:640px;height:480px;background:root.tint;}
+    Rectangle {x:0px;y:0px;width:640px;height:480px;background:#23333e;opacity:root.cloud;}
+    // Window overlays are restricted to the same glass rectangle in every variant.
+    Rectangle {x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:root.season==3?#a67c4320:root.season==0?#b3cbd324:root.season==1?#87a58912:transparent;}
+    Rectangle {x:544px*1.0125 - 4px+root.pan;y:280px*1.0125 - 3px;width:46px;height:48px;border-radius:16px;background:#e9ae5f;opacity:root.lamp;}
+    Rectangle {
+        property <float> show:root.weather==2?1:0;opacity:show;visible:show>0;animate show {duration:root.reduced?0ms:220ms;}
+        x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:transparent;clip:true;
+        for index in 20: Rectangle {x:6px+mod(index*37,168)*1px;y:mod(index*43,188)*1px;width:1px;height:13px;background:#d6e1de55;}
+    }
+    Rectangle {property <float> show:root.weather==3?1:0;opacity:show;visible:show>0;animate show {duration:root.reduced?0ms:220ms;}x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:#c8d4cd44;}
+    Rectangle {property <float> show:root.weather==4?1:0;opacity:show;visible:show>0;animate show {duration:root.reduced?0ms:220ms;}x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:#d9dfdf16;
+        for index in 25: Rectangle {x:mod(index*47,170)*1px;y:mod(index*31,200)*1px;width:2px;height:2px;background:#eeeae2;}
+    }
+    // Discreet placeholder ornaments, not final holiday artwork.
+    if root.decoration==1: Rectangle {x:472px*1.0125 - 4px+root.pan;y:335px*1.0125 - 3px;width:15px;height:11px;border-radius:5px;background:#ad7349;Rectangle{x:7px;y:-3px;width:2px;height:4px;background:#58634c;}}
+    if root.decoration==2: Text {x:474px*1.0125 - 4px+root.pan;y:322px*1.0125 - 3px;text:"✦";font-size:19px;color:#d8c595;}
+    if root.decoration==3: Text {x:474px*1.0125 - 4px+root.pan;y:322px*1.0125 - 3px;text:"✧";font-size:19px;color:#d6cead;}
+}
+export component Integrated inherits Rectangle {
+    in property <bool> show-content:true;
+    in property <string> heading;
+    in property <bool> resume;
+    in property <length> pan:0px;
+    in property <int> resume-count;
+    in property <string> resume-two;
+    in property <string> resume-three;
+    in property <int> resume-two-artwork;
+    in property <int> resume-three-artwork;
+    in property <string> resume-detail;
+    in property <string> editorial-reason;
+    in property <string> category;
+    in property <bool> demo-art;
+    in property <float> section-position;
+    in property <float> discovery-main;
+    in property <float> discovery-secondary;
+    in property <bool> has-recent;
+    in property <string> recent-title;
+    in property <int> recent-artwork;
+    in property <string> statistics;
+    in property <bool> demo-history;
+    in property <string> title;
+    in property <string> detail;
+    in property <int> artwork;
+    in property <string> alternative;
+    in property <string> clock;
+    in property <string> date;
+    in property <string> play;
+    in property <int> count;
+    in property <int> selected;
+    in property <int> phase;
+    in property <int> weather;
+    in property <int> season;
+    in property <int> decoration;
+    in property <bool> reduced;
+    in property <bool> ambient-motion;
+    in property <bool> blocked;
+    in property <bool> confirmed;
+    in property <bool> art-available;
+    in property <image> local-cover;
+    in property <image> alternative-cover;
+    in property <bool> alternative-art-available;
+    in property <image> resume-two-cover;
+    in property <bool> resume-two-art-available;
+    in property <image> resume-three-cover;
+    in property <bool> resume-three-art-available;
+    in property <bool> trial-mode;
+    in property <bool> local-art-available;
+    in property <float> reveal;
+    property <float> secondary-progress:!root.resume&&!root.blocked&&(root.selected==1||root.selected==2)?1:root.discovery-secondary;
+    property <bool> extended-title:root.title.character-count>60;
+    property <bool> compact-title:root.title.character-count>38;
+    property <bool> has-category:root.category!=""&&root.category!="Sin clasificar";
+    callback activated(int);
+    background:AtmosphereDesign.base;
+    RoomScene {width:640px;height:480px;pan:root.pan;phase:root.phase;weather:root.weather;season:root.season;decoration:root.decoration;reduced:root.reduced||!root.ambient-motion;}
+    Image {width:640px;height:480px;source:@image-url("../../assets/scenes/lofi-room-v2/reading-mask.svg");}
+
+    Rectangle {
+        x:-16px*root.section-position;width:640px;height:480px;
+        opacity:1-root.section-position;visible:root.show-content&&root.section-position<1;background:transparent;
+        AmbientPanel {
+            x:24px;y:104px;width:544px;height:208px;
+            focused:root.selected==0&&root.resume&&!root.blocked&&root.has-recent;
+            property <bool> cover-visible:root.art-available&&root.has-recent;
+            property <length> text-x:self.cover-visible?156px:16px;
+            property <bool> long-title:root.recent-title.character-count>38;
+            if self.cover-visible: EditorialArtwork {x:16px;y:16px;width:AtmosphereDesign.resume-art-width;height:AtmosphereDesign.resume-art-height;radius:max(0px,AtmosphereDesign.radius-l - AtmosphereDesign.pad);prepared:root.local-cover;available:root.local-art-available;demo:root.demo-art;index:root.recent-artwork;title:root.recent-title;category:root.category;}
+            Text {x:parent.text-x;y:16px;width:parent.width - self.x - 16px;height:14px;text:root.demo-history?"PARTIDAS DE MUESTRA":root.has-recent?"TU PARTIDA":"SIN PARTIDAS RECIENTES";font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.meta-size;letter-spacing:1px;color:AtmosphereDesign.muted;}
+            GameTitle {x:parent.text-x;y:40px;width:parent.width - self.x - 16px;height:parent.long-title?72px:56px;text:root.recent-title;compact:parent.long-title;}
+            Text {x:parent.text-x;y:parent.long-title?120px:112px;width:parent.width - self.x - 16px;height:32px;text:root.has-recent?(root.resume-detail.character-count<=100?root.resume-detail:""):"Cuando abras un juego, encontrarás aquí tu lugar para volver.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+            if root.has-recent: AmbientAction {x:parent.text-x;y:156px;label:root.has-recent?"Continuar":"Tu biblioteca";focused:root.selected==(root.has-recent?0:2)&&root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:root.resume&&!root.blocked;chosen=>{root.activated(root.has-recent?0:2);}}
+        }
+        Text {x:24px;y:320px;width:540px;height:16px;text:root.statistics;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
+        if root.resume-count>1: CompactGame {x:24px;y:344px;width:264px;height:56px;title:root.resume-two;prepared:root.resume-two-cover;available:root.resume-two-art-available;demo:root.demo-art;index:root.resume-two-artwork;focused:root.selected==4&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(4);}}
+        if root.resume-count>2: CompactGame {x:304px;y:344px;width:264px;height:56px;title:root.resume-three;prepared:root.resume-three-cover;available:root.resume-three-art-available;demo:root.demo-art;index:root.resume-three-artwork;focused:root.selected==5&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(5);}}
+    }
+
+    Rectangle {
+        x:16px*(1-root.discovery-main);y:5px*(1-root.discovery-main);width:640px;height:356px;
+        opacity:root.discovery-main;visible:root.show-content&&root.discovery-main>0;background:transparent;
+        AmbientPanel {
+            x:24px;y:104px;width:592px;height:240px;
+            focused:root.selected==0&&!root.resume&&!root.blocked&&root.count>0;
+            EditorialArtwork {x:4px;y:4px;width:AtmosphereDesign.discover-art-width;height:AtmosphereDesign.discover-art-height;radius:AtmosphereDesign.radius-l - 4px;prepared:root.local-cover;available:root.local-art-available;demo:root.demo-art&&root.count>0;index:root.artwork;title:root.count>0?root.title:"Tu próximo mundo empieza en tu colección";category:root.count>0?root.category:"A TU RITMO";}
+            if !root.extended-title&&root.has-category: Text {x:340px;y:16px;width:236px;height:14px;text:root.count>0?root.category:"TU COLECCIÓN";font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.meta-size;letter-spacing:0.5px;color:AtmosphereDesign.muted;}
+            GameTitle {x:340px;y:root.extended-title?12px:root.has-category?40px:16px;width:236px;height:root.extended-title?116px:root.compact-title?72px:56px;opacity:root.reveal;text:root.count>0?root.title:"Tu colección te espera";compact:root.compact-title;}
+            Text {x:340px;y:root.extended-title?136px:root.compact-title?(root.has-category?120px:96px):(root.has-category?112px:88px);width:236px;height:root.extended-title?48px:root.compact-title?56px:64px;text:root.count>0?root.editorial-reason:"Cuando añadas juegos disponibles, encontrarás aquí una propuesta.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+            if root.count>0: AmbientAction {x:340px;y:188px;label:root.count>0?root.play:"Tu biblioteca";focused:root.selected==(root.count>0?0:2)&&!root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(root.count>0?0:2);}}
+        }
+    }
+    Rectangle {
+        x:12px*(1-root.secondary-progress);y:6px*(1-root.secondary-progress);width:640px;height:400px;
+        opacity:root.secondary-progress;visible:root.show-content&&root.secondary-progress>0;background:transparent;
+        if root.count>1: CompactGame {x:24px;y:352px;width:288px;height:48px;title:root.alternative;prepared:root.alternative-cover;available:root.alternative-art-available;focused:root.selected==1&&!root.resume&&!root.blocked;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(1);}}
+    }
+}

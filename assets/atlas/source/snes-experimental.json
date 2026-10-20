@@ -1,0 +1,3368 @@
+{
+  "schema": 1,
+  "version": "0.2.0-experimental.1",
+  "platform": "snes",
+  "license": "GPL-3.0-only",
+  "sources": {
+    "nintendo-snes-list": {
+      "url": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-download-software/Super-Nintendo-Entertainment-System-Nintendo-Classics-1632515.html",
+      "accessed": "2026-10-18",
+      "scope": "Only title/platform checked against primary list; no descriptions/images copied. Trademark symbols omitted.",
+      "license": "Nintendo page copyrighted; factual title identification only, not artwork or licensed ROM content."
+    },
+    "pilot-editorial-proposals": {
+      "url": null,
+      "scope": "Original assistant editorial proposals; not external model API research or human validation.",
+      "license": "GPL-3.0-only"
+    },
+    "research-000001": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_world.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Mario and Luigi cross stages, use Yoshi and a cape, and solve stage obstacles.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000002": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_yossy.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Yoshi uses eggs and transformations across six worlds; Nintendo describes hand-drawn picture-book visuals.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000003": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_kart.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Kart races and battles, eight drivers and items that affect opponents.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000004": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/zelda.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Fields and dungeons, tools including bow and bombs, and puzzles solved with different actions.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000005": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_metroid.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Samus explores Zebes; equipment found along the route expands movement and attack options.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000006": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_fox.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Flight combat with teammates and manoeuvres such as rolling and reverse thrust, in polygonal space.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000007": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/f_zero.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Four machines race on fifteen circuits with damaging barriers and slippery surfaces.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000009": {
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Pilotwings-775615.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Flight exercises use a biplane, skydiving, hang-glider and rocket belt; precision landing matters.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000011": {
+      "url": "https://www.nintendo.co.jp/wii/vc/vc_kb/vc_kb_02.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Kirby is struck into enemies to turn them into stars; the last enemy becomes a cup, with strokes counted as score.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000012": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/makaimura.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Arthur uses multiple weapons and a double jump against monsters; terrain changes and difficulty is explicitly discussed.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000013": {
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Demon-s-Crest--949463.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Firebrand flies, breathes fire and assumes six forms; the quest has three endings.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000016": {
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Breath-of-Fire--938491.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Ryu can transform into a powerful beast and is accompanied by seven companions with animal powers.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000021": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/kirby.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Six different modes, helpers with different abilities, and subgames based on timed or rapid button presses.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000022": {
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Breath-of-Fire-II--798907.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "A wide world, missing family, allies, shaman fusion and dragon transformations.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000026": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/panel.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Swap horizontal neighbours; align at least three panels and continue chains while panels disappear.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000027": {
+      "url": "https://www.nintendo.com/en-gb/News/2010/Weekly-download-news-252582.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "SNES third-person shooting against outlaws and robots, including large bosses and two-player co-op.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000028": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_donkey_kong.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Donkey and Diddy exchange the lead, overcome obstacles and ride animals with distinct abilities.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000032": {
+      "url": "https://www.nintendo.com/en-gb/News/2007/Big-bang-on-Virtual-Console--249484.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Grid puzzles reveal pictures, with a save function for returning to unfinished puzzles.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000046": {
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/EarthBound-771110.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Ness travels through towns with companions, explores and shops; battles combine weapons and psychic powers.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000047": {
+      "url": "https://www.nintendo.com/en-gb/Games/Super-Nintendo/Harvest-Moon--788055.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Grow crops, raise animals and visit a town for tools and supplies.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    },
+    "research-000048": {
+      "url": "https://www.nintendo.co.jp/wii/vc/vc_sh/vc_sh_01.html",
+      "accessed": "2026-10-18",
+      "kind": "primary-publisher-page",
+      "scope": "Work-level gameplay evidence; not ROM region, save support or original release metadata.",
+      "facts": "Move blocks by sucking and spitting them to build routes towards rainbow pieces; levels allow different solutions.",
+      "license": "Copyright holder retains page rights. Original factual paraphrases only; no art or page text redistributed."
+    }
+  },
+  "games": [
+    {
+      "id": "atlas:snes:000001",
+      "objective": {
+        "title": {
+          "value": "Super Mario World",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "stage platforming",
+            "cape flight",
+            "Yoshi riding"
+          ],
+          "confidence": 90,
+          "source": "research-000001",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000001",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling."
+        },
+        "pace": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000001",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling."
+        },
+        "exploration": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000001",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling."
+        },
+        "short_sessions": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000001",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling."
+        },
+        "resume_ease": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000001",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling."
+        },
+        "calm": {
+          "value": 45,
+          "confidence": 65,
+          "source": "research-000001",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Stage boundaries suggest short visits; secrets invite exploration. This does not establish a save state or a personal feeling."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000001",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000002",
+      "objective": {
+        "title": {
+          "value": "Super Mario World 2: Yoshi's Island",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "egg aiming",
+            "transformations",
+            "stage platforming"
+          ],
+          "confidence": 90,
+          "source": "research-000002",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000002",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention."
+        },
+        "intensity": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000002",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention."
+        },
+        "exploration": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000002",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention."
+        },
+        "pace": {
+          "value": 55,
+          "confidence": 65,
+          "source": "research-000002",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention."
+        },
+        "short_sessions": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000002",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention."
+        },
+        "resume_ease": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000002",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Picture-book presentation suggests gentleness, while aiming and platforming still demand attention."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000002",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000003",
+      "objective": {
+        "title": {
+          "value": "Super Mario Kart",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "kart racing",
+            "item combat",
+            "versus battle"
+          ],
+          "confidence": 90,
+          "source": "research-000003",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000003",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred."
+        },
+        "pace": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000003",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred."
+        },
+        "short_sessions": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000003",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred."
+        },
+        "resume_ease": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000003",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred."
+        },
+        "mental_demand": {
+          "value": 55,
+          "confidence": 65,
+          "source": "research-000003",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred."
+        },
+        "calm": {
+          "value": 25,
+          "confidence": 65,
+          "source": "research-000003",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Discrete races can suit a short visit; items and opponents suggest lively attention. No exact session duration is inferred."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000003",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000004",
+      "objective": {
+        "title": {
+          "value": "The Legend of Zelda: A Link to the Past",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "field exploration",
+            "dungeon puzzles",
+            "tool acquisition"
+          ],
+          "confidence": 90,
+          "source": "research-000004",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        },
+        "mystery": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        },
+        "mental_demand": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        },
+        "pace": {
+          "value": 55,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        },
+        "intensity": {
+          "value": 55,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        },
+        "resume_ease": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        },
+        "calm": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000004",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Tools and dungeon puzzles support an exploratory interpretation; remembering objectives can take effort after a break."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000004",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000005",
+      "objective": {
+        "title": {
+          "value": "Super Metroid",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "connected exploration",
+            "ability-gated routes",
+            "equipment discovery"
+          ],
+          "confidence": 90,
+          "source": "research-000005",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 95,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "mystery": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "tension": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "intensity": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "mental_demand": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "pace": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "resume_ease": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        },
+        "calm": {
+          "value": 25,
+          "confidence": 65,
+          "source": "research-000005",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Unknown routes and growing abilities suggest mystery and discovery; danger means it is not simply a calming night game."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000005",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000006",
+      "objective": {
+        "title": {
+          "value": "Star Fox",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "flight combat",
+            "team support",
+            "flight manoeuvres"
+          ],
+          "confidence": 90,
+          "source": "research-000006",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000006",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration."
+        },
+        "pace": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000006",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration."
+        },
+        "tension": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000006",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration."
+        },
+        "short_sessions": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000006",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration."
+        },
+        "resume_ease": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000006",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration."
+        },
+        "calm": {
+          "value": 20,
+          "confidence": 65,
+          "source": "research-000006",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Pilot manoeuvres and combat suggest a brisk demanding visit; no claim of exact mission duration."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000006",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000007",
+      "objective": {
+        "title": {
+          "value": "F-ZERO",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "hover racing",
+            "circuit hazards",
+            "vehicle choice"
+          ],
+          "confidence": 90,
+          "source": "research-000007",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000007",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities."
+        },
+        "pace": {
+          "value": 95,
+          "confidence": 65,
+          "source": "research-000007",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities."
+        },
+        "mental_demand": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000007",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities."
+        },
+        "short_sessions": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000007",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities."
+        },
+        "resume_ease": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000007",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities."
+        },
+        "calm": {
+          "value": 15,
+          "confidence": 65,
+          "source": "research-000007",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Fast racing and hazardous tracks suggest intensity, while separate races offer brief opportunities."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000007",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000008",
+      "objective": {
+        "title": {
+          "value": "Stunt Race FX",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000008",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000009",
+      "objective": {
+        "title": {
+          "value": "Pilotwings",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "flight exercises",
+            "precision landing",
+            "vehicle variety"
+          ],
+          "confidence": 90,
+          "source": "research-000009",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        },
+        "intensity": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        },
+        "mental_demand": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        },
+        "pace": {
+          "value": 45,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        },
+        "short_sessions": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        },
+        "resume_ease": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        },
+        "exploration": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000009",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Flight setting may feel open and quiet, but scoring precise landings prevents classifying it as effortless."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000009",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000010",
+      "objective": {
+        "title": {
+          "value": "Kirby's Dream Land 3",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000010",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000011",
+      "objective": {
+        "title": {
+          "value": "Kirby's Dream Course",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "aimed shots",
+            "hole puzzles",
+            "stroke scoring"
+          ],
+          "confidence": 90,
+          "source": "research-000011",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000011",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation."
+        },
+        "mental_demand": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000011",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation."
+        },
+        "intensity": {
+          "value": 35,
+          "confidence": 65,
+          "source": "research-000011",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation."
+        },
+        "pace": {
+          "value": 35,
+          "confidence": 65,
+          "source": "research-000011",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation."
+        },
+        "short_sessions": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000011",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation."
+        },
+        "resume_ease": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000011",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Choosing shots suggests thought before action; the presence of hazards and vitality prevents an assumption of complete relaxation."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000011",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000012",
+      "objective": {
+        "title": {
+          "value": "Super Ghouls'n Ghosts",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "double jumping",
+            "weapon combat",
+            "changing terrain"
+          ],
+          "confidence": 90,
+          "source": "research-000012",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 95,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        },
+        "tension": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        },
+        "pace": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        },
+        "mental_demand": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        },
+        "calm": {
+          "value": 10,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        },
+        "short_sessions": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        },
+        "resume_ease": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000012",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Challenging monster encounters support tension. Gothic context can suggest Halloween, without imposing it or forbidding other dates."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000012",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000013",
+      "objective": {
+        "title": {
+          "value": "Demon's Crest",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "flight",
+            "form abilities",
+            "multiple endings"
+          ],
+          "confidence": 90,
+          "source": "research-000013",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        },
+        "mystery": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        },
+        "tension": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        },
+        "intensity": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        },
+        "pace": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        },
+        "resume_ease": {
+          "value": 45,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        },
+        "calm": {
+          "value": 25,
+          "confidence": 65,
+          "source": "research-000013",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Changing forms and different endings suggest discovery; the demon setting supports a possible autumn atmosphere, not a universal emotion."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000013",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000014",
+      "objective": {
+        "title": {
+          "value": "Super Puyo Puyo 2",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000014",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000015",
+      "objective": {
+        "title": {
+          "value": "Super Tennis",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000015",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000016",
+      "objective": {
+        "title": {
+          "value": "Breath Of Fire",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "party adventure",
+            "beast transformation",
+            "companion powers"
+          ],
+          "confidence": 90,
+          "source": "research-000016",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        },
+        "mystery": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        },
+        "mental_demand": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        },
+        "intensity": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        },
+        "pace": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        },
+        "resume_ease": {
+          "value": 35,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        },
+        "calm": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000016",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A party quest suggests sustained involvement and remembering abilities. No total playtime or battle mode is asserted by this evidence."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000016",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000017",
+      "objective": {
+        "title": {
+          "value": "BRAWL BROTHERS",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000017",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000018",
+      "objective": {
+        "title": {
+          "value": "SUPER E.D.F. EARTH DEFENSE FORCE",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000018",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000019",
+      "objective": {
+        "title": {
+          "value": "Joe & Mac 2: Lost in the Tropics",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000019",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000020",
+      "objective": {
+        "title": {
+          "value": "Super Punch-Out!!",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "short_sessions": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "intensity": {
+          "value": 75,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000020",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000021",
+      "objective": {
+        "title": {
+          "value": "Kirby Super Star",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "multiple adventure modes",
+            "ability helpers",
+            "timing subgames"
+          ],
+          "confidence": 90,
+          "source": "research-000021",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000021",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge."
+        },
+        "intensity": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000021",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge."
+        },
+        "pace": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000021",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge."
+        },
+        "short_sessions": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000021",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge."
+        },
+        "resume_ease": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000021",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge."
+        },
+        "exploration": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000021",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Multiple modes and subgames suggest flexible short visits; cooperative possibilities are not taken as reduced challenge."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000021",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000022",
+      "objective": {
+        "title": {
+          "value": "Breath of Fire II",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "world exploration",
+            "party abilities",
+            "dragon transformation"
+          ],
+          "confidence": 90,
+          "source": "research-000022",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        },
+        "mystery": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        },
+        "mental_demand": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        },
+        "intensity": {
+          "value": 55,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        },
+        "pace": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        },
+        "resume_ease": {
+          "value": 30,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        },
+        "calm": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000022",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "A missing-family quest supports mystery; managing a continuing party adventure can require reacquaintance after a break."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000022",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000023",
+      "objective": {
+        "title": {
+          "value": "Pop'n TwinBee",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000023",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000024",
+      "objective": {
+        "title": {
+          "value": "Smash Tennis",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000024",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000025",
+      "objective": {
+        "title": {
+          "value": "Operation Logic Bomb",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000025",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000026",
+      "objective": {
+        "title": {
+          "value": "Panel de Pon",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "panel swapping",
+            "active chains",
+            "versus mode"
+          ],
+          "confidence": 90,
+          "source": "research-000026",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000026",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions."
+        },
+        "mental_demand": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000026",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions."
+        },
+        "pace": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000026",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions."
+        },
+        "short_sessions": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000026",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions."
+        },
+        "resume_ease": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000026",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions."
+        },
+        "calm": {
+          "value": 30,
+          "confidence": 65,
+          "source": "research-000026",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Active chain building is mentally busy despite colourful presentation; separate puzzle rounds can suit brief sessions."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000026",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000027",
+      "objective": {
+        "title": {
+          "value": "Wild Guns",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "aimed shooting",
+            "boss encounters",
+            "two-player cooperation"
+          ],
+          "confidence": 90,
+          "source": "research-000027",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000027",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action."
+        },
+        "pace": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000027",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action."
+        },
+        "tension": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000027",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000027",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action."
+        },
+        "resume_ease": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000027",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action."
+        },
+        "calm": {
+          "value": 15,
+          "confidence": 65,
+          "source": "research-000027",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Arcade-style encounters suggest compact high-energy visits; no assumption about personal preference for action."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000027",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000028",
+      "objective": {
+        "title": {
+          "value": "Donkey Kong Country",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "character switching",
+            "stage platforming",
+            "animal abilities"
+          ],
+          "confidence": 90,
+          "source": "research-000028",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000028",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty."
+        },
+        "pace": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000028",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty."
+        },
+        "exploration": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000028",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty."
+        },
+        "calm": {
+          "value": 45,
+          "confidence": 65,
+          "source": "research-000028",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty."
+        },
+        "short_sessions": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000028",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty."
+        },
+        "resume_ease": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000028",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Distinct stage obstacles suggest rhythmic action and manageable visits, not a fixed easy difficulty."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000028",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000029",
+      "objective": {
+        "title": {
+          "value": "Natsume Championship Wrestling",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000029",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000030",
+      "objective": {
+        "title": {
+          "value": "Super Mario All-Stars",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000030",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000031",
+      "objective": {
+        "title": {
+          "value": "Donkey Kong Country 2: Diddy's Kong-Quest",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000031",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000032",
+      "objective": {
+        "title": {
+          "value": "Mario's Super Picross",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "picture logic puzzles",
+            "grid deduction",
+            "puzzle saving"
+          ],
+          "confidence": 90,
+          "source": "research-000032",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000032",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file."
+        },
+        "mental_demand": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000032",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file."
+        },
+        "intensity": {
+          "value": 20,
+          "confidence": 65,
+          "source": "research-000032",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file."
+        },
+        "pace": {
+          "value": 20,
+          "confidence": 65,
+          "source": "research-000032",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file."
+        },
+        "short_sessions": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000032",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file."
+        },
+        "resume_ease": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000032",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Grid deduction suggests slow concentration and interruption-friendly play. Documented original save is not evidence of a personal saved file."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000032",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000033",
+      "objective": {
+        "title": {
+          "value": "The Peace Keepers",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000033",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000034",
+      "objective": {
+        "title": {
+          "value": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000034",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000035",
+      "objective": {
+        "title": {
+          "value": "The Ignition Factor",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000035",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000036",
+      "objective": {
+        "title": {
+          "value": "Super Valis IV",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000036",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000037",
+      "objective": {
+        "title": {
+          "value": "Tuff E Nuff",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000037",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000038",
+      "objective": {
+        "title": {
+          "value": "DOOMSDAY WARRIOR",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000038",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000039",
+      "objective": {
+        "title": {
+          "value": "Prehistorik Man",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000039",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000040",
+      "objective": {
+        "title": {
+          "value": "Psycho Dream",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000040",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000041",
+      "objective": {
+        "title": {
+          "value": "Magical Drop II",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000041",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000042",
+      "objective": {
+        "title": {
+          "value": "Spanky's Quest",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000042",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000043",
+      "objective": {
+        "title": {
+          "value": "Claymates",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000043",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000044",
+      "objective": {
+        "title": {
+          "value": "JellyBoy",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000044",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000045",
+      "objective": {
+        "title": {
+          "value": "Bombuzal",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "mental_demand": {
+          "value": 70,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000045",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000046",
+      "objective": {
+        "title": {
+          "value": "EarthBound",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "town exploration",
+            "party battles",
+            "psychic abilities"
+          ],
+          "confidence": 90,
+          "source": "research-000046",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 85,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        },
+        "mystery": {
+          "value": 75,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        },
+        "mental_demand": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        },
+        "pace": {
+          "value": 45,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        },
+        "intensity": {
+          "value": 55,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        },
+        "calm": {
+          "value": 50,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        },
+        "resume_ease": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000046",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Town exploration and an unusual journey suggest curiosity, but battles and story memory rule out universally calm or easy-to-resume labels."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000046",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000047",
+      "objective": {
+        "title": {
+          "value": "Harvest Moon",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "crop tending",
+            "animal care",
+            "town supplies"
+          ],
+          "confidence": 90,
+          "source": "research-000047",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        },
+        "intensity": {
+          "value": 25,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        },
+        "pace": {
+          "value": 40,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        },
+        "mental_demand": {
+          "value": 60,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        },
+        "resume_ease": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        },
+        "exploration": {
+          "value": 45,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        },
+        "short_sessions": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000047",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Repeated farm tasks may feel grounded; resource decisions still require attention. No exact day or session duration inferred."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000047",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000048",
+      "objective": {
+        "title": {
+          "value": "Sutte Hakkun",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": {
+          "value": [
+            "block relocation",
+            "route construction",
+            "level puzzles"
+          ],
+          "confidence": 90,
+          "source": "research-000048",
+          "status": "source_checked",
+          "origin": "assistant_primary_source_analysis",
+          "note": "Paraphrased gameplay information. Human verification pending; source_checked is not human approval."
+        },
+        "duration": null
+      },
+      "editorial": {
+        "calm": {
+          "value": 70,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        },
+        "mental_demand": {
+          "value": 90,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        },
+        "exploration": {
+          "value": 65,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        },
+        "intensity": {
+          "value": 30,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        },
+        "pace": {
+          "value": 30,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        },
+        "resume_ease": {
+          "value": 80,
+          "confidence": 65,
+          "source": "research-000048",
+          "status": "proposed",
+          "origin": "assistant_editorial_interpretation",
+          "note": "Route planning and discrete levels suggest considered short visits; calm is an interpretation, not a documented response."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000048",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000049",
+      "objective": {
+        "title": {
+          "value": "NOBUNAGA'S AMBITION",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000049",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000050",
+      "objective": {
+        "title": {
+          "value": "Uncharted Waters: New Horizons",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000050",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000051",
+      "objective": {
+        "title": {
+          "value": "Romance of the Three Kingdoms IV: Wall of Fire",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000051",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000052",
+      "objective": {
+        "title": {
+          "value": "Mario Paint",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000052",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from": "atlas:snes:000004",
+      "to": "atlas:snes:000005",
+      "kind": "exploration",
+      "source": "pilot-editorial-proposals",
+      "status": "proposed",
+      "confidence": 40,
+      "origin": "assistant_proposal"
+    },
+    {
+      "from": "atlas:snes:000026",
+      "to": "atlas:snes:000032",
+      "kind": "brief_sessions",
+      "confidence": 65,
+      "source": "research-000026",
+      "status": "proposed",
+      "note": "Assistant comparison of discrete puzzle structure; not a documented historical connection."
+    },
+    {
+      "from": "atlas:snes:000005",
+      "to": "atlas:snes:000013",
+      "kind": "exploration",
+      "confidence": 65,
+      "source": "research-000005",
+      "status": "proposed",
+      "note": "Assistant proposal: abilities open ways forward; not influence or equivalence."
+    }
+  ],
+  "experiment": {
+    "channel": "experimental",
+    "selected_ids": [
+      "atlas:snes:000001",
+      "atlas:snes:000002",
+      "atlas:snes:000003",
+      "atlas:snes:000004",
+      "atlas:snes:000005",
+      "atlas:snes:000006",
+      "atlas:snes:000007",
+      "atlas:snes:000009",
+      "atlas:snes:000011",
+      "atlas:snes:000012",
+      "atlas:snes:000013",
+      "atlas:snes:000016",
+      "atlas:snes:000021",
+      "atlas:snes:000022",
+      "atlas:snes:000026",
+      "atlas:snes:000027",
+      "atlas:snes:000028",
+      "atlas:snes:000032",
+      "atlas:snes:000046",
+      "atlas:snes:000047",
+      "atlas:snes:000048"
+    ],
+    "human_review": null,
+    "author": "Codex assistant; source-assisted interpretation, not API research output",
+    "explanations": {
+      "atlas:snes:000001": "Una aventura por etapas, con caminos que invitan a explorar.",
+      "atlas:snes:000002": "Un viaje de dibujo y exploración, con pequeños retos por el camino.",
+      "atlas:snes:000003": "Carreras e imprevistos para una visita breve y con ritmo.",
+      "atlas:snes:000004": "Campos y mazmorras para descubrir caminos y resolver enigmas.",
+      "atlas:snes:000005": "Un planeta por explorar, con rutas que cambian al encontrar nuevas habilidades.",
+      "atlas:snes:000006": "Combate y maniobras de vuelo para un momento de acción concentrada.",
+      "atlas:snes:000007": "Circuitos y precisión al volante para una sesión con energía.",
+      "atlas:snes:000009": "Pequeños ejercicios de vuelo que dejan espacio a la precisión.",
+      "atlas:snes:000011": "Un pequeño problema de trayectorias para pensar antes de lanzar.",
+      "atlas:snes:000012": "Acción exigente entre criaturas y escenarios cambiantes.",
+      "atlas:snes:000013": "Formas y caminos por descubrir en una aventura de atmósfera oscura.",
+      "atlas:snes:000016": "Una aventura de compañeros y transformaciones para seguir con tiempo.",
+      "atlas:snes:000021": "Pequeñas aventuras y habilidades distintas para elegir tu propio ritmo.",
+      "atlas:snes:000022": "Un mundo amplio y una búsqueda que empieza con una desaparición.",
+      "atlas:snes:000026": "Puzles de cadenas activas que piden atención y rapidez.",
+      "atlas:snes:000027": "Forajidos, robots y acción concentrada para probar otro ritmo.",
+      "atlas:snes:000028": "Dos compañeros y habilidades animales para cruzar nuevos obstáculos.",
+      "atlas:snes:000032": "Un dibujo escondido entre números para resolver sin prisa.",
+      "atlas:snes:000046": "Pueblos y encuentros extraños en una aventura de compañeros.",
+      "atlas:snes:000047": "Una granja que cuidar, entre pequeños trabajos y decisiones cotidianas.",
+      "atlas:snes:000048": "Construir un camino con bloques, probando una idea cada vez."
+    }
+  }
+}

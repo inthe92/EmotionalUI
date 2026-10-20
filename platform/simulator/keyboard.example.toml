@@ -1,0 +1,9 @@
+# Overrides of the default virtual controller. Named arrows and lowercase keys.
+[bindings]
+z="confirm"
+x="back"
+s="menu"
+a="library"
+q="previous"
+e="next"
+n="refresh"

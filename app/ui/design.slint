@@ -1,0 +1,47 @@
+export struct Palette { base:color, ink:color, muted:color, accent:color }
+export global Design {
+    out property <[Palette]> palettes:[
+        {base:#e8edf0,ink:#22343b,muted:#3e535b,accent:#3d5d75},
+        {base:#d8e4df,ink:#22343b,muted:#3e535b,accent:#2b5653},
+        {base:#171d32,ink:#f2eee6,muted:#b4bbcf,accent:#e1bb90},
+        {base:#101923,ink:#f2eee6,muted:#b4bbcf,accent:#a6c4da}
+    ];
+    out property <length> margin:24px;
+    out property <length> gap:16px;
+    out property <length> card-radius:20px;
+    out property <length> control-radius:12px;
+    out property <length> panel-radius:24px;
+    out property <length> focus-width:2px;
+    out property <duration> focus-time:120ms;
+    out property <duration> confirmation-hold:120ms;
+    out property <duration> confirmation-travel:80ms;
+    out property <duration> content-defer:16ms;
+    out property <duration> toast-time:3000ms;
+    out property <duration> content-time:180ms;
+    out property <duration> panel-time:180ms;
+    out property <duration> palette-time:220ms;
+    out property <length> focus-growth:1px;
+    out property <length> confirmation-inset:2px;
+    out property <length> title-size:27px;
+    out property <length> brand-size:18px;
+    out property <length> greeting-size:24px;
+    out property <length> action-size:16px;
+    out property <length> panel-title-size:25px;
+    out property <length> toast-size:13px;
+    out property <length> body-size:14px;
+    out property <length> secondary-size:12px;
+}
+export component Glass inherits Rectangle {
+    in property <color> ink;
+    in property <color> accent;
+    in property <bool> selected:false;
+    in property <bool> reduced:false;
+    in property <image> surface:@image-url("../../assets/illustrations/glass.svg");
+    border-radius:Design.card-radius;
+    background:ink.with-alpha(0.055);
+    border-width:selected ? Design.focus-width : 1px;
+    border-color:selected ? accent : ink.with-alpha(0.16);
+    Rectangle {x:12px;y:0px;width:parent.width - 24px;height:1px;background:ink.with-alpha(selected?0.22:0.10);}
+    // SVG gradients and shadow are rasterized once; no dynamic backdrop blur.
+    Image {width:parent.width;height:parent.height;source:root.surface;image-fit:fill;}
+}

@@ -1,0 +1,71 @@
+# Authored fictional examples; these are not inferred from a genre.
+version = 1
+[[games]]
+id = "demo-0"
+[games.profile]
+calm = 82
+intensity = 22
+nostalgia = 75
+exploration = 82
+resume_ease = 90
+pace = 28
+session_minutes = 25
+[games.profile.seasons]
+autumn = 65
+winter = 65
+[[games]]
+id = "demo-1"
+[games.profile]
+calm = 92
+intensity = 12
+mental_demand = 35
+pace = 18
+resume_ease = 95
+session_minutes = 15
+[games.profile.celebrations]
+christmas = 80
+weekend = 50
+[[games]]
+id = "demo-2"
+[games.profile]
+exploration = 90
+mystery = 65
+intensity = 55
+mental_demand = 55
+pace = 55
+[games.profile.celebrations]
+new-year = 85
+[[games]]
+id = "demo-3"
+[games.profile]
+intensity = 95
+calm = 25
+pace = 92
+resume_ease = 95
+session_minutes = 10
+[games.profile.seasons]
+summer = 95
+[games.profile.celebrations]
+weekend = 80
+[[games]]
+id = "demo-4"
+[games.profile]
+mystery = 95
+nostalgia = 85
+calm = 65
+tension = 55
+pace = 35
+[games.profile.seasons]
+autumn = 90
+[games.profile.celebrations]
+halloween = 100
+[[games]]
+id = "demo-5"
+[games.profile]
+exploration = 95
+calm = 75
+intensity = 40
+mental_demand = 45
+[games.profile.seasons]
+summer = 85
+autumn = 70

@@ -1,0 +1,13 @@
+{
+  "title": "La habitación permanece",
+  "version": 1,
+  "seed": 35308,
+  "sample_rate": 22050,
+  "instrument": "Original additive soft piano study; no samples, no SoundFont",
+  "motifs": [
+    {"id":"umbral","seconds":10,"notes":[[0,57,38,1.8],[1.9,64,31,2.2],[4.8,62,28,1.7]]},
+    {"id":"brasa","seconds":14,"notes":[[0,60,34,2.1],[2.8,67,28,1.7],[5.7,65,26,1.8],[8.2,62,23,1.7]]},
+    {"id":"rastro","seconds":12,"notes":[[0,55,34,2.4],[3.8,62,28,1.9],[6.8,69,22,1.4]]}
+  ],
+  "preview": {"seconds":100,"phrases":[[4,"umbral"],[32,"brasa"],[69,"rastro"]]}
+}

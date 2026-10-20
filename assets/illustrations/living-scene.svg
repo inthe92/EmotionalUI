@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+<!-- Original EmotionalUI scene: a room opening onto a quiet inlet. No animation. -->
+<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#324b4d"/><stop offset="1" stop-color="#9baca2"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#5a7873"/><stop offset="1" stop-color="#273c3d"/></linearGradient></defs>
+<path fill="url(#sky)" d="M0 0h640v330H0z"/>
+<circle cx="441" cy="108" r="44" fill="#dfbf87"/>
+<path d="M0 218Q100 143 207 211T426 195T640 160V330H0" fill="#536e65"/>
+<path d="M0 251Q97 205 199 246T411 230T640 224V370H0" fill="#344f49"/>
+<path fill="url(#water)" d="M0 277h640v203H0z"/>
+<path d="M312 299h230m-272 18h300m-350 25h346m-213 29h244" stroke="#b8b899" stroke-opacity=".24" stroke-width="2"/>
+<path d="M0 0h35v480H0zM595 0h45v480h-45z" fill="#1c2a29"/>
+<path d="M28 0h8v480h-8zM588 0h7v480h-7z" fill="#bfa987" opacity=".30"/>
+<path d="M545 220v96h37v-96zM538 219h51l-26-14z" fill="#1e3331"/>
+<path d="M552 239h13v20h-13z" fill="#e4c28d"/>
+<path d="M65 265q-32-35-19-72 32 21 19 72m4-12q8-50 38-55 6 36-38 55" fill="#263d35"/>
+<path d="M0 458h640v22H0" fill="#1d2a29"/>
+</svg>

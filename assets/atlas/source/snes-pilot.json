@@ -1,0 +1,1928 @@
+{
+  "schema": 1,
+  "version": "0.1.0-pilot",
+  "platform": "snes",
+  "license": "GPL-3.0-only",
+  "sources": {
+    "nintendo-snes-list": {
+      "url": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-download-software/Super-Nintendo-Entertainment-System-Nintendo-Classics-1632515.html",
+      "accessed": "2026-10-18",
+      "scope": "Only title/platform checked against primary list; no descriptions/images copied. Trademark symbols omitted.",
+      "license": "Nintendo page copyrighted; factual title identification only, not artwork or licensed ROM content."
+    },
+    "pilot-editorial-proposals": {
+      "url": null,
+      "scope": "Original assistant editorial proposals; not external model API research or human validation.",
+      "license": "GPL-3.0-only"
+    }
+  },
+  "games": [
+    {
+      "id": "atlas:snes:000001",
+      "objective": {
+        "title": {
+          "value": "Super Mario World",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 55,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "exploration": {
+          "value": 55,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000001",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000002",
+      "objective": {
+        "title": {
+          "value": "Super Mario World 2: Yoshi's Island",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000002",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000003",
+      "objective": {
+        "title": {
+          "value": "Super Mario Kart",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000003",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000004",
+      "objective": {
+        "title": {
+          "value": "The Legend of Zelda: A Link to the Past",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "resume_ease": {
+          "value": 65,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000004",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000005",
+      "objective": {
+        "title": {
+          "value": "Super Metroid",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 90,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "mystery": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000005",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000006",
+      "objective": {
+        "title": {
+          "value": "Star Fox",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000006",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000007",
+      "objective": {
+        "title": {
+          "value": "F-ZERO",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "intensity": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000007",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000008",
+      "objective": {
+        "title": {
+          "value": "Stunt Race FX",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000008",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000009",
+      "objective": {
+        "title": {
+          "value": "Pilotwings",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000009",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000010",
+      "objective": {
+        "title": {
+          "value": "Kirby's Dream Land 3",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000010",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000011",
+      "objective": {
+        "title": {
+          "value": "Kirby's Dream Course",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000011",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000012",
+      "objective": {
+        "title": {
+          "value": "Super Ghouls'n Ghosts",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000012",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000013",
+      "objective": {
+        "title": {
+          "value": "Demon's Crest",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "mystery": {
+          "value": 75,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "exploration": {
+          "value": 70,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000013",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000014",
+      "objective": {
+        "title": {
+          "value": "Super Puyo Puyo 2",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000014",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000015",
+      "objective": {
+        "title": {
+          "value": "Super Tennis",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000015",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000016",
+      "objective": {
+        "title": {
+          "value": "Breath Of Fire",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000016",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000017",
+      "objective": {
+        "title": {
+          "value": "BRAWL BROTHERS",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000017",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000018",
+      "objective": {
+        "title": {
+          "value": "SUPER E.D.F. EARTH DEFENSE FORCE",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000018",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000019",
+      "objective": {
+        "title": {
+          "value": "Joe & Mac 2: Lost in the Tropics",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000019",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000020",
+      "objective": {
+        "title": {
+          "value": "Super Punch-Out!!",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "short_sessions": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "intensity": {
+          "value": 75,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000020",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000021",
+      "objective": {
+        "title": {
+          "value": "Kirby Super Star",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000021",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000022",
+      "objective": {
+        "title": {
+          "value": "Breath of Fire II",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000022",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000023",
+      "objective": {
+        "title": {
+          "value": "Pop'n TwinBee",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000023",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000024",
+      "objective": {
+        "title": {
+          "value": "Smash Tennis",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000024",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000025",
+      "objective": {
+        "title": {
+          "value": "Operation Logic Bomb",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000025",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000026",
+      "objective": {
+        "title": {
+          "value": "Panel de Pon",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "mental_demand": {
+          "value": 75,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "short_sessions": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000026",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000027",
+      "objective": {
+        "title": {
+          "value": "Wild Guns",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000027",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000028",
+      "objective": {
+        "title": {
+          "value": "Donkey Kong Country",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000028",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000029",
+      "objective": {
+        "title": {
+          "value": "Natsume Championship Wrestling",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000029",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000030",
+      "objective": {
+        "title": {
+          "value": "Super Mario All-Stars",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000030",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000031",
+      "objective": {
+        "title": {
+          "value": "Donkey Kong Country 2: Diddy's Kong-Quest",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000031",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000032",
+      "objective": {
+        "title": {
+          "value": "Mario's Super Picross",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000032",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000033",
+      "objective": {
+        "title": {
+          "value": "The Peace Keepers",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000033",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000034",
+      "objective": {
+        "title": {
+          "value": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000034",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000035",
+      "objective": {
+        "title": {
+          "value": "The Ignition Factor",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000035",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000036",
+      "objective": {
+        "title": {
+          "value": "Super Valis IV",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000036",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000037",
+      "objective": {
+        "title": {
+          "value": "Tuff E Nuff",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000037",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000038",
+      "objective": {
+        "title": {
+          "value": "DOOMSDAY WARRIOR",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000038",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000039",
+      "objective": {
+        "title": {
+          "value": "Prehistorik Man",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000039",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000040",
+      "objective": {
+        "title": {
+          "value": "Psycho Dream",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000040",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000041",
+      "objective": {
+        "title": {
+          "value": "Magical Drop II",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000041",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000042",
+      "objective": {
+        "title": {
+          "value": "Spanky's Quest",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000042",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000043",
+      "objective": {
+        "title": {
+          "value": "Claymates",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000043",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000044",
+      "objective": {
+        "title": {
+          "value": "JellyBoy",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000044",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000045",
+      "objective": {
+        "title": {
+          "value": "Bombuzal",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "mental_demand": {
+          "value": 70,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000045",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000046",
+      "objective": {
+        "title": {
+          "value": "EarthBound",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 75,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "pace": {
+          "value": 30,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000046",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000047",
+      "objective": {
+        "title": {
+          "value": "Harvest Moon",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "pace": {
+          "value": 25,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        },
+        "calm": {
+          "value": 70,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000047",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000048",
+      "objective": {
+        "title": {
+          "value": "Sutte Hakkun",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "mental_demand": {
+          "value": 80,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000048",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000049",
+      "objective": {
+        "title": {
+          "value": "NOBUNAGA'S AMBITION",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000049",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000050",
+      "objective": {
+        "title": {
+          "value": "Uncharted Waters: New Horizons",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {
+        "exploration": {
+          "value": 85,
+          "confidence": 40,
+          "source": "pilot-editorial-proposals",
+          "status": "proposed",
+          "origin": "assistant_proposal",
+          "note": "Interpretación inicial, pendiente de contrastar fuentes de juego y escucha/revisión humana; no dato objetivo."
+        }
+      },
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000050",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000051",
+      "objective": {
+        "title": {
+          "value": "Romance of the Three Kingdoms IV: Wall of Fire",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000051",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    },
+    {
+      "id": "atlas:snes:000052",
+      "objective": {
+        "title": {
+          "value": "Mario Paint",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "platform": {
+          "value": "snes",
+          "confidence": 100,
+          "source": "nintendo-snes-list",
+          "status": "source_checked",
+          "origin": "primary_catalog"
+        },
+        "year": null,
+        "developer": null,
+        "publisher": null,
+        "genre": null,
+        "mechanics": null,
+        "duration": null
+      },
+      "editorial": {},
+      "aliases": [],
+      "identity": {
+        "work_id": "atlas:snes:000052",
+        "region": "unspecified",
+        "revision": null,
+        "translation": null
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from": "atlas:snes:000004",
+      "to": "atlas:snes:000005",
+      "kind": "exploration",
+      "source": "pilot-editorial-proposals",
+      "status": "proposed",
+      "confidence": 40,
+      "origin": "assistant_proposal"
+    }
+  ]
+}

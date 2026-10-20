@@ -1,0 +1,101 @@
+[
+  {
+    "case": "hero",
+    "title": "Un lugar al que volver",
+    "field": "fanart",
+    "files": {
+      "snes/art.png": "26ed8a7735f0bbc859b45b56f6c0c39854ac8ec0922367566df71d8349079251",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "45f561b29eb6adbda243d4317226b3f99e3fa2023e0f811d2aec8d9ae1bced49"
+    }
+  },
+  {
+    "case": "boxart",
+    "title": "Un lugar al que volver",
+    "field": "boxart",
+    "files": {
+      "snes/art.png": "0f468455564e5e43d10c0c62274abd03b999d14bb2fc87d24deb266c45946344",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "1eeadc81c2129cd7f04834cbbdae99207ffdd35c49eeeacccb6c08bf8e46a399"
+    }
+  },
+  {
+    "case": "screenshot",
+    "title": "Un lugar al que volver",
+    "field": "screenshot",
+    "files": {
+      "snes/art.png": "7159b70a8ee6b9a5dff0e3e0610ae3cf278f11a0968a6ebe95510476831e0384",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "8dae18b54459600321253f4a8966cd2e222d0574e5031779574f3f8df172c4e2"
+    }
+  },
+  {
+    "case": "pixel-art",
+    "title": "Un lugar al que volver",
+    "field": "screenshot",
+    "files": {
+      "snes/art.png": "b208b410a4f48f6d29b1e6580f355f4c3aefbb6dcdb60d118c341e04732b2210",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "8dae18b54459600321253f4a8966cd2e222d0574e5031779574f3f8df172c4e2"
+    }
+  },
+  {
+    "case": "logo",
+    "title": "Un lugar al que volver",
+    "field": "marquee",
+    "files": {
+      "snes/art.png": "78ff3802988942b6804da7abe0af724c02b1ad4dc53b17ffe661f5aac7d14f92",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "1fb1de1ad49c41b76a7afab58a324c0af34b4768e9e2e37d282284f7385e21cb"
+    }
+  },
+  {
+    "case": "missing",
+    "title": "Un lugar al que volver",
+    "field": null,
+    "files": {
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "4c1353a5a0979de2bc8b70b19b36f027cb66bcda283238333c0e34b9ebc81e11"
+    }
+  },
+  {
+    "case": "corrupt",
+    "title": "Un lugar al que volver",
+    "field": "image",
+    "files": {
+      "snes/art.png": "ba85e5ae79b752d7f3f54ae5fcb81361e5f36831b99f1cbaa084cdd87a7fdd52",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "71fcf7b4662447fc0e6bab69407f793d3028546aac550645dd1cd23a6484988a"
+    }
+  },
+  {
+    "case": "long-title",
+    "title": "La casa junto al \u00faltimo faro y el peque\u00f1o viaje de regreso entre monta\u00f1as",
+    "field": "boxart",
+    "files": {
+      "snes/art.png": "0f468455564e5e43d10c0c62274abd03b999d14bb2fc87d24deb266c45946344",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "85eaa496952bddb8d8f9461c60979e0203f6ffee533c8aa55905a2f5d1dbcacf"
+    }
+  },
+  {
+    "case": "bright",
+    "title": "Un lugar al que volver",
+    "field": "fanart",
+    "files": {
+      "snes/art.png": "6edab9729fc657315f0a8439906467a3b0fa6fe6a4f063b2a6ca8e2387a8a29a",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "45f561b29eb6adbda243d4317226b3f99e3fa2023e0f811d2aec8d9ae1bced49"
+    }
+  },
+  {
+    "case": "dark",
+    "title": "Un lugar al que volver",
+    "field": "fanart",
+    "files": {
+      "snes/art.png": "a385dd8f2c4fdcdc37b0508e27497fae954a28abab6aa394ecad92fe5172fd33",
+      "snes/owned.fixture": "e73574c9d7a730386acd30c3489c10c2dcd008656414ee4ab6d0d6cfb3946f5f",
+      "snes/gamelist.xml": "45f561b29eb6adbda243d4317226b3f99e3fa2023e0f811d2aec8d9ae1bced49"
+    }
+  }
+]

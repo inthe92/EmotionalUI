@@ -1,0 +1,13 @@
+# Reserva editorial local
+
+`core/reserve.rs` utiliza el recomendador actual, con metadatos ya cargados y sin IA. Al preparar, combina las ocho primeras posiciones de doce escenarios estacionales/horarios/lluvia; la unión contiene como máximo 96 IDs de juegos instalados. No predice meteorología futura. Esta reserva sirve como conjunto reutilizable durante catorce días, no como agenda que obliga a jugar.
+
+Selección actual: ranking sobre el subconjunto y restauración de la selección persistida por contexto (estación, franja, clima, eventos y duración de sesión). Se mantiene un protagonista y una alternativa; no más contenido visible. La diversidad procede del ranking/penalización por repetición existentes, no de cuotas de títulos desconocidos. Una preferencia explícita positiva puede incorporar un título al conjunto; las preferencias pesan más que el contexto. No se emplea una señal de fama.
+
+La cache vive en settings.discovery_reserve de la SQLite propia: schema, versión/hash Atlas, fingerprint de disponibilidad/metadatos/preferencias, día de preparación si es fiable, IDs del pool, afinidades explícitas y selecciones por contexto. El primer inicio sin cache hace preparación antes de iniciar el event loop; tiene coste medido. Cambiar foco no calcula ranking, no lee SQLite y no vuelve a preparar. La selección de un contexto distinto trabaja en memoria; persistencia en el worker. Con --atlas se evita el ranking completo anterior en cada arranque con cache válida.
+
+Se invalida al cambiar catálogo/Atlas/preferencias, al retroceder el reloj fiable, al pasar catorce días o al cambiar confianza de hora. Un reloj de sistema sin confirmar no recibe una fecha de preparación: conserva una reserva sin edad ficticia, invalidada por versión/datos o renovación explícita. La fecha simulada solo prueba TTL de desarrollo. La caducidad se comprueba al arrancar; aún no hay renovación en background para una sesión de frontend abierta continuamente más de catorce días.
+
+Renovar manualmente reordena el pool y persiste la nueva elección. Catálogos agotados/vacíos no producen juegos ausentes; en el siguiente arranque una biblioteca cambiada se vuelve a preparar. La renovación no busca fuera de la reserva hasta que se invalida/reconstruye: es una limitación de esta primera implementación. El enlace --atlas activa esta ruta; sin Atlas se conserva la ruta anterior.
+
+La reserva no pretende ser más rápida para un catálogo de cien juegos. Se mantiene opcional: la comparación real incluye coste de preparación, fingerprint, lectura SQLite y clones. Payload de IDs no es RSS. Véase PHASE10_REPORT.md para resultados, y docs/phase10/performance-linux.json para datos exactos. No representa rendimiento RK3566 ni latencia de presentación.

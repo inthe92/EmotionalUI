@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Emotional Atlas source v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "version",
+    "platform",
+    "sources",
+    "games"
+  ],
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$"
+    },
+    "platform": {
+      "const": "snes"
+    },
+    "license": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "object"
+    },
+    "games": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "$ref": "#/$defs/game"
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "experiment": {
+      "type": "object",
+      "required": [
+        "channel",
+        "selected_ids",
+        "human_review",
+        "author",
+        "explanations"
+      ],
+      "properties": {
+        "channel": {
+          "const": "experimental"
+        },
+        "human_review": {
+          "type": "null"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "assertion": {
+      "type": "object",
+      "required": [
+        "value",
+        "confidence",
+        "source",
+        "status",
+        "origin"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {},
+        "confidence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "source": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "unknown",
+            "proposed",
+            "source_checked",
+            "approved",
+            "rejected"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "game": {
+      "type": "object",
+      "required": [
+        "id",
+        "identity",
+        "objective",
+        "editorial",
+        "aliases"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^atlas:snes:[0-9]{6}$"
+        },
+        "identity": {
+          "type": "object",
+          "required": [
+            "work_id",
+            "region",
+            "revision",
+            "translation"
+          ]
+        },
+        "objective": {
+          "type": "object",
+          "required": [
+            "title",
+            "platform",
+            "year",
+            "developer",
+            "publisher",
+            "genre",
+            "mechanics",
+            "duration"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "platform": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "year": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "developer": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "publisher": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "genre": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "mechanics": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            },
+            "duration": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/assertion"
+                }
+              ]
+            }
+          }
+        },
+        "editorial": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/assertion"
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "region",
+              "source"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$comment": "tools/atlas.py additionally validates provenance references, duplicates, relation targets, attribute bounds, region/revision ambiguity and review/publish rules."
+}

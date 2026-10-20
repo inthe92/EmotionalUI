@@ -1,0 +1,19 @@
+# Configuration read at startup. CLI flags override these values.
+reduced_motion = false
+region = "ES"
+session_minutes = 30
+weather = "unknown"
+# at = "2026-10-31T21:30" # frozen local wall time; omit for system clock
+
+# Regional overlays share the same visual identity; no unrelated holiday skins.
+[[holidays]]
+month = 10
+day = 31
+region = "ES"
+label = "Halloween"
+
+[[holidays]]
+month = 12
+day = 25
+region = "ES"
+label = "Navidad"

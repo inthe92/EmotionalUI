@@ -1,0 +1,28 @@
+[[events]]
+id = "halloween"
+month = 10
+day = 31
+region = "ES"
+[[events]]
+id = "christmas"
+month = 12
+day = 25
+region = "ES"
+[[events]]
+id = "new-year"
+month = 1
+day = 1
+[[events]]
+id = "summer"
+season = "summer"
+[[events]]
+id = "autumn"
+season = "autumn"
+[[events]]
+id = "weekend"
+weekend = true
+[[events]]
+id = "madrid-day"
+month = 5
+day = 2
+region = "ES-MD"
