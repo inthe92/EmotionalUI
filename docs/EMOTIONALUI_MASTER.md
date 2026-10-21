@@ -2,6 +2,9 @@
 
 Versión 1 · 19-10-2026 · **Propuesta consolidada, pendiente de aceptación del propietario.**
 
+
+**Actualización vigente del ambiente: §8 (20-10-2026).** Las cifras Git y las filas de escena del 19-10 siguientes son una instantánea histórica; no describen el estado ambiental actual.
+
 Referencia principal de producto y proceso. Los informes numerados conservan valor histórico, pero no definen por sí solos el estado actual ni autorizan tareas. Ante una contradicción: código/configuración → pruebas y registros reproducibles → evidencia física de la revisión identificada → informes → hipótesis. Una ejecución anterior en la consola no valida el build actual.
 
 **Hito activo: 0 — Consolidación.** Esta intervención solo modifica documentación. No se han ejecutado compilaciones, suites, benchmarks ni capturas nuevas, no hay conexión al dispositivo y no se ha creado un commit. Se inspeccionan las evidencias existentes.
@@ -18,7 +21,7 @@ Frontend nativo de videojuegos retro. Primera plataforma: Anbernic RG353V con dA
 
 ## 2. Realidad comprobada del repositorio
 
-**Identidad actual:** workspace 0.2.0, branch `main`, sin HEAD/commits, sin archivos seguidos, sin remoto y sin autor Git configurado. Todo el proyecto sigue sin seguimiento. El número inicial de archivos no ignorados era 2.530, de los cuales 2.226 estaban en `docs/`; no hacer `git add .` ni asumir que `.gitignore` constituye una auditoría.
+**Instantánea histórica del 19-10-2026 (superada):** workspace 0.2.0, branch `main`, sin HEAD/commits, sin archivos seguidos, sin remoto y sin autor Git configurado. Todo el proyecto sigue sin seguimiento. El número inicial de archivos no ignorados era 2.530, de los cuales 2.226 estaban en `docs/`; no hacer `git add .` ni asumir que `.gitignore` constituye una auditoría.
 
 El manifiesto [de fuentes](visual-unification-2026-10-19/source-manifest.json) coincide en sus **32 archivos inventariados** al inspeccionarlo. Esa lista no certifica por sí sola cada archivo del árbol. Los registros dan 178 tests Rust macOS, 180 Linux, 181 con simulator y 71 Python. No se han repetido en esta consolidación.
 
@@ -144,3 +147,31 @@ Licencia declarada: GPL-3.0-only en Cargo y LICENSE existentes; no se elige otra
 - Parada: al recibir la decisión; cualquier corrección se convierte en otra petición acotada. **No ejecutar esta siguiente tarea ni iniciar el siguiente hito durante la consolidación.**
 
 La decisión inmediata sigue siendo revisar esta especificación y la propuesta de checkpoint. Nada de lo anterior autoriza comenzar automáticamente otra intervención.
+
+
+## 8. Estado ambiental offline y simulador · 20-10-2026
+
+**VERIFICADO EN MAC:** se reutilizan NOAA offline, siete franjas, IANA/DST, estaciones y paletas. Efemérides en caché acotada por fecha/localización: 1.000 lecturas del mismo día requieren un solo cálculo. Se conserva la simulación histórica anterior. No cambian Slint, navegación, fuentes, geometría ni recursos; hashes de los assets comprobados contra la copia privada anterior.
+
+**PROBADO SINTÉTICAMENTE:** LIVE / CACHED / STALE / UNKNOWN, más DEMO explícito. STALE conserva historia sin representar precipitación actual. Nuevas observaciones guardan UTC de observación, recepción y caducidad, lugar y proveedor; TTL por defecto 180 minutos y límite más restrictivo entre TTL actual y expiración guardada. Cachés antiguas conservan campos desconocidos sin inventarlos; para cargar clima de producto se exige procedencia identificada. Ubicación distinta o reloj no fiable no utiliza clima ajeno. Sin reloj fiable: escena neutra y sin estación/festivo inventados.
+
+Simulador ampliado en `tools/preview_environment.py` y `--dev-environment-file` (rechazado en build de producto). No añade pantallas. Permite fecha local o RFC3339 con offset, franja solar, estación calculada, clima/estado ficticios, caché de archivo y reloj desconocido. `--open` mantiene la ventana para navegación manual; no cambia el reloj del Mac. La ejecución del driver macOS bloquea red para Slint. Ubicación se lee de configuración privada o argumentos explícitos, nunca se incorpora una localidad personal al código.
+
+Reproducción, con Python ≥3.11 y Pillow existentes (`EMOTIONAL_PYTHON`):
+```sh
+"$EMOTIONAL_PYTHON" tools/preview_environment.py --compact --context-config /ruta/privada/ambient-private.toml --out "$HOME/Desktop/EmotionalUI-DEMO" --work /ruta/privada/preview
+"$EMOTIONAL_PYTHON" tools/preview_environment.py --dev-at 2026-12-25T12:00 --moment anochecer --weather-state cached --condition snow --context-config /ruta/privada/ambient-private.toml --view emotional --open --out "$HOME/Desktop/EmotionalUI-DEMO"
+cargo test --offline --locked -p emotional-core --test ambient_e1 --test ambient_composition
+cargo test --offline --locked -p emotional-services ambient::
+cargo test --offline --locked -p emotional-services open_meteo
+cargo test --offline --locked -p emotional-services clock::
+cargo test --offline --locked -p emotional-ui moments::tests
+```
+
+Resultados: **56 tests Rust focalizados**, incluido un test con 7×4 contextos solares/estacionales, y **24 ejecuciones Slint offline**: 12 capturas de ambas vistas, 11 casos de borde (archivos de caché vacía/vigente/caducada, ubicación, reloj, DST, niebla/nubes/Año Nuevo) y una regresión existente de foco/navegación/transición. Se conserva la referencia fija USNO de tres fechas, tolerancia 300 s; sin consulta de red para calcular sol. Las aserciones de transición se mantienen: el test selecciona colores realmente distintos, evitando confundir un no-op por cuantización de 8 bits con una animación fallida.
+
+Capturas RGB reales 640×480 y comparativa: `~/Desktop/EmotionalUI-Ambiente-Offline-DEMO-nf5s7223/Comparacion-DEMO.jpg`. Son datos ficticios DEMO y arte privado provisional, sin aprobación artística ni permiso de redistribución implícitos. Evidencia detallada privada: carpeta `EmotionalUI-Validation/offline-simulator-bvj927sl` en Application Support.
+
+Compilaciones macOS y Linux ARM64 `linuxkms-direct` ejecutadas; se reutiliza `tools/arm64/build.sh` y el SDK existente, sin nuevas dependencias. Clippy de producción/servicios, formato y diff correctos. **BLOQUEADO solo Clippy global de tests:** tres avisos previos `chunks_exact_to_as_chunks` en `app/src/artwork/tests.rs`, fuera del alcance y sin modificar. No bloquea los builds ni los tests anteriores.
+
+**NO PROBADO EN RG353V:** esta revisión completa, LCD, rendimiento, mandos y audio físicos. No se ha conectado al dispositivo ni realizado consultas meteorológicas reales en esta fase; la autorización privada sigue desactivada. Sin nuevos fundidos entre pinturas, commits o publicación. HEAD de origen `d65c03c8306ed95e42a3110d734133a1dbba04f9`; se conserva `80c6dcd` y los respaldos. Siguiente paso mínimo: revisión humana del simulador; después, prueba física supervisada cuando haya consola.

@@ -9,7 +9,16 @@ default = ["desktop"]
 desktop = ["slint/backend-winit"]
 linuxkms = ["slint/backend-linuxkms"]
 linuxkms-direct = ["slint/backend-linuxkms-noseat"]
+linuxkms-gpu = ["linuxkms-direct", "slint/renderer-femtovg"]
 simulator = []
+[[bin]]
+name = "gpu-probe"
+path = "src/bin/gpu_probe.rs"
+required-features = ["linuxkms-gpu"]
+[[bin]]
+name = "gpu-pipeline-probe"
+path = "src/bin/gpu_pipeline_probe.rs"
+required-features = ["linuxkms-gpu"]
 [dependencies]
 emotional-core = { path = "../core" }
 emotional-services = { path = "../services" }

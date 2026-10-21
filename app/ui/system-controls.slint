@@ -1,16 +1,18 @@
+import { DaycycleAssets } from "../../assets/scenes/daycycle/assets.slint";
 import { AtmosphereDesign, AmbientPanel } from "integrated.slint";
 export component SystemControls inherits Rectangle {
     in property <bool> focused;
     in property <bool> expanded;
+    in property <float> progress;
     in property <bool> reduced;
     in property <bool> blocked;
     callback toggled();
     callback settings();
     width:640px;height:480px;background:transparent;
-    if root.expanded: Rectangle {width:640px;height:480px;background:#080a0870;TouchArea {clicked=>{root.toggled();}}}
+    if root.progress>0: Rectangle {width:640px;height:480px;background:#080a0870;opacity:root.progress;TouchArea {enabled:root.expanded;clicked=>{root.toggled();}}}
     AmbientPanel {
         x:440px;y:16px;width:176px;height:28px;radius:self.height/2;
-        focused:root.focused;surface:AtmosphereDesign.status-material;
+        focused:root.focused;surface:AtmosphereDesign.status-material;focused-surface:AtmosphereDesign.status-material-focus;next-surface:DaycycleAssets.status-next;next-focused-surface:DaycycleAssets.status-focus-next;
         for icon[index] in [@image-url("../../assets/icons/wifi.svg"),@image-url("../../assets/icons/battery.svg"),@image-url("../../assets/icons/bluetooth.svg"),@image-url("../../assets/icons/sound.svg"),@image-url("../../assets/icons/brightness.svg")]: Image {
             x:16px+index*32px;y:6px;width:16px;height:16px;source:icon;colorize:AtmosphereDesign.muted;
             // Unknown is not off: the expanded panel explicitly says unverified.
@@ -18,8 +20,7 @@ export component SystemControls inherits Rectangle {
         TouchArea {enabled:!root.blocked;clicked=>{root.toggled();}}
     }
     AmbientPanel {
-        property <float> show:root.expanded?1:0;
-        animate show {duration:root.reduced?0ms:160ms;easing:ease-out;}
+        property <float> show:root.progress;
         x:344px;y:44px+(1-self.show)*4px;width:272px;height:268px;
         visible:self.show>0;opacity:self.show;radius:AtmosphereDesign.radius-l;
         TouchArea {enabled:root.expanded;}

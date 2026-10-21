@@ -1,3 +1,23 @@
+# Fase 14 · actualización vigente · 21-10-2026
+
+`app/ui/motion.slint` centraliza micro110/pulsación80, sección360/funcional240, panel180/cierre130 y desfase45 ms. Curva espacial ease-in-out suave (velocidad inicial/final cero), trayectoria retargeteable, fin exacto y movimiento reducido inmediato sin parallax. Son parámetros, no FPS garantizados.
+
+Se conservan pestañas superiores, cápsula, geometría de Continuar y materiales F13. Tu momento cambia a panel400×208 (216 para título largo), arte176×104, explicación debajo del arte, CTA compartido a la derecha y alternativa248×48/64 en x176. No se cambian tipografías/paletas/radios. La franja inferior derivada de la habitación se desplaza ±12 px y la pintura ±6 px: profundidad aproximada, sin nuevos artes ni blur. Encabezados estables; las páginas coexisten durante el movimiento dentro de un viewport640×480.
+
+Primera pasada corrigió el anclaje implícitamente centrado del viewport; segunda revisó bordes de salida, títulos largos, vacío y ausencia de arte. Fluidez confirmada en primer ensayo RG353V; entrada por borde físico corregida después, pendiente de nueva valoración LCD. No cambia duración ni posiciones finales. Evidencias y límites: [PHASE14_REPORT.md](PHASE14_REPORT.md). Las notas F13 inferiores son históricas donde difieran.
+
+---
+
+# Fase 13 · actualización vigente · 21-10-2026
+
+La petición Fase 13 sustituye el dock inferior por pestañas superiores: Continuar · Tu momento · Biblioteca · Ajustes. Barra 400×32 en (24,16), cuatro zonas de 100 px; cápsula conserva (440,16) y 176×28. Indicador activo animado y foco por contorno son independientes. No hay una segunda navegación al pie.
+
+Continuar: 448×192 en (24,152), dos secundarias 216×56. Tu momento: 400×184 en (24,168), alternativa 248×48. Títulos largos amplían alturas y ajustan posición para terminar antes de y448. CTA único 188×36, cuerpo 13 px y radios 16/12/8/6 conservados; píldoras altura/2. Encabezados comunes y materiales/paletas existentes. Transición finita 240 ms, habitación ±8 px y primer plano UI 28 px. Una sola pintura, sin segmentación artística ficticia; movimiento reducido inmediato. B cierra paneles sin cola visual.
+
+Capturas auténticas y estado de aceptación: [PHASE13_REPORT](PHASE13_REPORT.md). Las geometrías inferiores se conservan como historia y no describen esta revisión. Aprobación artística/física pendiente.
+
+---
+
 # Revisión definitiva · 19-10-2026
 
 Sistema vigente en `AtmosphereDesign`, `AmbientPanel`, `AmbientAction`, `SectionHeader`, `SectionDock` y `SystemControls`. Se conservan las notas históricas inferiores.

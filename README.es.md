@@ -2,6 +2,9 @@
 # EmotionalUI
 **Menos buscar. Más jugar.**
 
+> **Preparación de preview:** `v0.1.0-preview.1` todavía no está disponible para descarga pública. El código fuente ya es público. Falta la prueba de instalación del ZIP exacto. Esta preparación no ha publicado una release.
+
+
 ### Videojuegos para cada momento.
 
 EmotionalUI nació una tarde lluviosa de domingo.
@@ -77,3 +80,18 @@ Si compartes esta forma de entender los videojuegos, nos encantará conocer tu o
 *No se trata de tener más videojuegos.*
 
 **Se trata de darles el lugar que merecen en nuestros momentos.**
+
+
+## Preview experimental para RG353V
+
+El frontend local ya se ha ejecutado en una Anbernic RG353V real con dArkOS, controles físicos y regreso supervisado a EmulationStation. Esa evidencia corresponde a los binarios registrados, no certifica el instalador pendiente.
+
+Las cuatro secciones son **Continuar, Tu momento, Biblioteca y Ajustes**. La misma habitación responde a hora local, estación, clima opcional y eventos editoriales. El modo offline no necesita meteorología; el clima real requiere ubicación y consentimiento privados. El clima DEMO no representa una observación.
+
+El paquete previsto `v0.1.0-preview.1` usará **software por defecto** y **Mali-G52 / FemtoVG experimental**. No activará el swap inmediato. La GPU mejora la navegación percibida, pero no se han demostrado 30 ni 60 FPS estables; hay pequeñas diferencias de rasterizado y salto de línea.
+
+El modo prueba permite explorar la interfaz e importar una biblioteca existente a una SQLite propia. **No permite lanzar juegos.** No se incluyen ROMs, BIOS, partidas ni carátulas comerciales. `install-main` continúa bloqueado.
+
+[Instalación y recuperación: borrador](PREVIEW_INSTALL.md) · [Preparación y notas de release](RELEASE_READINESS.md) · [Pruebas](TESTING.md) · [Licencias](THIRD_PARTY_LICENSES.md)
+
+Rust + Slint 1.13.1; código propio GPL-3.0-only. Fuentes y dependencias conservan sus avisos. El propietario confirma que la referencia de la habitación es propia; su declaración queda registrada. Los binarios de desarrollo todavía no son artefactos de release aprobados. La publicación exige revisión y autorización final.

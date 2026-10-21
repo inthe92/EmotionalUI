@@ -46,10 +46,11 @@ def check_tree(text,main):
     if any(pid in descendants and name not in ALLOWED for pid,_,name in parsed):raise ValueError('Unrecognized frontend child; cancel')
     if any(name in {'retroarch','retroarch32','retroarch64','Xorg','Xwayland','weston','ppsspp','ppsspp64'} for _,_,name in parsed):raise ValueError('Emulator/other compositor active; cancel')
 
-def command(bundle,unit,probe,seconds=10,input_profile=False,library_root=None,audio_mode="silence",audio_volume=0,calibrated_audio=False,context=None,view="emotional",unknown_time=False,isolated=False):
+def command(bundle,unit,probe,seconds=10,input_profile=False,library_root=None,audio_mode="silence",audio_volume=0,calibrated_audio=False,context=None,view="emotional",unknown_time=False,isolated=False,renderer='software'):
     bundle=safe_path(bundle)
     library_root=safe_path(library_root) if library_root else bundle/'empty'
     if audio_mode not in {'silence','minimal','ambient'} or not 0<=audio_volume<=25:raise ValueError('Quiet preview audio only')
+    if renderer not in {'software','femtovg'}:raise ValueError('Explicit supported renderer required')
     if not re.fullmatch(r'emotional-ui-phase12-(?:probe|preview)-[a-z0-9-]+',unit):raise ValueError('Unexpected transient unit')
     if not 2<=seconds<=180:raise ValueError('Preview duration must be 2..180 seconds')
     args=['sudo','-n','systemd-run','--wait','--unit='+unit,
@@ -61,14 +62,19 @@ def command(bundle,unit,probe,seconds=10,input_profile=False,library_root=None,a
     stem=unit if isolated else 'preview'
     quit_name=unit+'.quit.request' if isolated else 'quit.request'
     if probe:return args+['/usr/bin/true']
+    diagnostic=[]
+    for key,allowed in [('EMOTIONAL_PERF',{'full','static','simple'}),('EMOTIONAL_SCENE_CACHE',{'off','base','layers'}),('EMOTIONAL_PERF_TRACE',{'1'}),('EMOTIONAL_GPU_REPLAY',{'fixed-v1','capture-v1'}),('EMOTIONAL_GPU_SWAP',{'immediate'})]:
+        value=os.environ.get(key)
+        if value in allowed:diagnostic.append(key+'='+value)
+    diagnostic.append('EMOTIONAL_ARTWORK_CACHE='+str(bundle/'artwork-cache'))
     # Runtime cap applies ONLY to a --trial preview that cannot start any emulator.
     args += ['--property=ExecStartPre=+/usr/bin/systemctl stop '+UNIT,
              '--property=RuntimeMaxSec='+str(seconds+15),
              '--property=ReadOnlyPaths='+str(library_root),
-             '--property=Environment=SLINT_BACKEND=linuxkms-software SLINT_SCALE_FACTOR=1 XDG_RUNTIME_DIR=/run/user/1000',
+             '--property=Environment=SLINT_BACKEND=linuxkms-'+renderer+' SLINT_SCALE_FACTOR=1 XDG_RUNTIME_DIR=/run/user/1000 '+' '.join(diagnostic),
              '--property=StandardOutput=append:'+str(bundle/(stem+'.stdout')),
              '--property=StandardError=append:'+str(bundle/(stem+'.stderr')),
-             str(bundle/'emotional-ui'),'--trial','--library-root',str(library_root),
+             str(bundle/('emotional-ui-gpu' if renderer=='femtovg' else 'emotional-ui')),'--trial','--library-root',str(library_root),
              '--db',str(bundle/'preview.sqlite'),'--view',view,'--audio-mode',audio_mode,'--audio-volume',str(audio_volume),
              '--smoke-log',str(bundle/(stem+'-events.toml')),'--quit-file',str(bundle/quit_name)]
     if seconds<=30:args += ['--smoke-test','--smoke-seconds',str(seconds)]
@@ -82,11 +88,12 @@ def run(args):
     return subprocess.run(args,capture_output=True,text=True,timeout=95)
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('bundle',type=Path);p.add_argument('--unit',required=True);p.add_argument('--context');p.add_argument('--view',default='emotional');p.add_argument('--unknown-time',action='store_true');p.add_argument('--isolated',action='store_true');p.add_argument('--probe',action='store_true');p.add_argument('--input-profile',action='store_true');p.add_argument('--library-root',type=Path);p.add_argument('--audio-mode',default='silence');p.add_argument('--audio-volume',type=int,default=0);p.add_argument('--calibrated-audio',action='store_true');p.add_argument('--seconds',type=int,default=10);p.add_argument('--execute',action='store_true');p.add_argument('--supervised',action='store_true');p.add_argument('--second-session-confirmed',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('bundle',type=Path);p.add_argument('--unit',required=True);p.add_argument('--renderer',choices=['software','femtovg'],default='software');p.add_argument('--context');p.add_argument('--view',default='emotional');p.add_argument('--unknown-time',action='store_true');p.add_argument('--isolated',action='store_true');p.add_argument('--probe',action='store_true');p.add_argument('--input-profile',action='store_true');p.add_argument('--library-root',type=Path);p.add_argument('--audio-mode',default='silence');p.add_argument('--audio-volume',type=int,default=0);p.add_argument('--calibrated-audio',action='store_true');p.add_argument('--seconds',type=int,default=10);p.add_argument('--execute',action='store_true');p.add_argument('--supervised',action='store_true');p.add_argument('--second-session-confirmed',action='store_true');a=p.parse_args()
     manifest=verify_bundle(a.bundle)
     if a.calibrated_audio:check_audio_bank(manifest)
     if a.context and a.context not in manifest['files']:raise SystemExit('Context is not covered by manifest')
-    args=command(a.bundle,a.unit,a.probe,a.seconds,a.input_profile,a.library_root,a.audio_mode,a.audio_volume,a.calibrated_audio,a.context,a.view,a.unknown_time,a.isolated)
+    if a.renderer=='femtovg' and 'emotional-ui-gpu' not in manifest['files']:raise SystemExit('GPU executable is not covered by manifest; software remains available')
+    args=command(a.bundle,a.unit,a.probe,a.seconds,a.input_profile,a.library_root,a.audio_mode,a.audio_volume,a.calibrated_audio,a.context,a.view,a.unknown_time,a.isolated,a.renderer)
     if not a.execute:print(json.dumps({'dry_run':True,'argv':args}));return
     if not a.supervised or not a.second_session_confirmed or not os.environ.get('SSH_CONNECTION'):raise SystemExit('Current supervision and independently tested SSH session required')
     state=run(['systemctl','show',UNIT,'-p','ActiveState','-p','MainPID'])

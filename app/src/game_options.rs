@@ -55,6 +55,7 @@ impl State {
                 .copied()
         };
         if let Some(i) = index.filter(|i| self.games.get(*i).is_some_and(|g| g.available)) {
+            self.begin_modal(crate::navigation::Modal::GameOptions);
             self.game_options = Some(i);
             self.game_option_index = 0;
             self.game_explained = false;
@@ -73,11 +74,11 @@ impl State {
         match action {
             Action::Up => self.game_option_index = self.game_option_index.saturating_sub(1),
             Action::Down => self.game_option_index = (self.game_option_index + 1).min(5),
-            Action::Back | Action::Menu => self.game_options = None,
+            Action::Back | Action::Menu => self.close_modal(),
             Action::Confirm if self.game_option_index == 4 => {
                 self.game_explained = !self.game_explained
             }
-            Action::Confirm if self.game_option_index == 5 => self.game_options = None,
+            Action::Confirm if self.game_option_index == 5 => self.close_modal(),
             Action::Confirm if self.game_option_index < 4 => {
                 let id = self.games[i].id.clone();
                 let mut p = self

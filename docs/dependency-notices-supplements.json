@@ -1,0 +1,24 @@
+[
+  {
+    "name": "drm-fourcc",
+    "version": "2.2.0",
+    "scope": "runtime",
+    "authors_metadata": [
+      "Daniel Franklin <daniel@danielzfranklin.org>"
+    ],
+    "upstream_declaration_sha256": "0660e17d634e5b8c2a82cd0b0328c42fbc6e8b77a9f37b85f49bfeba1f4931ca",
+    "standard_terms": "https://spdx.org/licenses/MIT.html",
+    "note": "Upstream supplies no separate copyright notice. Standard terms below are a supplement, not an upstream-specific grant or invented copyright. Placeholders deliberately unchanged."
+  },
+  {
+    "name": "simd_helpers",
+    "version": "0.1.0",
+    "scope": "build-time proc-macro",
+    "authors_metadata": [
+      "Luca Barbato <lu_zero@gentoo.org>"
+    ],
+    "upstream_declaration_sha256": "b41497677a5498040f2eb3fc089e3c2c38c413dca64f41dc57a115e26480461d",
+    "standard_terms": "https://spdx.org/licenses/MIT.html",
+    "note": "Upstream supplies no separate copyright notice. Standard terms below are a supplement, not an upstream-specific grant or invented copyright. Placeholders deliberately unchanged."
+  }
+]

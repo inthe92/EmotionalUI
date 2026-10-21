@@ -1,27 +1,55 @@
+import { MotionDesign } from "motion.slint";
 import "../../assets/fonts/DejaVuSans.ttf";
 import "../../assets/fonts/DejaVuSans-Bold.ttf";
+import { DaycycleAssets } from "../../assets/scenes/daycycle/assets.slint";
 export global AtmosphereDesign {
+    // Only set by explicit EMOTIONAL_PERF diagnostics; never persisted.
+    in-out property <int> diagnostic-mode:0;
+    in-out property <[image]> scene-rasters:[];
+    in-out property <bool> scene-raster-ready:false;
+    in-out property <int> cached-weather:-1;
+    in-out property <int> cached-event:-1;
+    in-out property <[image]> near-rasters:[];
+    in-out property <int> near-key:-1;
+    in-out property <int> near-next-key:-1;
+    in-out property <image> base-cache;
+    in-out property <bool> base-cache-ready:false;
+    in-out property <int> base-cache-builds:0;
+    in-out property <int> base-cache-hits:0;
+    in-out property <image> near-cache;
+    in-out property <bool> near-cache-ready:false;
     out property <string> family:"DejaVu Sans";
-    out property <color> base:#181713;
-    out property <color> ink:#f5ebd8;
-    out property <color> muted:#ded2be;
-    out property <color> mark:#ead1a4;
-    out property <color> glass:#28241de8;
-    out property <color> sheet:#201e19fa;
-    // Nine-slice preserves circular corners without rounded child clipping,
-    // whose software-rendered gradients leave corner artifacts in Slint 1.13.
-    out property <image> material:@image-url("../../assets/illustrations/room-material.png",nine-slice(14));
-    out property <image> tile-material:@image-url("../../assets/illustrations/room-tile.png",nine-slice(10));
-    out property <image> action-material:@image-url("../../assets/illustrations/room-action.png");
-    out property <image> status-material:@image-url("../../assets/illustrations/room-status.png");
-    out property <image> dock-material:@image-url("../../assets/illustrations/room-dock.png");
-    out property <brush> fallback:@linear-gradient(125deg,#494338,#252c25);
-    out property <color> border:#e9d6b447;
-    out property <color> rim:#fff0cc1c;
-    out property <color> active:#ead1a421;
-    out property <color> shadow:#05050330;
+    out property <color> base:DaycycleAssets.base;
+    out property <color> ink:DaycycleAssets.ink;
+    out property <color> muted:DaycycleAssets.muted;
+    out property <color> mark:DaycycleAssets.mark;
+    out property <color> glass:DaycycleAssets.glass;
+    out property <color> sheet:DaycycleAssets.sheet;
+    // Shared 2px antialiased surfaces, prepared offline for each atmosphere.
+    out property <image> material:DaycycleAssets.material;
+    out property <image> material-focus:DaycycleAssets.material-focus;
+    out property <image> tile-material:DaycycleAssets.tile;
+    out property <image> tile-material-focus:DaycycleAssets.tile-focus;
+    out property <image> action-material:DaycycleAssets.action;
+    out property <image> action-material-focus:DaycycleAssets.action-focus;
+    out property <image> status-material:DaycycleAssets.status;
+    out property <image> status-material-focus:DaycycleAssets.status-focus;
+    out property <image> dock-material:DaycycleAssets.dock;
+    out property <image> dock-active:DaycycleAssets.dock-selection-active;
+    out property <image> dock-focus:DaycycleAssets.dock-selection-focus;
+    out property <image> dock-active-focus:DaycycleAssets.dock-selection-active-focus;
+    out property <brush> fallback:@linear-gradient(125deg,DaycycleAssets.fallback-top,DaycycleAssets.fallback-bottom);
+    out property <color> border:DaycycleAssets.border;
+    out property <color> rim:DaycycleAssets.rim;
+    out property <color> active:DaycycleAssets.active;
+    out property <color> shadow:DaycycleAssets.shadow;
     out property <length> shadow-blur:0px;
     out property <length> margin:24px;
+    // One shared room plane; foreground cards travel further than the landscape.
+    out property <length> scene-width:664px;
+    out property <length> scene-height:498px;
+    out property <length> scene-left:-12px;
+    out property <length> scene-top:-9px;
     out property <length> pad:16px;
     out property <length> gap:12px;
     out property <length> radius-l:16px;
@@ -30,14 +58,19 @@ export global AtmosphereDesign {
     out property <length> radius-xs:6px;
     out property <length> radius:self.radius-l;
     out property <length> art-radius:self.radius-m;
-    out property <length> resume-art-width:124px;
-    out property <length> resume-art-height:176px;
-    out property <length> discover-art-width:320px;
-    out property <length> discover-art-height:232px;
+    out property <length> resume-art-width:112px;
+    out property <length> resume-art-height:160px;
+    out property <length> discover-art-width:176px;
+    out property <length> resume-card-width:448px;
+    out property <length> discover-card-width:400px;
+    out property <length> resume-secondary-width:216px;
+    out property <length> editorial-text-x:148px;
+    out property <length> discover-art-height:104px;
     out property <length> tile-art-width:64px;
     out property <length> tile-art-height:40px;
     out property <length> focus-width:2px;
-    out property <length> section-title-size:44px;
+    out property <length> border-width:2px;
+    out property <length> section-title-size:36px;
     out property <length> title-size:22px;
     out property <length> long-title-size:19px;
     out property <length> tile-size:14px;
@@ -50,16 +83,16 @@ export global AtmosphereDesign {
     out property <length> action-height:36px;
     out property <length> action-radius:self.action-height/2;
     out property <length> action-icon:20px;
-    out property <length> dock-width:344px;
-    out property <length> dock-height:52px;
+    out property <length> dock-width:400px;
+    out property <length> dock-height:32px;
     out property <length> dock-bottom:12px;
-    out property <length> dock-x:(640px - self.dock-width)/2;
-    out property <length> dock-y:480px - self.dock-bottom - self.dock-height;
+    out property <length> dock-x:self.margin;
+    out property <length> dock-y:16px;
     out property <length> dock-radius:self.dock-height/2;
     out property <length> dock-icon:16px;
-    out property <duration> transition:180ms;
-    out property <duration> section-time:220ms;
-    out property <duration> press-time:80ms;
+    out property <duration> transition:MotionDesign.panel-ms*1ms;
+    out property <duration> section-time:MotionDesign.section-ms*1ms;
+    out property <duration> press-time:MotionDesign.press-ms*1ms;
     // The section follows cubic ease-out: 0.75 is reached after ~81 ms at 220 ms.
     out property <float> secondary-start:0.75;
 }
@@ -82,16 +115,27 @@ component EditorialArtwork inherits Rectangle {
     if !root.available&&!root.demo: Text {x:16px;y:16px;width:parent.width - 32px;height:parent.height - 64px;text:root.title;wrap:word-wrap;vertical-alignment:center;horizontal-alignment:center;font-family:AtmosphereDesign.family;font-size:parent.width>180px?AtmosphereDesign.long-title-size:AtmosphereDesign.small-size;font-weight:600;color:AtmosphereDesign.ink;}
     if !root.available&&!root.demo: Text {x:16px;y:parent.height - 36px;width:parent.width - 32px;height:16px;text:root.category=="Sin clasificar"?"":root.category;horizontal-alignment:center;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
 }
+component AmbientSurface inherits Rectangle {
+    in property <image> first;
+    in property <image> second;
+    background:transparent;
+    // Compensate source-over coverage (~94% inside the baked materials).
+    // Both endpoints are exact; no translucent double layer remains at a keyframe.
+    Image {width:parent.width;height:parent.height;source:root.first;opacity:(1-DaycycleAssets.day-mix)/(1-DaycycleAssets.day-mix*DaycycleAssets.material-coverage);image-fit:fill;image-rendering:smooth;}
+    if DaycycleAssets.day-mix>0: Image {width:parent.width;height:parent.height;source:root.second;opacity:DaycycleAssets.day-mix;image-fit:fill;image-rendering:smooth;}
+    Image {width:parent.width;height:parent.height;source:root.first;colorize:DaycycleAssets.context-color;opacity:DaycycleAssets.surface-wash;image-fit:fill;image-rendering:smooth;}
+}
 export component AmbientPanel inherits Rectangle {
     in property <bool> focused;
     in property <image> surface:AtmosphereDesign.material;
+    in property <image> focused-surface:AtmosphereDesign.material-focus;
+    in property <image> next-surface:DaycycleAssets.material-next;
+    in property <image> next-focused-surface:DaycycleAssets.material-focus-next;
     in property <length> radius:AtmosphereDesign.radius-l;
     background:transparent;
     border-radius:root.radius;
-    border-width:root.focused?AtmosphereDesign.focus-width:1px;
-    border-color:root.focused?AtmosphereDesign.mark:AtmosphereDesign.border;
-    Image {x:2px;y:2px;width:parent.width - 4px;height:parent.height - 4px;source:root.surface;image-fit:fill;}
-    Rectangle {x:max(AtmosphereDesign.pad,root.radius);y:1px;width:parent.width - 2*max(AtmosphereDesign.pad,root.radius);height:1px;background:AtmosphereDesign.rim;}
+    border-width:0px;
+    AmbientSurface {width:parent.width;height:parent.height;first:root.focused?root.focused-surface:root.surface;second:root.focused?root.next-focused-surface:root.next-surface;}
 }
 component GameTitle inherits Text {
     in property <bool> compact:false;
@@ -109,10 +153,8 @@ component AmbientAction inherits Rectangle {
     width:AtmosphereDesign.action-width;height:AtmosphereDesign.action-height;
     border-radius:AtmosphereDesign.action-radius;
     background:transparent;
-    border-width:root.focused?AtmosphereDesign.focus-width:1px;
-    border-color:root.focused?AtmosphereDesign.mark:AtmosphereDesign.border;
-    Image {x:2px;y:2px;width:parent.width - 4px;height:parent.height - 4px;source:AtmosphereDesign.action-material;image-fit:fill;}
-    Rectangle {x:2px;y:2px;width:parent.width - 4px;height:parent.height - 4px;border-radius:AtmosphereDesign.action-radius - 2px;background:AtmosphereDesign.mark;opacity:root.focused?0.08:0;}
+    border-width:0px;
+    AmbientSurface {width:parent.width;height:parent.height;first:root.focused?AtmosphereDesign.action-material-focus:AtmosphereDesign.action-material;second:root.focused?DaycycleAssets.action-focus-next:DaycycleAssets.action-next;}
     property <length> inset:root.pressed&&!root.reduced?1px:0px;
     animate inset {duration:root.reduced?0ms:AtmosphereDesign.press-time;easing:ease-out;}
     Rectangle {x:12px+root.inset;y:(parent.height - AtmosphereDesign.action-icon)/2;width:AtmosphereDesign.action-icon;height:AtmosphereDesign.action-icon;border-radius:AtmosphereDesign.action-icon/2;background:root.focused?AtmosphereDesign.mark:AtmosphereDesign.muted;
@@ -124,6 +166,8 @@ component AmbientAction inherits Rectangle {
 component CompactGame inherits AmbientPanel {
     radius:AtmosphereDesign.radius-m;
     surface:AtmosphereDesign.tile-material;
+    focused-surface:AtmosphereDesign.tile-material-focus;
+    next-surface:DaycycleAssets.tile-next;next-focused-surface:DaycycleAssets.tile-focus-next;
     in property <string> title;
     in property <image> prepared;
     in property <bool> available;
@@ -132,27 +176,32 @@ component CompactGame inherits AmbientPanel {
     in property <bool> enabled:true;
     callback chosen();
     property <bool> has-art:root.available||root.demo;
-    if root.has-art: EditorialArtwork {x:8px;y:(parent.height - AtmosphereDesign.tile-art-height)/2;width:AtmosphereDesign.tile-art-width;height:AtmosphereDesign.tile-art-height;radius:max(0px,root.radius - 8px);prepared:root.prepared;available:root.available;demo:root.demo;index:root.index;}
-    Text {x:root.has-art?84px:16px;y:4px;width:parent.width - self.x - 12px;height:parent.height - 8px;text:root.title;wrap:word-wrap;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:root.title.character-count>36?AtmosphereDesign.body-size:AtmosphereDesign.tile-size;font-weight:600;color:AtmosphereDesign.ink;}
+    if root.has-art: EditorialArtwork {x:8px;y:(parent.height - AtmosphereDesign.tile-art-height)/2;width:AtmosphereDesign.tile-art-width;height:AtmosphereDesign.tile-art-height;radius:AtmosphereDesign.radius-xs;prepared:root.prepared;available:root.available;demo:root.demo;index:root.index;}
+    Text {x:root.has-art?84px:16px;y:4px;width:parent.width - self.x - 12px;height:parent.height - 8px;text:root.title;wrap:word-wrap;overflow:elide;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:root.title.character-count>36?AtmosphereDesign.body-size:AtmosphereDesign.tile-size;font-weight:600;color:AtmosphereDesign.ink;}
     TouchArea {enabled:root.enabled;clicked=>{root.chosen();}}
 }
-export component SectionDock inherits AmbientPanel {
+// Global tabs share one geometry in every section. Active and focus are separate.
+export component SectionDock inherits Rectangle {
     in property <int> active;
     in property <int> cursor:-1;
     in property <bool> blocked;
-    focused:false;surface:AtmosphereDesign.dock-material;radius:AtmosphereDesign.dock-radius;
+    in property <bool> reduced;
+    in property <float> position;
     callback chosen(int);
     width:AtmosphereDesign.dock-width;height:AtmosphereDesign.dock-height;
-    for label[index] in ["Continuar","Descubre","Biblioteca","Ajustes"]: Rectangle {
-        x:12px+index*80px;y:4px;width:80px;height:44px;border-radius:self.height/2;
-        property <bool> active:index==root.active;
-        property <bool> key-focus:index==root.cursor&&!root.blocked;
-        background:self.active?AtmosphereDesign.active:transparent;
-        border-width:self.key-focus?AtmosphereDesign.focus-width:0px;border-color:AtmosphereDesign.mark;
-        Image {x:(parent.width - AtmosphereDesign.dock-icon)/2;y:4px;width:AtmosphereDesign.dock-icon;height:AtmosphereDesign.dock-icon;source:index==0?@image-url("../../assets/icons/continue.svg"):index==1?@image-url("../../assets/icons/discover.svg"):index==2?@image-url("../../assets/icons/library.svg"):@image-url("../../assets/icons/settings.svg");colorize:parent.active||parent.key-focus?AtmosphereDesign.mark:AtmosphereDesign.muted;}
-        Text {y:24px;width:parent.width;height:14px;text:label;horizontal-alignment:center;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:parent.active?AtmosphereDesign.ink:AtmosphereDesign.muted;}
-        if self.active: Rectangle {x:32px;y:40px;width:16px;height:2px;border-radius:self.height/2;background:AtmosphereDesign.mark;}
+    border-radius:self.height/2;
+    background:AtmosphereDesign.sheet.with-alpha(0.76);
+    for label[index] in ["Continuar","Tu momento","Biblioteca","Ajustes"]: Rectangle {
+        x:index*100px;width:100px;height:32px;border-radius:AtmosphereDesign.radius-s;
+        background:root.active==index?AtmosphereDesign.active.with-alpha(0.65):transparent;
+        border-width:root.cursor==index&&!root.blocked?AtmosphereDesign.focus-width:0px;
+        border-color:AtmosphereDesign.mark;
+        Text {x:4px;width:92px;height:30px;text:label;horizontal-alignment:center;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:12px;font-weight:root.active==index?700:500;color:root.active==index?AtmosphereDesign.ink:AtmosphereDesign.muted;}
         TouchArea {enabled:!root.blocked;clicked=>{root.chosen(index);}}
+    }
+    Rectangle {
+        x:8px+root.position*100px;y:30px;width:84px;height:2px;border-radius:1px;
+        background:DaycycleAssets.dock-accent;
     }
 }
 export component SectionHeader inherits Rectangle {
@@ -161,10 +210,10 @@ export component SectionHeader inherits Rectangle {
     in property <string> clock;
     in property <string> date;
     background:transparent;
-    Text {x:AtmosphereDesign.margin;y:16px;width:384px;height:56px;text:root.title;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.section-title-size;font-weight:700;color:AtmosphereDesign.ink;}
-    Text {x:AtmosphereDesign.margin;y:76px;width:388px;height:20px;text:root.subtitle;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
-    Text {x:536px;y:52px;width:80px;height:28px;text:root.clock;horizontal-alignment:right;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.clock-size;font-weight:700;color:AtmosphereDesign.ink;}
-    Text {x:392px;y:60px;width:132px;height:16px;text:root.date;horizontal-alignment:right;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
+    Text {x:AtmosphereDesign.margin;y:64px;width:400px;height:44px;text:root.title;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.section-title-size;font-weight:700;color:AtmosphereDesign.ink;}
+    Text {x:AtmosphereDesign.margin;y:112px;width:400px;height:32px;text:root.subtitle;wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+    Text {x:528px;y:64px;width:88px;height:28px;text:root.clock;horizontal-alignment:right;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.clock-size;font-weight:700;color:AtmosphereDesign.ink;}
+    Text {x:440px;y:100px;width:176px;height:16px;text:root.date;horizontal-alignment:right;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
 }
 export component RoomScene inherits Rectangle {
     in property <int> phase;
@@ -173,33 +222,54 @@ export component RoomScene inherits Rectangle {
     in property <int> season;
     in property <int> decoration;
     in property <bool> reduced;
-    background:#18211e;clip:true;
-    Image {x:-4px+root.pan;y:-3px;width:648px;height:486px;source:@image-url("../../assets/scenes/checkpoint-room-v1/master.png");image-fit:contain;}
-    // A single camera, master and geometry. Dusk is the reference illumination.
-    property <color> tint:root.phase==0?#d3d8bd30:root.phase==1?#e4e6d138:root.phase==2?#c6ae8620:root.phase==3?#00000000:root.phase==4?#101b365a:#10232c80;
-    property <float> lamp:root.phase==3?0.08:root.phase==4?0.14:root.phase==5?0.03:0;
-    property <float> cloud:root.weather==1?0.08:root.weather==2?0.15:root.weather==3?0.2:0;
-    animate tint,lamp,cloud {duration:root.reduced?0ms:220ms;}
-    Rectangle {x:0px;y:0px;width:640px;height:480px;background:root.tint;}
-    Rectangle {x:0px;y:0px;width:640px;height:480px;background:#23333e;opacity:root.cloud;}
+    in property <int> background-index:7;
+    in property <color> target-tint;
+    in property <float> target-lamp;
+    property <color> tint:root.target-tint;
+    property <float> lamp:root.target-lamp;
+    property <length> effective-pan:AtmosphereDesign.diagnostic-mode>0?0px:root.pan*MotionDesign.far-travel;
+    property <bool> base-cached:AtmosphereDesign.base-cache-ready&&AtmosphereDesign.diagnostic-mode<2;
+    property <bool> near-cached:AtmosphereDesign.near-cache-ready&&AtmosphereDesign.diagnostic-mode<2;
+    background:AtmosphereDesign.base;clip:true;
+    Image {x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:root.base-cached?AtmosphereDesign.base-cache:DaycycleAssets.backgrounds[max(0,min(7,DaycycleAssets.palette-index))];image-fit:contain;}
+    if !root.base-cached&&AtmosphereDesign.diagnostic-mode<2&&DaycycleAssets.day-mix>0: Image {x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:DaycycleAssets.backgrounds[max(0,min(7,DaycycleAssets.palette-next-index))];opacity:DaycycleAssets.day-mix;image-fit:contain;}
+    // Derived near-field strip; cached on keyframe changes, not on navigation.
+    Image {x:AtmosphereDesign.scene-left+round(root.pan/1px*MotionDesign.near-travel)*1px;y:336px;width:664px;height:root.near-cached?24px:153px;source:AtmosphereDesign.near-rasters[0];source-clip-width:664;source-clip-height:root.near-cached?24:153;image-fit:fill;}
+    if DaycycleAssets.day-mix>0: Image {x:AtmosphereDesign.scene-left+round(root.pan/1px*MotionDesign.near-travel)*1px;y:336px;width:664px;height:root.near-cached?24px:153px;source:AtmosphereDesign.near-rasters[1];source-clip-width:664;source-clip-height:root.near-cached?24:153;opacity:DaycycleAssets.day-mix;image-fit:fill;}
+    if root.near-cached: Image {x:AtmosphereDesign.scene-left+round(root.pan/1px*MotionDesign.near-travel)*1px;y:360px;width:664px;height:129px;source:AtmosphereDesign.near-cache;image-fit:fill;}
+    // Two adjacent lighting studies share one room; updated once per minute.
+    animate tint,lamp {duration:root.reduced||AtmosphereDesign.diagnostic-mode>0?0ms:MotionDesign.ambient-ms*1ms;}
+    // Reuses the former scene-tint pass; masks room surfaces, protecting glass
+    // and the lantern core. Cached vector, no new animation or full-frame filter.
+    Image {visible:AtmosphereDesign.diagnostic-mode<2&&(root.tint.alpha>0||DaycycleAssets.interior-tint.alpha>0);x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[0]:@image-url("../../assets/scenes/daycycle/interior-light-mask.svg");colorize:root.tint.alpha>0?root.tint:DaycycleAssets.interior-tint;image-fit:contain;}
+    Rectangle {visible:AtmosphereDesign.diagnostic-mode<2;x:0px;y:0px;width:640px;height:480px;
+        property <color> grade:DaycycleAssets.background-tint.mix(DaycycleAssets.daylight-tint,1-DaycycleAssets.vegetation-strength*DaycycleAssets.seasonal-light-mix);
+        animate grade {duration:root.reduced||AtmosphereDesign.diagnostic-mode>0?0ms:MotionDesign.ambient-ms*1ms;}
+        background:self.grade;}
     // Window overlays are restricted to the same glass rectangle in every variant.
-    Rectangle {x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:root.season==3?#a67c4320:root.season==0?#b3cbd324:root.season==1?#87a58912:transparent;}
-    Rectangle {x:544px*1.0125 - 4px+root.pan;y:280px*1.0125 - 3px;width:46px;height:48px;border-radius:16px;background:#e9ae5f;opacity:root.lamp;}
-    Rectangle {
-        property <float> show:root.weather==2?1:0;opacity:show;visible:show>0;animate show {duration:root.reduced?0ms:220ms;}
-        x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:transparent;clip:true;
-        for index in 20: Rectangle {x:6px+mod(index*37,168)*1px;y:mod(index*43,188)*1px;width:1px;height:13px;background:#d6e1de55;}
-    }
-    Rectangle {property <float> show:root.weather==3?1:0;opacity:show;visible:show>0;animate show {duration:root.reduced?0ms:220ms;}x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:#c8d4cd44;}
-    Rectangle {property <float> show:root.weather==4?1:0;opacity:show;visible:show>0;animate show {duration:root.reduced?0ms:220ms;}x:334px*1.0125 - 4px+root.pan;y:104px*1.0125 - 3px;width:178px*1.0125;height:208px*1.0125;background:#d9dfdf16;
-        for index in 25: Rectangle {x:mod(index*47,170)*1px;y:mod(index*31,200)*1px;width:2px;height:2px;background:#eeeae2;}
-    }
-    // Discreet placeholder ornaments, not final holiday artwork.
-    if root.decoration==1: Rectangle {x:472px*1.0125 - 4px+root.pan;y:335px*1.0125 - 3px;width:15px;height:11px;border-radius:5px;background:#ad7349;Rectangle{x:7px;y:-3px;width:2px;height:4px;background:#58634c;}}
-    if root.decoration==2: Text {x:474px*1.0125 - 4px+root.pan;y:322px*1.0125 - 3px;text:"✦";font-size:19px;color:#d8c595;}
-    if root.decoration==3: Text {x:474px*1.0125 - 4px+root.pan;y:322px*1.0125 - 3px;text:"✧";font-size:19px;color:#d6cead;}
+    Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[1]:@image-url("../../assets/scenes/daycycle/vegetation-mask.svg");
+        property <color> seasonal:DaycycleAssets.vegetation-tint;
+        animate seasonal {duration:root.reduced||AtmosphereDesign.diagnostic-mode>0?0ms:MotionDesign.ambient-ms*1ms;}
+        colorize:self.seasonal;opacity:DaycycleAssets.vegetation-strength;image-fit:contain;}
+
+    // Weather only: fixed, cached SVG layers inside the glass. Never inferred from season.
+    Image {visible:AtmosphereDesign.diagnostic-mode<2&&DaycycleAssets.weather-window-tint.alpha>0;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[2]:@image-url("../../assets/scenes/daycycle/weather-window.svg");colorize:DaycycleAssets.weather-window-tint;image-fit:contain;}
+    if root.weather==2: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[3]:@image-url("../../assets/scenes/daycycle/rain-window.svg");image-fit:contain;}
+    if root.weather==4: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[4]:@image-url("../../assets/scenes/daycycle/snow-window.svg");image-fit:contain;}
+    // Original small vector ornament, linked to optional cultural observances.
+    if root.decoration==1: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[5]:@image-url("../../assets/scenes/daycycle/halloween-table.svg");image-fit:contain;}
+    if root.decoration==2: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[6]:@image-url("../../assets/scenes/daycycle/christmas-table.svg");image-fit:contain;}
+    if root.decoration==3: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[7]:@image-url("../../assets/scenes/daycycle/new-year-table.svg");image-fit:contain;}
+
 }
 export component Integrated inherits Rectangle {
+    in property <int> background-index:7;
+    in property <color> ambient-tint;
+    in property <float> ambient-lamp;
+    in property <[float]> page-offsets;
+    in property <[float]> secondary-offsets;
+    in property <image> resume-cover;
+    in property <bool> resume-art-available;
     in property <bool> show-content:true;
     in property <string> heading;
     in property <bool> resume;
@@ -255,45 +325,49 @@ export component Integrated inherits Rectangle {
     property <bool> has-category:root.category!=""&&root.category!="Sin clasificar";
     callback activated(int);
     background:AtmosphereDesign.base;
-    RoomScene {width:640px;height:480px;pan:root.pan;phase:root.phase;weather:root.weather;season:root.season;decoration:root.decoration;reduced:root.reduced||!root.ambient-motion;}
-    Image {width:640px;height:480px;source:@image-url("../../assets/scenes/lofi-room-v2/reading-mask.svg");}
+    RoomScene {width:640px;height:480px;pan:root.pan;phase:root.phase;background-index:root.background-index;target-tint:root.ambient-tint;target-lamp:root.ambient-lamp;weather:root.weather;season:root.season;decoration:root.decoration;reduced:root.reduced||!root.ambient-motion;}
+    Image {width:640px;height:480px;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[8]:@image-url("../../assets/scenes/lofi-room-v2/reading-mask.svg");}
 
+    // Only the content plane moves; the landscape and system anchors stay put.
+    Rectangle {x:0px;y:0px;width:MotionDesign.content-span*1px;height:480px;clip:true;background:transparent;
     Rectangle {
-        x:-16px*root.section-position;width:640px;height:480px;
-        opacity:1-root.section-position;visible:root.show-content&&root.section-position<1;background:transparent;
+        x:root.page-offsets[0]*(MotionDesign.content-span/MotionDesign.page-span)*1px;width:640px;height:480px;
+        visible:root.show-content&&root.page-offsets[0]>-640&&root.page-offsets[0]<640;background:transparent;
         AmbientPanel {
-            x:24px;y:104px;width:544px;height:208px;
+            x:24px;y:152px;width:AtmosphereDesign.resume-card-width;height:192px;
             focused:root.selected==0&&root.resume&&!root.blocked&&root.has-recent;
-            property <bool> cover-visible:root.art-available&&root.has-recent;
-            property <length> text-x:self.cover-visible?156px:16px;
+            property <bool> cover-visible:root.has-recent&&(root.resume-art-available||root.demo-art);
+            property <length> text-x:self.cover-visible?144px:16px;
             property <bool> long-title:root.recent-title.character-count>38;
-            if self.cover-visible: EditorialArtwork {x:16px;y:16px;width:AtmosphereDesign.resume-art-width;height:AtmosphereDesign.resume-art-height;radius:max(0px,AtmosphereDesign.radius-l - AtmosphereDesign.pad);prepared:root.local-cover;available:root.local-art-available;demo:root.demo-art;index:root.recent-artwork;title:root.recent-title;category:root.category;}
+            // This is a separate inset cover, not the panel's inner contour:
+            // subtracting the 16px content padding erased its rounded corners.
+            if self.cover-visible: EditorialArtwork {x:16px;y:16px;width:AtmosphereDesign.resume-art-width;height:AtmosphereDesign.resume-art-height;radius:AtmosphereDesign.radius-s;prepared:root.resume-cover;available:root.resume-art-available;demo:root.demo-art;index:root.recent-artwork;title:root.recent-title;category:root.category;}
             Text {x:parent.text-x;y:16px;width:parent.width - self.x - 16px;height:14px;text:root.demo-history?"PARTIDAS DE MUESTRA":root.has-recent?"TU PARTIDA":"SIN PARTIDAS RECIENTES";font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.meta-size;letter-spacing:1px;color:AtmosphereDesign.muted;}
             GameTitle {x:parent.text-x;y:40px;width:parent.width - self.x - 16px;height:parent.long-title?72px:56px;text:root.recent-title;compact:parent.long-title;}
-            Text {x:parent.text-x;y:parent.long-title?120px:112px;width:parent.width - self.x - 16px;height:32px;text:root.has-recent?(root.resume-detail.character-count<=100?root.resume-detail:""):"Cuando abras un juego, encontrarás aquí tu lugar para volver.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
-            if root.has-recent: AmbientAction {x:parent.text-x;y:156px;label:root.has-recent?"Continuar":"Tu biblioteca";focused:root.selected==(root.has-recent?0:2)&&root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:root.resume&&!root.blocked;chosen=>{root.activated(root.has-recent?0:2);}}
+            Text {x:parent.text-x;y:parent.long-title?112px:104px;width:parent.width - self.x - 16px;height:32px;text:root.has-recent?(root.resume-detail.character-count<=100?root.resume-detail:""):"Cuando abras un juego, encontrarás aquí tu lugar para volver.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+            if root.has-recent: AmbientAction {x:parent.text-x;y:140px;label:root.has-recent?"Continuar":"Tu biblioteca";focused:root.selected==(root.has-recent?0:2)&&root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:root.resume&&!root.blocked;chosen=>{root.activated(root.has-recent?0:2);}}
         }
-        Text {x:24px;y:320px;width:540px;height:16px;text:root.statistics;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
-        if root.resume-count>1: CompactGame {x:24px;y:344px;width:264px;height:56px;title:root.resume-two;prepared:root.resume-two-cover;available:root.resume-two-art-available;demo:root.demo-art;index:root.resume-two-artwork;focused:root.selected==4&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(4);}}
-        if root.resume-count>2: CompactGame {x:304px;y:344px;width:264px;height:56px;title:root.resume-three;prepared:root.resume-three-cover;available:root.resume-three-art-available;demo:root.demo-art;index:root.resume-three-artwork;focused:root.selected==5&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(5);}}
+        Text {x:24px;y:348px;width:AtmosphereDesign.resume-card-width;height:16px;text:root.statistics;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
+        if root.resume-count>1: CompactGame {x:24px+(root.secondary-offsets[0]-root.page-offsets[0])*(MotionDesign.content-span/MotionDesign.page-span)*1px;y:root.resume-two.character-count>52?368px:376px;width:AtmosphereDesign.resume-secondary-width;height:root.resume-two.character-count>52?80px:56px;title:root.resume-two;prepared:root.resume-two-cover;available:root.resume-two-art-available;demo:root.demo-art;index:root.resume-two-artwork;focused:root.selected==4&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(4);}}
+        if root.resume-count>2: CompactGame {x:256px+(root.secondary-offsets[0]-root.page-offsets[0])*(MotionDesign.content-span/MotionDesign.page-span)*1px;y:root.resume-three.character-count>52?368px:376px;width:AtmosphereDesign.resume-secondary-width;height:root.resume-three.character-count>52?80px:56px;title:root.resume-three;prepared:root.resume-three-cover;available:root.resume-three-art-available;demo:root.demo-art;index:root.resume-three-artwork;focused:root.selected==5&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(5);}}
     }
 
     Rectangle {
-        x:16px*(1-root.discovery-main);y:5px*(1-root.discovery-main);width:640px;height:356px;
-        opacity:root.discovery-main;visible:root.show-content&&root.discovery-main>0;background:transparent;
+        x:root.page-offsets[1]*(MotionDesign.content-span/MotionDesign.page-span)*1px;width:640px;height:480px;
+        visible:root.show-content&&root.page-offsets[1]>-640&&root.page-offsets[1]<640;background:transparent;
         AmbientPanel {
-            x:24px;y:104px;width:592px;height:240px;
+            x:24px;y:root.extended-title?152px:160px;width:400px;height:root.extended-title?216px:208px;
             focused:root.selected==0&&!root.resume&&!root.blocked&&root.count>0;
-            EditorialArtwork {x:4px;y:4px;width:AtmosphereDesign.discover-art-width;height:AtmosphereDesign.discover-art-height;radius:AtmosphereDesign.radius-l - 4px;prepared:root.local-cover;available:root.local-art-available;demo:root.demo-art&&root.count>0;index:root.artwork;title:root.count>0?root.title:"Tu próximo mundo empieza en tu colección";category:root.count>0?root.category:"A TU RITMO";}
-            if !root.extended-title&&root.has-category: Text {x:340px;y:16px;width:236px;height:14px;text:root.count>0?root.category:"TU COLECCIÓN";font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.meta-size;letter-spacing:0.5px;color:AtmosphereDesign.muted;}
-            GameTitle {x:340px;y:root.extended-title?12px:root.has-category?40px:16px;width:236px;height:root.extended-title?116px:root.compact-title?72px:56px;opacity:root.reveal;text:root.count>0?root.title:"Tu colección te espera";compact:root.compact-title;}
-            Text {x:340px;y:root.extended-title?136px:root.compact-title?(root.has-category?120px:96px):(root.has-category?112px:88px);width:236px;height:root.extended-title?48px:root.compact-title?56px:64px;text:root.count>0?root.editorial-reason:"Cuando añadas juegos disponibles, encontrarás aquí una propuesta.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
-            if root.count>0: AmbientAction {x:340px;y:188px;label:root.count>0?root.play:"Tu biblioteca";focused:root.selected==(root.count>0?0:2)&&!root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(root.count>0?0:2);}}
+            EditorialArtwork {x:12px;y:12px;width:AtmosphereDesign.discover-art-width;height:AtmosphereDesign.discover-art-height;radius:AtmosphereDesign.radius-s;prepared:root.local-cover;available:root.local-art-available;demo:root.demo-art&&root.count>0;index:root.artwork;title:root.count>0?root.title:"Tu colección te espera";category:root.category;}
+            Text {x:12px;y:128px;width:176px;height:68px;text:root.count>0?root.editorial-reason:"Cuando añadas juegos, encontrarás aquí una propuesta.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+            GameTitle {x:204px;y:16px;width:184px;height:root.extended-title?140px:120px;text:root.count>0?root.title:"Tu colección te espera";compact:root.compact-title;}
+            if root.count>0: AmbientAction {x:200px;y:160px;label:root.play;focused:root.selected==0&&!root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(0);}}
         }
     }
     Rectangle {
-        x:12px*(1-root.secondary-progress);y:6px*(1-root.secondary-progress);width:640px;height:400px;
-        opacity:root.secondary-progress;visible:root.show-content&&root.secondary-progress>0;background:transparent;
-        if root.count>1: CompactGame {x:24px;y:352px;width:288px;height:48px;title:root.alternative;prepared:root.alternative-cover;available:root.alternative-art-available;focused:root.selected==1&&!root.resume&&!root.blocked;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(1);}}
+        x:root.secondary-offsets[1]*(MotionDesign.content-span/MotionDesign.page-span)*1px;width:640px;height:480px;
+        visible:root.show-content&&root.secondary-offsets[1]>-640&&root.secondary-offsets[1]<640;background:transparent;
+        if root.count>1: CompactGame {x:176px;y:root.extended-title?384px:380px;width:248px;height:root.alternative.character-count>52?64px:48px;title:root.alternative;prepared:root.alternative-cover;available:root.alternative-art-available;focused:root.selected==1&&!root.resume&&!root.blocked;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(1);}}
+    }
     }
 }

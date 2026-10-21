@@ -2,6 +2,9 @@
 # EmotionalUI
 **Less searching. More playing.**
 
+> **Preview preparation:** `v0.1.0-preview.1` is not available for public download yet. The source repository is public. Physical installation of the exact ZIP remains pending. No release has been published by this preparation.
+
+
 ### Games for every moment.
 
 EmotionalUI was born on a rainy Sunday afternoon.
@@ -79,3 +82,18 @@ If this way of thinking about video games resonates with you, we'd love to hear 
 *It's not about having more games.*
 
 **It's about giving them a meaningful place in our lives.**
+
+
+## Experimental RG353V preview
+
+The local frontend has run on a real Anbernic RG353V with dArkOS, including physical controls and a supervised return to EmulationStation. That validates the recorded test builds; it does not validate an unreleased installer.
+
+The four sections are **Continue, Your moment, Library and Settings**. One room responds to local time, seasons, optional weather and editorial events. Offline operation does not require a weather service. Real weather requires a privately configured location and consent; demo weather is not an observation.
+
+The planned `v0.1.0-preview.1` package uses **software by default** and offers **Mali-G52 / FemtoVG as experimental**. Immediate EGL swapping is not enabled by default. GPU improves perceived navigation in supervised tests, but stable 30 or 60 FPS have not been demonstrated. Text rasterization and some line breaks differ slightly.
+
+Trial mode explores the interface and can read an existing library into its own SQLite database. **It cannot launch games.** No ROMs, BIOS, saves or commercial covers are bundled. Main frontend replacement (`install-main`) remains disabled.
+
+[Installation and recovery draft](PREVIEW_INSTALL.md) · [Readiness and release notes](RELEASE_READINESS.md) · [Testing](TESTING.md) · [Licenses](THIRD_PARTY_LICENSES.md)
+
+Rust + Slint 1.13.1; GPL-3.0-only for project code. Third-party fonts and dependencies retain their notices. The owner has declared the room reference to be project-owned; its provenance is recorded. Current development binaries are not approved release artifacts. Public publication still requires the final review and owner approval.

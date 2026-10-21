@@ -1,3 +1,29 @@
+# Orden vigente de publicación — 21-10-2026
+
+El propietario autoriza commit/push/tag y pre-release v0.1.0-preview.1 una vez superadas las verificaciones. GitHub es PUBLIC por autorización específica posterior del propietario, verificado por API y HTTP200 sin autenticación. La instalación/restauración del ZIP exacto también necesita supervisión y autorización gráfica actual.
+
+Escaneo nuevo de 284 blobs históricos completos (incluidos binarios) y allowlist de fuentes: sin coincidencias de patrones de claves/tokens, rutas personales del Mac, IP privadas, localidad configurada ni firmas/extensiones ROM/BIOS/guardados comprobadas. PNG históricos sin chunks textuales/EXIF. No es una garantía absoluta contra todo secreto posible. Se conserva la identidad de autor real en los metadatos Git.
+
+Los ELF anteriores contienen rutas personales de compilación: no se distribuyen. Candidatos 0.1.0-preview.1 recompilados con remapeo de rutas Rust/C; verificar ambos binarios antes del ZIP. Foto1 propia por declaración del propietario. Avisos recibidos conservados; las dos declaraciones MIT sin archivo/LICENSE específico llevan manifests originales y suplemento MIT estándar explícitamente diferenciado, sin copyright inventado. El paquete no copia .git, respaldos, evidencia SSH, ubicación meteorológica privada, ROMs, BIOS, partidas ni carátulas comerciales.
+
+---
+
+## Preparación anterior conservada — la orden actual prevalece
+
+# Fase 16 · control vigente de publicación · 21-10-2026
+
+**Publicación bloqueada.** GitHub confirmado PRIVATE; main remoto incorpora dos cambios sólo de README. Se preserva el código local con cambios sin confirmar, sin staging/commit/push. La identidad real del autor existe en el historial y su exposición necesita revisión final.
+
+La habitación selected-room-v1 deriva de Foto 1. El 21-10-2026 el propietario confirma «La foto1 es nuestra»: se registra como recurso propio, resuelto para preparar el paquete conforme a la política existente de arte propio. Declaración del propietario, sin verificación independiente ni nueva licencia inventada. Sus siete PNG están embebidos en los ELF. No se incorpora la referencia original con interfaz/carátulas. .gitignore y originales permanecen intactos; no se realiza staging ni publicación. La aprobación final sigue siendo independiente.
+
+Audio runtime original GPL, máscaras/materiales procedurales propios y DejaVu con COPYRIGHT: conservar avisos. Inventario Cargo actualizado para ARM64/GPU; cualquier texto de licencia pendiente queda enumerado, no se presume resuelto. Fuentes correspondientes deben incluir el backend vendor parcheado y recursos realmente embebidos.
+
+Escaneo acotado de los dos commits locales: sin coincidencias en los patrones textuales de tokens/claves/rutas personales/IP privadas comprobados; 25 binarios/grandes no cubiertos por esa lectura. No es garantía absoluta. La allowlist de distribución excluye respaldos, evidencia física/SSH, ubicaciones privadas, DB personales, ROMs, BIOS, carátulas comerciales y exports históricos. ZIP exacto, revisión final y autorización pública siguen pendientes. [Puertas y evidencias](RELEASE_READINESS.md).
+
+---
+
+## Inspecciones históricas — no describen el Git actual
+
 # Consolidación · inspección local de 19-10-2026
 
 Referencia vigente: [especificación maestra](docs/EMOTIONALUI_MASTER.md#7-primer-punto-de-control-git--propuesta-no-ejecutada). No se publica, crea commit, hace staging ni modifica .gitignore/identidad Git.

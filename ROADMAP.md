@@ -1,3 +1,65 @@
+# Tarea activa · Fase 16 — First Public Preview
+
+Distribución, seguridad, integración y documentación de v0.1.0-preview.1. Sin nuevas funciones ni optimizaciones. Software predeterminado, Mali-G52 experimental; no swap inmediato por defecto. Código local conservado; README remotos preservados. Propietario confirma Foto 1 propia; procedencia despejada para preparar el paquete. Orden de publicación recibida: avisos y selección revisados; falta decisión específica de visibilidad PRIVATE→PUBLIC (ya autorizada y realizada) y prueba física del ZIP exacto. Instalador gráfico preparado localmente, pero ZIP exacto/instalación/audio/desinstalación físicos todavía no probados. Hay autorización expresa de commit/push/tag/pre-release tras superar las verificaciones; presencia y autorización gráfica actual siguen pendientes. [Preparación y puertas](RELEASE_READINESS.md).
+
+La investigación de pipeline queda pausada, no es un requisito para esta preview y no autoriza más ensayos. La orden vigente autoriza commit/push/Release verificados, sin nueva aprobación de publicación. No cambiar visibilidad sin decisión específica ni habilitar install-main.
+
+---
+
+## Estado anterior conservado — no es la tarea activa
+
+# Tarea activa · aislar capacidad mínima del pipeline GPU
+
+Publicación pausada por la nueva petición. Nine-slice-temporal por repetición descartada mediante inspección y tests de la versión real; no crearB2. PruebaA mínima preparada y pendiente de supervisión/autorización nueva; no tocar consola mientras el propietario esté ausente. SegúnA, cerrar o medir una tarjetaC. No abrir otra investigación, cambiar VSync o activar caché global. Software predeterminado/GPUexperimental se conservan. [Puertas y evidencia](GPU_RENDER_PIPELINE_AUDIT.md).
+
+---
+
+# Fase 15.3 · tres ensayos cerrados; GPU sigue experimental
+
+Dos intentos como máximo. Trazas por etapa y experimentoA de esperaEGL preparados; ARM64/loader pasan y software se conserva. Tres ensayos autorizados completados y ESvisible confirmado. GPUreferencia19,84Hz frente a22,00Hz enA; p95~100ms sin mejora, no30FPS estables. RAMsoftware83,06MiB frente a156,20/156,74MiBGPU. IntentoA sólo optativo; no hay segundo intento seleccionado ni nuevas pruebas autorizadas. Usuario siente la tercera bien, sin afirmar30/60FPS. Software por defecto y GPUexperimental; estabilidad prolongada/manual y derechos de distribución pendientes. No iniciar tercer intento ni publicar. Recorte secundario corregido por overflow y validado en nueve casos locales; GPU/LCD pendiente, fuentes y geometría conservadas. [Estado y evidencias](GPU_ACCELERATION.md).
+
+---
+
+# Fase 15.2 · GPU experimental medida; software conservado
+
+Mali propietario g29p1 y FemtoVG/Slint1.13.1 funcionan en RG353V. Dos rutas automáticas idénticas de13 acciones: cadencia agrupada de animación13,015→21,602Hz, mediana66,726→33,376ms; sin30/60FPS sostenidos. Prototipo y cuatro vistas capturados; usuario no apreció diferencias, pero un título cambia de salto de línea. Recuperación por PID1 y dos SSH conservadas. Software por defecto;09f71dfb GPU experimental. Falta valoración humana final y confirmación visible de ES, tipografía estricta, memoria software comparable y estabilidad prolongada. No abrir otra fase ni publicar. [Decisiones y límites](GPU_ACCELERATION.md).
+
+---
+
+# Fase 15 · optimización parcial validada; cierre visual pendiente
+
+Dos composiciones estáticas acotadas implementadas, sin cambiar fuentes, apariencia ni movimiento360/240ms. Ganancia local modesta,18capturas pixelidénticas y ARM64 listo. Instrumentación de pageflips reales añadida; no60 FPS certificados. Ensayos A/B terminados: raster76,146→65,402ms e intervalo kernel83,395→66,716ms; recorridos manuales distintos. Usuario confirma fluidez y retorno visible a ES, detecta recorte del título alternativo. Siguiente tarea mínima: reproducir/corregir ese recorte.60 FPS y consumo de reposo B siguen pendientes de perfil específico. Sin commit/push ni nuevas funciones. [Informe](PHASE15_REPORT.md).
+
+---
+
+Estado más reciente:2f0ed169 validado un minuto; usuario confirma más suavidad y pide60 FPS. Mantener ritmo360/240 y apariencia. Siguiente tarea única: evaluar caché de composiciones estáticas para reducir coste de raster; objetivo60 pendiente, sin nuevos efectos ni ensayos automáticos.
+
+Siguiente revisión acotada: medir en RG353V el candidato XRGB optimizado (mismo ritmo360/240 ms), tras nueva autorización. El propietario confirma mejor ritmo del ec124ea0; duplicar FPS sigue sin demostrar.
+
+Siguiente revisión mínima: valorar en LCD el ritmo local360/240 ms (ELFec124ea0), solicitado tras el ensayo de cinco minutos del1e635ac6. Ensayo previo cerrado con retorno visible confirmado; sin nueva prueba automática.
+
+# Tarea activa · Fase 14 · revisión física pendiente
+
+Movimiento finito e interrumpible, profundidad ligera y composición editorial diferenciada implementados. Primer ensayo físico: fluidez confirmada, defecto de entrada interior detectado. Corrección local a640 px, secuencias y ARM64 preparados. No iniciar nuevas funciones. Siguiente puerta: ensayo temporal autorizado del ELF corregido `1e635ac6…` en RG353V; comprobar continuidad/profundidad, inversión, menús, cuatro secciones y fluidez conservada, seguido de retorno visible a ES. Usuario decide aceptación artística. El perfil local no sustituye esa validación; ver [PHASE14_REPORT.md](PHASE14_REPORT.md).
+
+---
+
+# Hito activo · Fase 13 — cerrar UX y lag · 21-10-2026
+
+La petición actual sustituye las decisiones de navegación históricas: pestañas superiores Continuar · Tu momento · Biblioteca · Ajustes, L/R circular, un único modal y foco persistente.
+
+1. Navegación: implementada; 160 pasos de replay y siete tests nuevos pasan. Falta confirmación física de esta revisión.
+2. Rendimiento: penalización de composición en mmap demostrada con buffer propio en RG353V; backend RAM+copia implementado y compilado. Dos ensayos físicos completados: propietario confirma B claramente más rápido. Recorridos manuales distintos; parallax/transiciones y foco de cápsula siguen abiertos.
+3. Composición: tarjetas compactas, más paisaje, capturas auténticas y corrección de máscara blanca/título largo. Aceptación visual humana pendiente.
+4. Movimiento: transición 240 ms finita/interrumpible y planos UI/habitación con desplazamiento relativo; sin nuevas ilustraciones. Suavidad física pendiente.
+5. Integración: Rust/Python/replays y ARM64 pasan; paquete privado preparado. Siguiente tarea única: ensayo gráfico supervisado del hash final con recuperación y retorno visible a ES.
+
+No publicar ni hacer commits automáticos. No alterar dArkOS, arranque, ROMs o guardados. No ampliar Atlas/audio/clima/instaladores. [Evidencias y puerta de aceptación](PHASE13_REPORT.md).
+
+---
+
+## Historial conservado — no es el hito activo
+
 # Hoja de ruta por hitos
 
 Fuente principal: [EMOTIONALUI_MASTER](docs/EMOTIONALUI_MASTER.md). Propuesta de 19-10-2026 pendiente de aceptación del propietario. **Único hito activo: 0.** No hay nuevas tareas de implementación autorizadas por esta hoja.

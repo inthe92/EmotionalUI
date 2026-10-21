@@ -1,0 +1,19 @@
+// Shared timing and depth. Rust advances only finite, retargetable trajectories.
+// Integer milliseconds are also consumed by native controls (value * 1ms).
+export global MotionDesign {
+    out property <int> micro-ms:110;
+    out property <int> press-ms:80;
+    out property <int> panel-ms:180;
+    out property <int> close-ms:130;
+    out property <int> section-ms:360;
+    out property <int> functional-ms:240;
+    out property <int> secondary-delay-ms:45;
+    out property <int> frame-ms:16;
+    out property <float> page-span:640;
+    // Clip and travel use the physical viewport, never the final card column.
+    out property <float> content-span:640;
+    out property <int> ambient-ms:240;
+    out property <float> far-travel:6;
+    out property <float> near-travel:12;
+    out property <float> modal-travel:8;
+}

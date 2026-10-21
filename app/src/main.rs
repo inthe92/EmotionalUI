@@ -1,14 +1,21 @@
+mod ambient_motion;
 mod artwork;
 mod atlas;
 mod audio_settings;
 mod capture;
 mod controls;
+mod discovery_presentation;
 mod game_options;
 mod launch_ui;
 #[cfg(any(debug_assertions, feature = "simulator"))]
 mod moments;
 mod motion;
 mod navigation;
+mod performance;
+#[cfg(test)]
+mod pipeline_audit_tests;
+mod scene_cache;
+mod scene_raster;
 #[cfg(feature = "simulator")]
 mod simulator;
 mod smoke;
@@ -16,6 +23,7 @@ mod state;
 mod store;
 mod supervisor;
 mod trial;
+mod trial_replay;
 use chrono::{Datelike, NaiveDateTime};
 use emotional_core::{
     input::RepeatGate,
@@ -32,6 +40,7 @@ slint::include_modules!();
 #[derive(Deserialize)]
 #[serde(default, deny_unknown_fields)]
 struct Config {
+    ambient: emotional_core::ambient::Settings,
     reduced_motion: bool,
     continuity: emotional_core::continuity::Weights,
     region: String,
@@ -43,6 +52,7 @@ struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
+            ambient: Default::default(),
             reduced_motion: false,
             continuity: Default::default(),
             region: "ES".into(),
@@ -74,6 +84,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 fn run() -> Result<(), Box<dyn Error>> {
     let mut args = std::env::args().skip(1);
     let mut config_path = None;
+    let mut weather_config_path = None;
     let mut demo_count = None;
     let mut unknown_time = false;
     let mut import_xml = None;
@@ -107,12 +118,19 @@ fn run() -> Result<(), Box<dyn Error>> {
     let mut keyboard_map = None;
     let mut dev_moment = None;
     let mut dev_weather_age = None;
+    let mut dev_season = None;
+    let mut dev_environment_file = None;
     let mut simulation = None;
     let mut snapshot = None;
     let mut snapshot_view = "home".to_owned();
     let mut db_path = None;
     while let Some(arg) = args.next() {
         match arg.as_str() {
+            "--dev-environment-file" => {
+                dev_environment_file = Some(PathBuf::from(
+                    args.next().ok_or("DEV environment needs a file")?,
+                ))
+            }
             "--launcher-config" | "--launch-child" | "--sim-return-replay" => {
                 args.next().ok_or("Missing launcher argument")?;
             }
@@ -184,6 +202,12 @@ fn run() -> Result<(), Box<dyn Error>> {
                 ))
             }
             "--dev-moment" => dev_moment = Some(args.next().ok_or("--dev-moment necesita nombre")?),
+            "--dev-season" => {
+                dev_season = Some(
+                    args.next()
+                        .ok_or("--dev-season needs spring|summer|autumn|winter")?,
+                )
+            }
             "--dev-weather-age" => {
                 dev_weather_age = Some(
                     args.next()
@@ -223,11 +247,14 @@ fn run() -> Result<(), Box<dyn Error>> {
   --unknown-time
   --dev-moment NAME      preset, solo desarrollo/simulador
   --dev-weather-age MIN  antigüedad simulada, solo desarrollo
+  --dev-season spring|summer|autumn|winter (requiere --at; solo desarrollo)
+  --dev-environment-file PATH  escenario offline ficticio (solo desarrollo)
   --keyboard-map PATH    sobrescrituras TOML
   --input-profile PATH   evdev Linux, perfil físico verificado
   --library-root DIR     GUI desde el catálogo SQLite importado
   --import-gamelist XML --rom-root DIR --db DB
   --db PATH --config PATH --reduced-motion
+  --weather-config PATH.weather-private.toml  ubicación y consentimiento privados (0600)
   --ui-test
   --smoke-test --smoke-seconds 1..30
   --smoke-log PATH --quit-file PATH
@@ -265,6 +292,10 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             "--at" => at = Some(args.next().ok_or("--at necesita valor")?),
             "--weather" => weather = Some(args.next().ok_or("--weather necesita valor")?),
             "--config" => config_path = Some(args.next().ok_or("--config necesita ruta")?),
+            "--weather-config" => {
+                weather_config_path =
+                    Some(args.next().ok_or("--weather-config needs a private file")?)
+            }
             "--db" => db_path = Some(args.next().ok_or("--db necesita ruta")?),
             "--reduced-motion" => reduced = true,
             "--smoke-log" => {
@@ -303,6 +334,14 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             _ => return Err(format!("Opción desconocida: {arg}").into()),
         }
     }
+    let gpu_replay = trial_replay::configured(trial_mode)?;
+    #[cfg(feature = "linuxkms-gpu")]
+    if !matches!(
+        std::env::var("SLINT_BACKEND").as_deref(),
+        Ok("linuxkms-femtovg" | "linuxkms-software")
+    ) {
+        return Err("GPU experimental builds require explicit SLINT_BACKEND=linuxkms-femtovg or linuxkms-software; use the independent software executable for fallback".into());
+    }
     if trial_mode
         && (demo_count.is_some()
             || demo_history
@@ -324,7 +363,11 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         _ => return Err("Unknown visual case".into()),
     }
     #[cfg(not(any(debug_assertions, feature = "simulator")))]
-    if dev_moment.is_some() || dev_weather_age.is_some() {
+    if dev_moment.is_some()
+        || dev_weather_age.is_some()
+        || dev_season.is_some()
+        || dev_environment_file.is_some()
+    {
         return Err("Context presets require a development or simulator build".into());
     }
     #[cfg(not(feature = "simulator"))]
@@ -360,6 +403,27 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     } else {
         toml::from_str(include_str!("../../assets/themes/default.toml"))?
     };
+    #[cfg(any(debug_assertions, feature = "simulator"))]
+    let dev_environment = dev_environment_file
+        .as_ref()
+        .map(|path| moments::Environment::read(path))
+        .transpose()?;
+    #[cfg(any(debug_assertions, feature = "simulator"))]
+    if let Some(case) = &dev_environment {
+        if weather_config_path.is_some()
+            || at.is_some()
+            || weather.is_some()
+            || dev_moment.is_some()
+            || dev_season.is_some()
+            || unknown_time
+            || trial_mode
+        {
+            return Err("DEV environment cannot combine with network configuration or other context overrides".into());
+        }
+        config.ambient = case.ambient.clone();
+        config.at = None;
+        config.weather = "unknown".into();
+    }
     if let Some(at) = at {
         config.at = Some(at);
     }
@@ -390,6 +454,24 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         clock.unknown();
     }
     let mut weather = Weather::parse(&config.weather)?;
+    let mut ambient = emotional_services::ambient::Runtime::new(config.ambient.clone())?;
+    #[cfg(any(debug_assertions, feature = "simulator"))]
+    if let Some(case) = &dev_environment {
+        clock = case.install(&mut ambient)?;
+    }
+    if let Some(name) = dev_season {
+        if simulated.is_none() {
+            return Err("--dev-season requires a simulated --at date".into());
+        }
+        use emotional_core::calendar::Season;
+        ambient.demo_season = Some(match name.as_str() {
+            "spring" => Season::Spring,
+            "summer" => Season::Summer,
+            "autumn" => Season::Autumn,
+            "winter" => Season::Winter,
+            _ => return Err("Invalid preview season".into()),
+        });
+    }
     #[cfg(any(debug_assertions, feature = "simulator"))]
     if let Some(name) = &dev_moment {
         let (c, w) = moments::context(name)?;
@@ -429,7 +511,25 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             }
         }
     }
+    if let Some(private_path) = weather_config_path {
+        match emotional_services::open_meteo::Config::read(std::path::Path::new(&private_path)) {
+            Ok(private) => ambient.configure_weather(
+                private,
+                emotional_services::ambient::Runtime::cache_path(&path),
+            ),
+            Err(reason) => eprintln!("Weather disabled; continuing offline: {reason}"),
+        }
+    } else if ambient.settings.location.is_some() && !ambient.demo_context() {
+        let cache = emotional_services::ambient::Runtime::cache_path(&path);
+        if cache.is_file() && ambient.load_cache(&cache).is_err() {
+            eprintln!("Ambient weather cache unavailable; continuing offline");
+        }
+    }
     let mut store = store::Store::open(&path)?;
+    match store.last_valid_time() {
+        Ok(saved) => clock.restore_last_known(saved),
+        Err(e) => eprintln!("Clock fallback ignored: {e}"),
+    }
     if let Some(path) = editorial_path {
         let catalog: emotional_core::editorial::Catalog =
             toml::from_str(&std::fs::read_to_string(path)?)?;
@@ -746,6 +846,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             0
         };
     let mut state = State {
+        navigation: Default::default(),
+        modal_return: None,
         atlas_explanations,
         system_focus: false,
         system_return_dock: None,
@@ -813,6 +915,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         audio_preferences,
         audio_panel: false,
         audio_index: 0,
+        ambient,
         clock,
         weather,
         config,
@@ -844,11 +947,17 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             .library_index
             .min(state.games.len().saturating_sub(1));
     }
+    state.order = discovery_presentation::presentation_order(
+        &state.order,
+        state.recent,
+        &state.games.iter().map(|g| g.available).collect::<Vec<_>>(),
+    );
     #[cfg(feature = "simulator")]
     simulator::install()?;
     let ui = Home::new().inspect_err(|error| {
         smoke::emit("window_init_error", None, None, Some(&error.to_string()))
     })?;
+    let _performance = performance::start(&ui);
     ui.set_concept(concept);
     ui.set_trial_mode(trial_mode);
     ui.set_art_available(!imported && visual_case.as_deref() != Some("no-art"));
@@ -862,6 +971,17 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         Some("Window size only; does not verify LCD image"),
     );
     state.paint(&ui);
+    #[cfg(any(debug_assertions, feature = "simulator"))]
+    if dev_environment.is_some() {
+        moments::verify_environment(&state, &ui);
+    }
+    if let Some(at) = state.clock.persistable_now() {
+        state.clock.restore_last_known(Some(at));
+        if let Err(e) = state.writer.clock(at) {
+            eprintln!("Clock checkpoint skipped: {e}");
+        }
+    }
+    println!("ENV scene={} moment={} source={:?} artwork=provisional-private; palette={}; offline-capable=true; weather=optional-private-provider-or-demo",ui.get_scene_id(),ui.get_scene_moment(),state.clock.context().source,ui.global::<DaycycleAssets>().get_palette_index());
     if library_unavailable {
         state.notify(
             &ui,
@@ -905,6 +1025,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                     let mut state = s.borrow_mut();
                     match update {
                         Ok(mut update) => {
+                            state.remember_focus();
                             let focused =
                                 state.games.get(state.library_index).map(|g| g.id.clone());
                             let resume_focused_id = if state.resume {
@@ -923,8 +1044,12 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             let open_id = state
                                 .game_options
                                 .and_then(|i| state.games.get(i).map(|g| g.id.clone()));
+                            let had_game_modal = open_id.is_some();
                             state.game_options =
                                 open_id.and_then(|id| update.games.iter().position(|g| g.id == id));
+                            if state.game_options.is_none() && had_game_modal {
+                                state.close_modal();
+                            }
                             state.atlas_explanations = update.explanations;
                             state.games = update.games;
                             state.local_art = update.art;
@@ -947,6 +1072,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             if let Err(e) = state.rerank() {
                                 eprintln!("TRIAL ranking: {e}");
                             }
+                            state.restore_remembered_focus();
                             state.paint(&ui);
                             state.notify(&ui, &update.message);
                             println!("TRIAL catalog_ready games={}", state.games.len());
@@ -968,8 +1094,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     let weak = ui.as_weak();
     let s = shared.clone();
     let mut pending: Option<String> = None;
-    let mut shown: [Option<String>; 4] = Default::default();
-    let mut requested: [Option<String>; 4] = Default::default();
+    let mut shown: [Option<String>; 5] = Default::default();
+    let mut requested: [Option<String>; 5] = Default::default();
     art_timer.start(
         slint::TimerMode::Repeated,
         std::time::Duration::from_millis(30),
@@ -979,30 +1105,23 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             };
             let state = s.borrow();
             let indices = [
-                if state.resume {
-                    state.recent
-                } else {
-                    state.order.first().copied()
-                },
+                state.order.first().copied(),
                 state.order.get(1).copied(),
                 state.continuity_order.get(1).copied(),
                 state.continuity_order.get(2).copied(),
+                state.recent,
             ];
-            let desired: [Option<String>; 4] = std::array::from_fn(|slot| {
+            let desired: [Option<String>; 5] = std::array::from_fn(|slot| {
                 indices[slot].and_then(|i| state.games.get(i)).map(|g| {
                     format!(
                         "{slot}:{}:{}:{}",
                         ui.get_artwork_generation(),
-                        if slot == 0 && state.resume {
-                            "resume"
-                        } else {
-                            "discover"
-                        },
+                        if slot == 4 { "resume" } else { "discover" },
                         g.id
                     )
                 })
             });
-            for slot in 0..4 {
+            for slot in 0..5 {
                 if shown[slot] != desired[slot] {
                     match slot {
                         0 => {
@@ -1018,9 +1137,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             ui.set_resume_two_cover(slint::Image::default());
                             ui.set_resume_two_art_available(false);
                         }
-                        _ => {
+                        3 => {
                             ui.set_resume_three_cover(slint::Image::default());
                             ui.set_resume_three_art_available(false);
+                        }
+                        _ => {
+                            ui.set_resume_cover(slint::Image::default());
+                            ui.set_resume_art_available(false);
                         }
                     }
                     shown[slot] = desired[slot].clone();
@@ -1052,9 +1175,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                 ui.set_resume_two_cover(image);
                                 ui.set_resume_two_art_available(true);
                             }
-                            _ => {
+                            3 => {
                                 ui.set_resume_three_cover(image);
                                 ui.set_resume_three_art_available(true);
+                            }
+                            _ => {
+                                ui.set_resume_cover(image);
+                                ui.set_resume_art_available(true);
                             }
                         }
                         smoke::emit(
@@ -1072,7 +1199,11 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             }
             if pending.is_none() {
                 // Only visible or immediately adjacent cards, never the entire catalog.
-                let slots: &[usize] = if state.resume { &[0, 2, 3] } else { &[0, 1] };
+                let slots: &[usize] = if state.resume {
+                    &[4, 2, 3, 0, 1]
+                } else {
+                    &[0, 1, 4, 2, 3]
+                };
                 for &slot in slots {
                     if requested[slot] == desired[slot] {
                         continue;
@@ -1081,10 +1212,18 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                         .as_ref()
                         .zip(indices[slot].and_then(|i| state.games.get(i)))
                     {
-                        let (width, height) = if slot == 0 {
+                        let (width, height) = if slot == 0 || slot == 4 {
                             (
-                                ui.get_prepared_art_width() as u32,
-                                ui.get_prepared_art_height() as u32,
+                                if slot == 4 {
+                                    ui.get_prepared_resume_width()
+                                } else {
+                                    ui.get_prepared_moment_width()
+                                } as u32,
+                                if slot == 4 {
+                                    ui.get_prepared_resume_height()
+                                } else {
+                                    ui.get_prepared_moment_height()
+                                } as u32,
                             )
                         } else {
                             (
@@ -1104,7 +1243,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                     .unwrap_or_default(),
                                 width,
                                 height,
-                                presentation: if slot == 0 {
+                                presentation: if slot == 0 || slot == 4 {
                                     artwork::Presentation::Hero
                                 } else {
                                     artwork::Presentation::Tile
@@ -1125,6 +1264,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     #[cfg(feature = "simulator")]
     let _simulation = simulation
         .map(|path| simulator::replay(&path, &ui, shared.clone()))
+        .transpose()?;
+    let _gpu_replay = gpu_replay
+        .then(|| trial_replay::start(&ui, &shared))
         .transpose()?;
     let weak = ui.as_weak();
     let s = shared.clone();
@@ -1185,13 +1327,11 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     ui.on_system_toggle(move || {
         if let Some(ui) = weak.upgrade() {
             let mut state = s.borrow_mut();
-            if state.game_options.is_none() && !state.audio_panel {
+            if state.system_open || !state.modal_active() {
                 if state.system_open {
                     state.close_status();
                 } else {
-                    state.system_return_dock = state.dock_focus.take();
-                    state.system_open = true;
-                    state.system_focus = true;
+                    state.open_status();
                 }
                 state.paint(&ui);
             }
@@ -1225,7 +1365,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         if let Some(ui) = weak.upgrade() {
             let mut state = s.borrow_mut();
             if state.menu
-                && !state.audio_panel
+                && !state.modal_active()
                 && (0..if state.layout == 4 { 10 } else { 3 }).contains(&index)
             {
                 state.dock_focus = None;
@@ -1244,7 +1384,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             let mut state = s.borrow_mut();
             if state.audio_panel && (0..7).contains(&index) {
                 state.audio_index = index as usize;
-                if let Err(error) = state.audio_action(
+                if let Err(error) = state.modal_audio_action(
                     &ui,
                     if delta < 0 {
                         emotional_core::controls::Action::Left
@@ -1338,6 +1478,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         .clock
         .known_now()
         .map(|d| d.format("%Y%m%d%H%M").to_string());
+    let mut last_ambient_context = last_context.clone();
     let weak = ui.as_weak();
     let s = shared.clone();
     tick.start(
@@ -1345,11 +1486,29 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         std::time::Duration::from_secs(1),
         move || {
             if let Some(ui) = weak.upgrade() {
-                let st = s.borrow();
+                let mut st = s.borrow_mut();
+                let clock = st.clock.clone();
+                let demo = st.weather != Weather::Unknown;
+                let neutral = st.privacy.neutral;
+                if st.ambient.weather_tick(&clock, demo, neutral) {
+                    st.paint(&ui);
+                }
                 ui.set_audio_status(st.audio_status().into());
                 if let Some(error) = st.writer.error() {
                     eprintln!("Persistence failed: {error}");
                     ui.set_message("No pudimos guardar tu elección.".into());
+                }
+                // Ambient expiry and solar light must also update while panels
+                // are open; ranking remains deferred by its existing contract.
+                let ambient_context = st
+                    .clock
+                    .known_now()
+                    .map(|d| d.format("%Y%m%d%H%M").to_string());
+                if ambient_context != last_ambient_context {
+                    if st.menu || st.library {
+                        st.paint(&ui);
+                    }
+                    last_ambient_context = ambient_context;
                 }
                 if !st.menu
                     && !st.library
@@ -1765,4 +1924,87 @@ fn run_integrated_checks(ui: &Home) {
     assert!(ui.get_discovery_secondary() > 0.0 && ui.get_discovery_main() < 1.0);
     ui.set_section_position(ui.get_section_target());
     ui.set_reduced(reduced);
+    // Interrupt ambient interpolation from its CURRENT rendered colors; no jumps.
+    let saved_reduced = ui.get_reduced();
+    ui.set_reduced(false);
+    let style = ui.global::<DaycycleAssets>();
+    let saved_index = style.get_palette_index();
+    // A continuous blend can quantize to the next keyframe's identical 8-bit
+    // colors. Select two genuinely different targets for this transition test;
+    // a no-op must not be mistaken for a failed animation.
+    use slint::Model;
+    let saved_next = style.get_palette_next_index();
+    let saved_mix = style.get_day_mix();
+    let original_target = style.get_target_colors().iter().collect::<Vec<_>>();
+    let mut distinct = Vec::new();
+    let mut previous = original_target.clone();
+    for index in 0..7 {
+        style.set_palette_index(index);
+        style.set_palette_next_index(index);
+        style.set_day_mix(0.);
+        let target = style.get_target_colors().iter().collect::<Vec<_>>();
+        if target != original_target && target != previous {
+            distinct.push(index);
+            previous = target;
+            if distinct.len() == 2 {
+                break;
+            }
+        }
+    }
+    style.set_palette_index(saved_index);
+    style.set_palette_next_index(saved_next);
+    style.set_day_mix(saved_mix);
+    assert_eq!(
+        distinct.len(),
+        2,
+        "Ambient palettes must contain distinct targets"
+    );
+    // Slint .alpha is 0..255; with-alpha expects 0..1. Preserve translucent grades.
+    assert!(style.get_background_tint().alpha() < 40);
+    assert!(style.get_active().alpha() < 70);
+    let start = style.get_ink();
+    ambient_motion::transition(ui, distinct[0], false);
+    assert_eq!(style.get_palette_progress(), 0.);
+    assert_eq!(style.get_ink(), start);
+    style.set_palette_progress(0.5);
+    let halfway = style.get_ink();
+    let generation = ui.get_ambient_generation();
+    ambient_motion::transition(ui, distinct[1], false);
+    assert_eq!(style.get_ink(), halfway);
+    assert_ne!(ui.get_ambient_generation(), generation);
+    ui.set_reduced(true);
+    ambient_motion::transition(ui, saved_index, false);
+    assert_eq!(style.get_palette_progress(), 1.);
+    // Same time, different environment: accents change, text alpha stays valid.
+    let season = style.get_season_index();
+    let weather = style.get_weather_index();
+    let celebration = style.get_celebration_index();
+    let blend = emotional_core::ambient_art::Blend {
+        from: 3,
+        to: 4,
+        mix: 0.5,
+    };
+    ambient_motion::update(ui, blend, 0, 4, 0, true);
+    let snow = style.get_mark();
+    let ink = style.get_ink();
+    ambient_motion::update(ui, blend, 0, 4, 2, true);
+    assert_ne!(style.get_mark(), snow);
+    assert_eq!(style.get_ink(), ink);
+    assert!(style.get_background_tint().alpha() < 40);
+    let generation = ui.get_ambient_generation();
+    ambient_motion::update(ui, blend, 0, 4, 2, true);
+    assert_eq!(ui.get_ambient_generation(), generation); // No repeated work at rest.
+    let winter_secondary = style.get_muted();
+    ambient_motion::update(ui, blend, 3, 2, 1, true);
+    assert_ne!(style.get_muted(), winter_secondary);
+    assert!(style.get_background_tint().alpha() < 40);
+    ambient_motion::update(
+        ui,
+        emotional_core::ambient_art::Blend::still(saved_index as usize),
+        season,
+        weather,
+        celebration,
+        true,
+    );
+    ui.set_reduced(saved_reduced);
 }

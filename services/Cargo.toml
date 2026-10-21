@@ -6,8 +6,11 @@ license.workspace = true
 [dependencies]
 emotional-core = { path = "../core" }
 chrono = "=0.4.42"
+chrono-tz = "=0.10.4"
+toml = "=0.8.23"
 roxmltree = "=0.20.0"
 serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.154"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 libc = "=0.2.191"

@@ -1,0 +1,340 @@
+[
+  {
+    "name": "const-field-offset-macro",
+    "version": "0.1.5",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/slint-ui/slint/7df9b3cbb70b46233bf4d49966d65f94f09fa6bd/helper_crates/const-field-offset/LICENSES/Apache-2.0.txt",
+        "sha256": "f9e1082ab6ccfb5a2588ecfaf6bc29f1c4c6c024d7a43d12bcd69cd0cfed634e",
+        "file": "const-field-offset-macro-0.1.5/helper_crates__const-field-offset__LICENSES__Apache-2.0.txt",
+        "upstream_type": "symlink",
+        "resolved_file": "const-field-offset-macro-0.1.5/LICENSES__Apache-2.0.txt"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/slint-ui/slint/7df9b3cbb70b46233bf4d49966d65f94f09fa6bd/helper_crates/const-field-offset/LICENSES/MIT.txt",
+        "sha256": "d5ea4b74dfb7de7353f34646979d8a07d4bea51a1c1c9499b59f41a8a8a2b8e5",
+        "file": "const-field-offset-macro-0.1.5/helper_crates__const-field-offset__LICENSES__MIT.txt",
+        "upstream_type": "symlink",
+        "resolved_file": "const-field-offset-macro-0.1.5/LICENSES__MIT.txt"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/slint-ui/slint/7df9b3cbb70b46233bf4d49966d65f94f09fa6bd/LICENSES/Apache-2.0.txt",
+        "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
+        "file": "const-field-offset-macro-0.1.5/LICENSES__Apache-2.0.txt"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/slint-ui/slint/7df9b3cbb70b46233bf4d49966d65f94f09fa6bd/LICENSES/MIT.txt",
+        "sha256": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
+        "file": "const-field-offset-macro-0.1.5/LICENSES__MIT.txt"
+      }
+    ],
+    "source_commit": "7df9b3cbb70b46233bf4d49966d65f94f09fa6bd",
+    "path_in_vcs": "helper_crates/const-field-offset/macro",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/slint-ui/slint/7df9b3cbb70b46233bf4d49966d65f94f09fa6bd/helper_crates/const-field-offset/macro/Cargo.toml",
+    "upstream_manifest_sha256": "322d44e7798b41ce6a750d919a1b58a416185cc6496b7d4906f89d6083286d29",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "drm-fourcc",
+    "version": "2.2.0",
+    "files": [],
+    "source_commit": "7b9f80060ffd4b35cd236437e65a17fb517d163c",
+    "path_in_vcs": "",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/danielzfranklin/drm-fourcc-rs/7b9f80060ffd4b35cd236437e65a17fb517d163c/Cargo.toml",
+    "upstream_manifest_sha256": "0660e17d634e5b8c2a82cd0b0328c42fbc6e8b77a9f37b85f49bfeba1f4931ca",
+    "status": "PENDING",
+    "reason": "No complete license text present in pinned upstream tree; package license declaration alone is insufficient"
+  },
+  {
+    "name": "gbm-sys",
+    "version": "0.4.0",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/Drakulix/gbm.rs/2b4047f8e5ab4d050d4ed88f5ee2515069478fac/LICENSE",
+        "sha256": "56ab09c42eb251646c1c00ba32f5db0e51e297cd379eccc5a1cb7808f2de4ce7",
+        "file": "gbm-sys-0.4.0/LICENSE"
+      }
+    ],
+    "source_commit": "2b4047f8e5ab4d050d4ed88f5ee2515069478fac",
+    "path_in_vcs": "gbm-sys",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/Drakulix/gbm.rs/2b4047f8e5ab4d050d4ed88f5ee2515069478fac/gbm-sys/Cargo.toml",
+    "upstream_manifest_sha256": "88ae78c99a8ada05492f7146084444d9740921fbeb22158d1c9bc774af0ac1ab",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "gl_generator",
+    "version": "0.14.0",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/brendanzab/gl-rs/ea503e8d5fb6d73c6030e6191ce738cd3bf3433e/LICENSE",
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "file": "gl_generator-0.14.0/LICENSE"
+      }
+    ],
+    "source_commit": "ea503e8d5fb6d73c6030e6191ce738cd3bf3433e",
+    "path_in_vcs": "",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/brendanzab/gl-rs/ea503e8d5fb6d73c6030e6191ce738cd3bf3433e/gl_generator/Cargo.toml",
+    "upstream_manifest_sha256": "4daaaac088657de6c5b6223ca9f890b8b5621f073068c65c0d759b0625d36280",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "integer-sqrt",
+    "version": "0.1.5",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/derekdreery/integer-sqrt-rs/282d0d4e26fd41d888894f5578b9d7553f7be0c8/LICENSE-APACHE",
+        "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+        "file": "integer-sqrt-0.1.5/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/derekdreery/integer-sqrt-rs/282d0d4e26fd41d888894f5578b9d7553f7be0c8/LICENSE-MIT",
+        "sha256": "0029ee19467a3fc365e6f0fe61b95ad2525f2b55478ec1159bfc570657273111",
+        "file": "integer-sqrt-0.1.5/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "282d0d4e26fd41d888894f5578b9d7553f7be0c8",
+    "path_in_vcs": "",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/derekdreery/integer-sqrt-rs/282d0d4e26fd41d888894f5578b9d7553f7be0c8/Cargo.toml",
+    "upstream_manifest_sha256": "afafe0a25c80211689239962b187dfc01dbf016a1574dcf5b97b1b6563c9b4fc",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "khronos_api",
+    "version": "3.1.0",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/brendanzab/gl-rs/f150967b1c44ae888e6676f93f639ebc82771bdc/LICENSE",
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "file": "khronos_api-3.1.0/LICENSE"
+      }
+    ],
+    "source_commit": "f150967b1c44ae888e6676f93f639ebc82771bdc",
+    "path_in_vcs": "",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/brendanzab/gl-rs/f150967b1c44ae888e6676f93f639ebc82771bdc/khronos_api/Cargo.toml",
+    "upstream_manifest_sha256": "4a1ac66b226935a2ce69cca4c1c56be36cea83a5da382514db5ea967568e3ca9",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "lyon_algorithms",
+    "version": "1.0.21",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/994526f2766c7e9bc5bb16687232fd7e8999dbdf/LICENSE-APACHE",
+        "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06",
+        "file": "lyon_algorithms-1.0.21/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/994526f2766c7e9bc5bb16687232fd7e8999dbdf/LICENSE-MIT",
+        "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e",
+        "file": "lyon_algorithms-1.0.21/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "994526f2766c7e9bc5bb16687232fd7e8999dbdf",
+    "path_in_vcs": "crates/algorithms",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/nical/lyon/994526f2766c7e9bc5bb16687232fd7e8999dbdf/crates/algorithms/Cargo.toml",
+    "upstream_manifest_sha256": "1ef8e331d2200ab7a3b7a180f2c2de475f8f55411fccf0145dfa5c66d65cec09",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "MIT full text available; upstream Apache file is a notice linking the full Apache terms, not the complete terms."
+  },
+  {
+    "name": "lyon_extra",
+    "version": "1.1.0",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-APACHE",
+        "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06",
+        "file": "lyon_extra-1.1.0/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-MIT",
+        "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e",
+        "file": "lyon_extra-1.1.0/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "path_in_vcs": "crates/extra",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/crates/extra/Cargo.toml",
+    "upstream_manifest_sha256": "39f0b6da7dc1c9ca5e133a470c3bc4a21971527812b34a94c3e76a22879d1ec2",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "MIT full text available; upstream Apache file is a notice linking the full Apache terms, not the complete terms."
+  },
+  {
+    "name": "lyon_geom",
+    "version": "1.0.19",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-APACHE",
+        "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06",
+        "file": "lyon_geom-1.0.19/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-MIT",
+        "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e",
+        "file": "lyon_geom-1.0.19/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "path_in_vcs": "crates/geom",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/crates/geom/Cargo.toml",
+    "upstream_manifest_sha256": "54b1545d4de812d5fe669890b5a2bec17e65c42b9ade5c7e6a41ffbff0314c5c",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "MIT full text available; upstream Apache file is a notice linking the full Apache terms, not the complete terms."
+  },
+  {
+    "name": "lyon_path",
+    "version": "1.0.19",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-APACHE",
+        "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06",
+        "file": "lyon_path-1.0.19/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-MIT",
+        "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e",
+        "file": "lyon_path-1.0.19/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "path_in_vcs": "crates/path",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/crates/path/Cargo.toml",
+    "upstream_manifest_sha256": "f32c18792650c570d5751f9a7b4748931aafa96b88c08565a9a5c23fa3bd73c5",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "MIT full text available; upstream Apache file is a notice linking the full Apache terms, not the complete terms."
+  },
+  {
+    "name": "profiling",
+    "version": "1.0.18",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE",
+        "sha256": "10d30a673cd5e9349bdc02aeb48f14b3386d27d0da32df8f0a555d4aa16aa551",
+        "file": "profiling-1.0.18/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT",
+        "sha256": "c8167fdeeed46d3f244d3f85c5bf998ce889343691c32be2c61a8bc4b5c08333",
+        "file": "profiling-1.0.18/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+    "path_in_vcs": "profiling",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/profiling/Cargo.toml",
+    "upstream_manifest_sha256": "5c2cc51af406c9e636730400d7fd1293c3cc3ef294421113c6af826bb2d47c1b",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "profiling-procmacros",
+    "version": "1.0.18",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE",
+        "sha256": "10d30a673cd5e9349bdc02aeb48f14b3386d27d0da32df8f0a555d4aa16aa551",
+        "file": "profiling-procmacros-1.0.18/LICENSE-APACHE"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT",
+        "sha256": "c8167fdeeed46d3f244d3f85c5bf998ce889343691c32be2c61a8bc4b5c08333",
+        "file": "profiling-procmacros-1.0.18/LICENSE-MIT"
+      }
+    ],
+    "source_commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+    "path_in_vcs": "profiling-procmacros",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/profiling-procmacros/Cargo.toml",
+    "upstream_manifest_sha256": "5e3aa7f36a75631b8bcb63c9344fd838993700de1f4099666619c2fa18d32aeb",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "pulp-wasm-simd-flag",
+    "version": "0.1.1",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/sarah-quinones/pulp/5eb07fd7b68edf0a5e19f71737d315f72a510295/LICENSE",
+        "sha256": "d64f878c89bd5f1e5ada7e4aad57690b122727cf5229b7b87ea1980c188da1d9",
+        "file": "pulp-wasm-simd-flag-0.1.1/LICENSE"
+      }
+    ],
+    "source_commit": "5eb07fd7b68edf0a5e19f71737d315f72a510295",
+    "path_in_vcs": "pulp-wasm-simd-flag",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/sarah-quinones/pulp/5eb07fd7b68edf0a5e19f71737d315f72a510295/pulp-wasm-simd-flag/Cargo.toml",
+    "upstream_manifest_sha256": "5bb7f9eea7eef386b8ff1516876bc62c8a9f2ab122ac20a4600528042f5463fb",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE"
+  },
+  {
+    "name": "simd_helpers",
+    "version": "0.1.0",
+    "files": [],
+    "source_commit": "ca1a2f84aa386d758e98f8a609d990263932fb85",
+    "path_in_vcs": "",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/lu-zero/simd_helpers/ca1a2f84aa386d758e98f8a609d990263932fb85/Cargo.toml",
+    "upstream_manifest_sha256": "b41497677a5498040f2eb3fc089e3c2c38c413dca64f41dc57a115e26480461d",
+    "status": "PENDING",
+    "reason": "No complete license text present in pinned upstream tree; package license declaration alone is insufficient"
+  },
+  {
+    "name": "zune-core",
+    "version": "0.4.12",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/etemesi254/zune-image/f8fbb123d5ed04441e8324a555bfcda0cb1bd28f/LICENSE-ZLIB",
+        "sha256": "7fa429541e55b1509909e058f2d21a37467e4958ec713b357f6e0cf9dc4ee352",
+        "file": "zune-core-0.4.12/LICENSE-ZLIB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/etemesi254/zune-image/f8fbb123d5ed04441e8324a555bfcda0cb1bd28f/LICENSE.md",
+        "sha256": "c6dff146a9f31848ac296faa5a08a4253caf2c384c86f906dc99e7fc0a39cc8c",
+        "file": "zune-core-0.4.12/LICENSE.md"
+      }
+    ],
+    "source_commit": "f8fbb123d5ed04441e8324a555bfcda0cb1bd28f",
+    "path_in_vcs": "crates/zune-core",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/etemesi254/zune-image/f8fbb123d5ed04441e8324a555bfcda0cb1bd28f/crates/zune-core/Cargo.toml",
+    "upstream_manifest_sha256": "cc3fa616bb3dd673abbdebce2d8b2a1a1ecb6a3dd9654313d6fcc0ab2d3c5f84",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "Full Zlib terms available at exact commit; Cargo license expression permits this option. LICENSE.md separately records MIT/Apache references."
+  },
+  {
+    "name": "zune-inflate",
+    "version": "0.2.54",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/etemesi254/zune-image/69502ce83fdfecdd0beefd677e2abb3781b29d98/LICENSE-ZLIB",
+        "sha256": "7fa429541e55b1509909e058f2d21a37467e4958ec713b357f6e0cf9dc4ee352",
+        "file": "zune-inflate-0.2.54/LICENSE-ZLIB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/etemesi254/zune-image/69502ce83fdfecdd0beefd677e2abb3781b29d98/LICENSE.md",
+        "sha256": "e870d7fd7819a9f0453c62798cb52ae95d148a8c91dc2de1d983f997143c72de",
+        "file": "zune-inflate-0.2.54/LICENSE.md"
+      }
+    ],
+    "source_commit": "69502ce83fdfecdd0beefd677e2abb3781b29d98",
+    "path_in_vcs": "zune-inflate",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/etemesi254/zune-image/69502ce83fdfecdd0beefd677e2abb3781b29d98/zune-inflate/Cargo.toml",
+    "upstream_manifest_sha256": "a7e3d8fd82218e7f9f2172d41a048e4879abc81228589539e1ec750d72811f90",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "Full Zlib terms available at exact commit; Cargo license expression permits this option. LICENSE.md separately records MIT/Apache references."
+  },
+  {
+    "name": "zune-jpeg",
+    "version": "0.4.21",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/etemesi254/zune-image/fa2c767a01d7d9373911d0bf63e0588553d67e0e/LICENSE-ZLIB",
+        "sha256": "7fa429541e55b1509909e058f2d21a37467e4958ec713b357f6e0cf9dc4ee352",
+        "file": "zune-jpeg-0.4.21/LICENSE-ZLIB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/etemesi254/zune-image/fa2c767a01d7d9373911d0bf63e0588553d67e0e/LICENSE.md",
+        "sha256": "c6dff146a9f31848ac296faa5a08a4253caf2c384c86f906dc99e7fc0a39cc8c",
+        "file": "zune-jpeg-0.4.21/LICENSE.md"
+      }
+    ],
+    "source_commit": "fa2c767a01d7d9373911d0bf63e0588553d67e0e",
+    "path_in_vcs": "crates/zune-jpeg",
+    "upstream_manifest_url": "https://raw.githubusercontent.com/etemesi254/zune-image/fa2c767a01d7d9373911d0bf63e0588553d67e0e/crates/zune-jpeg/Cargo.toml",
+    "upstream_manifest_sha256": "b84874c67f2b66aa79164f0a946d36b673a8e2a3e6bcc6a5ecdfc1b1c1e04530",
+    "status": "PINNED_COMPLETE_LICENSE_TEXT_AVAILABLE",
+    "note": "Full Zlib terms available at exact commit; Cargo license expression permits this option. LICENSE.md separately records MIT/Apache references."
+  }
+]

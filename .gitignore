@@ -52,6 +52,9 @@ library.db-wal
 library.db-shm
 user.db-wal
 user.db-shm
+# Optional own weather cache contains user-selected location and timestamps.
+*.weather-cache.toml
+*.weather-cache.*.tmp
 
 # Additional ROM/BIOS and save formats: private inputs, never project source.
 *.gb
@@ -77,6 +80,7 @@ user.db-shm
 /docs/editorial-artwork-*/**/*.stderr
 
 # Private/unresolved files withheld from this initial source checkpoint.
+*.weather-private.toml
 /assets/scenes/lofi-room-v2/master.png
 /assets/scenes/room-v1/master.png
 /ARTWORK_IMPLEMENTATION_REPORT.md

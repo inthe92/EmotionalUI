@@ -21,17 +21,27 @@ def manifest(package):
  d=json.loads((package/'package.json').read_text())
  if d.get('schema')!=1 or d.get('kind')!='emotional-ui-trial' or d.get('architecture')!='aarch64' or d.get('main_install_enabled') is not False:raise ValueError('Unsupported package')
  if not isinstance(d.get('files'),dict) or not d['files']:raise ValueError('Empty package')
+ executable=d.get('executable_files',[])
+ if not isinstance(executable,list) or any(name not in d['files'] or name not in {'emotional-ui','emotional-ui-gpu'} for name in executable):raise ValueError('Invalid executable allowlist')
  for name,sha in d['files'].items():
   relative(name);p=package/name;plain_tree(p)
   if not p.is_file() or digest(p)!=sha:raise ValueError('Package checksum mismatch: '+name)
  return d
+
+def darkos_identity(os_release, splash='', device=''):
+ # The tested dArkOS image identifies itself as Debian in os-release.
+ # A generic Debian/ArkOS installation is not evidence of dArkOS compatibility.
+ return bool(re.search(r'(?im)^ID\s*=\s*[\"\']?darkos[\"\']?\s*$',os_release) or
+             (re.search(r'(?im)^title=dArkOS \([0-9]{8}\)\s*$',splash) and device.strip().upper()=='RG353V'))
 
 def compatible(package,d):
  if platform.system()!='Linux' or platform.machine() not in ('aarch64','arm64'):raise ValueError('Requires Linux ARM64; no installation performed')
  model=Path('/proc/device-tree/model')
  if not model.is_file() or not re.search(rb'(?<![A-Z0-9])RG353V(?![A-Z0-9])',model.read_bytes().upper()):raise ValueError('RG353V identity not established; do not install blindly')
  distro=Path('/etc/os-release').read_text().lower()
- if 'darkos' not in distro:raise ValueError('dArkOS identity not established; generic ArkOS is not certification')
+ if not darkos_identity(distro):
+  splash=Path('/usr/share/plymouth/themes/text.plymouth');device=Path.home()/'.config/.DEVICE'
+  if not darkos_identity(distro,splash.read_text() if splash.is_file() else '',device.read_text() if device.is_file() else ''):raise ValueError('dArkOS identity not established; generic ArkOS is not certification')
  data=(package/'emotional-ui').read_bytes()
  if data[:6]!=b'\x7fELF\x02\x01' or len(data)<64 or struct.unpack_from('<H',data,18)[0]!=183:raise ValueError('Requires ELF64 AArch64')
  loader=Path('/lib/ld-linux-aarch64.so.1')
@@ -96,7 +106,9 @@ def install(package,destination,confirmed=False,free_bytes=None):
   p.parent.mkdir(parents=True,exist_ok=True)
   with (package/name).open('rb') as source,p.open('xb') as out:
    shutil.copyfileobj(source,out);out.flush();os.fsync(out.fileno())
-  os.chmod(p,stat.S_IMODE((package/name).stat().st_mode)&0o755)
+  # FAT/extractors can lose ZIP Unix mode bits. Only the two manifest-listed
+  # ELF entry points may acquire executable bits explicitly.
+  os.chmod(p,0o755 if name in d.get('executable_files',[]) else stat.S_IMODE((package/name).stat().st_mode)&0o755)
  check_owned(stage,s)
  # Final state records the intended location before atomic promotion. A crash here
  # is detected rather than overwriting it on retry; independent uninstall can inspect it.

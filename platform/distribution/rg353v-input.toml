@@ -1,0 +1,69 @@
+# Derived from guided physical capture; 13/14 buttons and 0/2 stick axes.
+# Missing controls are deliberately unmapped.
+enabled = true
+device_name = "retrogame_joypad"
+
+# up
+[[mapping.buttons]]
+code = 544
+action = "up"
+
+# down
+[[mapping.buttons]]
+code = 545
+action = "down"
+
+# left
+[[mapping.buttons]]
+code = 546
+action = "left"
+
+# right
+[[mapping.buttons]]
+code = 547
+action = "right"
+
+# A
+[[mapping.buttons]]
+code = 305
+action = "confirm"
+
+# B
+[[mapping.buttons]]
+code = 304
+action = "back"
+
+# X
+[[mapping.buttons]]
+code = 307
+action = "refresh"
+
+# Y
+[[mapping.buttons]]
+code = 308
+action = "library"
+
+# Start
+[[mapping.buttons]]
+code = 315
+action = "menu"
+
+# Select
+[[mapping.buttons]]
+code = 314
+action = "reduced_motion"
+
+# L1
+[[mapping.buttons]]
+code = 310
+action = "previous"
+
+# R1
+[[mapping.buttons]]
+code = 311
+action = "next"
+
+# L2
+[[mapping.buttons]]
+code = 312
+action = "previous"

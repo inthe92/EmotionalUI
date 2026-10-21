@@ -4,7 +4,9 @@ use emotional_core::controls::{Controller, Mapping, RawEvent};
 use serde::Deserialize;
 use slint::{
     platform::{
-        software_renderer::{MinimalSoftwareWindow, RepaintBufferType},
+        software_renderer::{
+            MinimalSoftwareWindow, PremultipliedRgbaColor, RepaintBufferType, TargetPixel,
+        },
         EventLoopProxy, Platform, WindowAdapter,
     },
     ComponentHandle, Rgb8Pixel,
@@ -18,9 +20,55 @@ use std::{
     time::{Duration, Instant},
 };
 
+// Diagnostic target matches Slint 1.13.1 linuxkms renderer/sw.rs XRGB packing.
+// Copyright SixtyFPS GmbH; GPL-3.0-only (same license as this project).
+#[derive(Clone, Copy, Default, PartialEq, Eq)]
+struct KmsXrgb(u32);
+impl TargetPixel for KmsXrgb {
+    #[inline]
+    fn blend(&mut self, color: PremultipliedRgbaColor) {
+        if color.alpha == 0 {
+            return;
+        }
+        if color.alpha == 255 {
+            self.0 = 0xff000000
+                | ((color.red as u32) << 16)
+                | ((color.green as u32) << 8)
+                | color.blue as u32;
+            return;
+        }
+        let mut pixel = PremultipliedRgbaColor {
+            red: (self.0 >> 16) as u8,
+            green: (self.0 >> 8) as u8,
+            blue: self.0 as u8,
+            alpha: (self.0 >> 24) as u8,
+        };
+        pixel.blend(color);
+        self.0 = ((pixel.alpha as u32) << 24)
+            | ((pixel.red as u32) << 16)
+            | ((pixel.green as u32) << 8)
+            | pixel.blue as u32;
+    }
+    fn from_rgb(r: u8, g: u8, b: u8) -> Self {
+        Self(0xff000000 | ((r as u32) << 16) | ((g as u32) << 8) | b as u32)
+    }
+    fn background() -> Self {
+        Self(0)
+    }
+}
+
 enum Message {
     Quit,
     Invoke(Box<dyn FnOnce() + Send>),
+}
+struct FrameCapture {
+    path: std::path::PathBuf,
+    ui: slint::Weak<Home>,
+    replay_start: Instant,
+    scheduled_ms: u64,
+}
+thread_local! {
+    static FRAME_CAPTURE: RefCell<Option<FrameCapture>> = const { RefCell::new(None) };
 }
 struct Proxy(mpsc::Sender<Message>);
 impl EventLoopProxy for Proxy {
@@ -51,7 +99,33 @@ impl Platform for Offscreen {
         Some(Box::new(Proxy(self.sender.clone())))
     }
     fn run_event_loop(&self) -> Result<(), slint::PlatformError> {
-        let mut pixels = vec![Rgb8Pixel::default(); 640 * 480];
+        // Opt-in RAM-only control: not a measurement of mmap/DRM or LCD timing.
+        let kms_target = crate::performance::enabled()
+            && std::env::var("EMOTIONAL_PERF_TARGET").as_deref() == Ok("xrgb");
+        let mut pixels = if kms_target {
+            Vec::new()
+        } else {
+            vec![Rgb8Pixel::default(); 640 * 480]
+        };
+        let mut kms_pixels = if kms_target {
+            vec![KmsXrgb::default(); 640 * 480]
+        } else {
+            Vec::new()
+        };
+        let verify_shadow =
+            kms_target && std::env::var("EMOTIONAL_PERF_VERIFY_SHADOW").as_deref() == Ok("1");
+        // Only correctness verification: a full reference repaint and three
+        // ordinary RAM copies. Never used in timing runs or in production KMS.
+        let mut reference = if verify_shadow {
+            vec![KmsXrgb::default(); 640 * 480]
+        } else {
+            Vec::new()
+        };
+        let mut ring = if verify_shadow {
+            vec![reference.clone(); 3]
+        } else {
+            Vec::new()
+        };
         let start = Instant::now();
         let mut frames = 0u64;
         'event_loop: loop {
@@ -62,13 +136,53 @@ impl Platform for Offscreen {
                     Message::Invoke(callback) => callback(),
                 }
             }
-            if self.window.has_active_animations() {
+            let animated = self.window.has_active_animations();
+            if animated {
                 self.window.request_redraw();
             }
+            let mut verify_failed = false;
             if self.window.draw_if_needed(|renderer| {
-                renderer.render(&mut pixels, 640);
+                crate::performance::frame(Instant::now(), start.elapsed(), animated);
+                let _timing = crate::performance::span("software_raster_ms");
+                if kms_target {
+                    renderer.render(&mut kms_pixels, 640);
+                } else {
+                    renderer.render(&mut pixels, 640);
+                }
+                crate::performance::raster_finished();
+                if verify_shadow {
+                    renderer.set_repaint_buffer_type(RepaintBufferType::NewBuffer);
+                    renderer.render(&mut reference, 640);
+                    renderer.set_repaint_buffer_type(RepaintBufferType::ReusedBuffer);
+                    let target = &mut ring[frames as usize % 3];
+                    target.copy_from_slice(&kms_pixels);
+                    verify_failed = *target != reference;
+                }
             }) {
                 frames += 1;
+                if let Some(request) = FRAME_CAPTURE.with(|capture| capture.borrow_mut().take()) {
+                    // This is the buffer actually rasterized above, not a second
+                    // take_snapshot render of a potentially different state.
+                    let rgb: Vec<u8> = if kms_target {
+                        kms_pixels
+                            .iter()
+                            .flat_map(|p| [(p.0 >> 16) as u8, (p.0 >> 8) as u8, p.0 as u8])
+                            .collect()
+                    } else {
+                        pixels.iter().flat_map(|p| [p.r, p.g, p.b]).collect()
+                    };
+                    image::save_buffer(&request.path, &rgb, 640, 480, image::ColorType::Rgb8)
+                        .map_err(|e| slint::PlatformError::from(e.to_string()))?;
+                    if let Some(ui) = request.ui.upgrade() {
+                        use slint::Model;
+                        let metadata = format!("scheduled_ms={}\nobserved_ms={}\nsection={}\npage_offsets={:?}\nmodal_kind={}\nmodal_progress={}\nsource=actual_offscreen_raster_buffer\nphysical_presented=false\n",request.scheduled_ms,request.replay_start.elapsed().as_millis(),ui.get_active_section(),ui.get_page_offsets().iter().collect::<Vec<_>>(),ui.get_modal_kind(),ui.get_modal_progress());
+                        std::fs::write(request.path.with_extension("frame.txt"), metadata)
+                            .map_err(|e| slint::PlatformError::from(e.to_string()))?;
+                    }
+                }
+            }
+            if verify_failed {
+                return Err(format!("Shadow/reference pixel mismatch at frame {frames}").into());
             }
             // A bound for unattended CI, separate from the application's smoke timer.
             if start.elapsed() > Duration::from_secs(35) {
@@ -92,6 +206,9 @@ impl Platform for Offscreen {
             }
         }
         println!("SIMULATOR: rasterized_frames={frames}; physical_frames_presented=UNMEASURED");
+        if verify_shadow {
+            println!("SIMULATOR: shadow_full_reference_equal_frames={frames}; triple_ram_copies=true; verification_not_timing=true");
+        }
         if frames == 0 {
             return Err("Simulator did not rasterize a frame".into());
         }
@@ -100,7 +217,14 @@ impl Platform for Offscreen {
 }
 pub fn install() -> Result<(), Box<dyn Error>> {
     let (sender, receiver) = mpsc::channel();
-    let window = MinimalSoftwareWindow::new(RepaintBufferType::ReusedBuffer);
+    let buffer_type = if crate::performance::enabled()
+        && std::env::var("EMOTIONAL_PERF_BUFFER").as_deref() == Ok("new")
+    {
+        RepaintBufferType::NewBuffer
+    } else {
+        RepaintBufferType::ReusedBuffer
+    };
+    let window = MinimalSoftwareWindow::new(buffer_type);
     window.set_size(slint::PhysicalSize::new(640, 480));
     slint::platform::set_platform(Box::new(Offscreen {
         window,
@@ -132,6 +256,12 @@ struct Step {
     system_open: Option<bool>,
     system_focused: Option<bool>,
     active_section: Option<i32>,
+    page_at_rest: Option<usize>,
+    motion_full_viewport: Option<bool>,
+    modal_kind: Option<i32>,
+    modal_progress_min: Option<f32>,
+    modal_progress_max: Option<f32>,
+    distinct_protagonists: Option<bool>,
     menu: Option<bool>,
     library: Option<bool>,
     menu_index: Option<usize>,
@@ -165,6 +295,7 @@ struct Step {
     section_min: Option<f32>,
     section_max: Option<f32>,
     capture: Option<std::path::PathBuf>,
+    motion_sample_ms: Option<u32>,
 }
 impl Scenario {
     fn validate(&self) -> Result<(), Box<dyn Error>> {
@@ -189,6 +320,12 @@ impl Scenario {
                 return Err("Invalid replay order, duration or event fields".into());
             }
             previous = step.at_ms;
+            if step
+                .motion_sample_ms
+                .is_some_and(|ms| ms > 2000 || step.capture.is_none())
+            {
+                return Err("Motion sampling requires a capture and bounded elapsed time".into());
+            }
             if step
                 .capture
                 .as_ref()
@@ -261,6 +398,12 @@ pub fn replay(
                 }
             }
             state.native_held = controller.held();
+            if let Some(ms)=step.motion_sample_ms {
+                if !crate::motion::sample_for_capture(&ui,ms) {
+                    *stored.borrow_mut()=Some(Err("No motion trajectory to capture".into()));
+                    let _=slint::quit_event_loop(); return;
+                }
+            }
             if step.pan_min.is_some() || step.pan_max.is_some() || step.resume.is_some() {
                 println!("PAN_SAMPLE scheduled_ms={} elapsed_ms={} position={:.4}", step.at_ms, start.elapsed().as_millis(), ui.get_pan_position());
             }
@@ -268,6 +411,23 @@ pub fn replay(
                 println!("SECTION_SAMPLE scheduled_ms={} elapsed_ms={} position={:.4} primary={:.4} secondary={:.4} target={:.1}", step.at_ms, start.elapsed().as_millis(), ui.get_section_position(), ui.get_discovery_main(), ui.get_discovery_secondary(), ui.get_section_target());
             }
             let checks = [
+                step.motion_full_viewport.is_none_or(|expected| {
+                    let style=ui.global::<crate::MotionDesign>();
+                    let width=ui.window().size().width as f32;
+                    ((style.get_content_span()-width).abs()<0.01
+                        && (style.get_page_span()-width).abs()<0.01)==expected
+                }),
+                step.page_at_rest.is_none_or(|page| {
+                    use slint::Model;
+                    ui.get_motion_section()==page as i32
+                        && ui.get_page_offsets().row_data(page)==Some(0.)
+                        && ui.get_page_secondary_offsets().row_data(page)==Some(0.)
+                        && ui.get_page_offsets().iter().enumerate().all(|(i,x)| i==page || x.abs()>=640.)
+                }),
+                step.modal_kind.is_none_or(|v|ui.get_modal_kind()==v),
+                step.modal_progress_min.is_none_or(|v|ui.get_modal_progress()>=v),
+                step.modal_progress_max.is_none_or(|v|ui.get_modal_progress()<=v),
+                step.distinct_protagonists.is_none_or(|v|(ui.get_recent_title()!=ui.get_hero_title())==v),
                 step.system_open.is_none_or(|v|ui.get_system_open()==v),
                 step.system_focused.is_none_or(|v|ui.get_system_focused()==v),
                 step.dock_cursor.is_none_or(|v|ui.get_dock_cursor()==v),
@@ -313,7 +473,12 @@ pub fn replay(
             if let Some(path) = &step.capture {
                 let capture = (|| -> Result<(), Box<dyn Error>> {
                     if path.exists() { return Err("Replay capture already exists".into()); }
-                    crate::capture::save_ui(path,&ui.window().take_snapshot()?)
+                    FRAME_CAPTURE.with(|capture| {
+                        if capture.borrow().is_some() { return Err("Unconsumed frame capture".into()); }
+                        *capture.borrow_mut() = Some(FrameCapture {path:path.clone(),ui:ui.as_weak(),replay_start:start,scheduled_ms:step.at_ms});
+                        ui.window().request_redraw();
+                        Ok(())
+                    })
                 })();
                 if let Err(error) = capture {
                     *stored.borrow_mut() = Some(Err(error.to_string()));
@@ -340,6 +505,69 @@ pub fn replay(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn xrgb_fast_paths_match_reference_for_every_source_and_destination_alpha() {
+        for alpha in 0..=255u8 {
+            for destination_alpha in 0..=255u8 {
+                let source = PremultipliedRgbaColor {
+                    red: alpha / 3,
+                    green: alpha / 2,
+                    blue: alpha,
+                    alpha,
+                };
+                let mut reference = PremultipliedRgbaColor {
+                    red: destination_alpha,
+                    green: destination_alpha / 2,
+                    blue: destination_alpha / 5,
+                    alpha: destination_alpha,
+                };
+                let mut actual = KmsXrgb(
+                    ((reference.alpha as u32) << 24)
+                        | ((reference.red as u32) << 16)
+                        | ((reference.green as u32) << 8)
+                        | reference.blue as u32,
+                );
+                reference.blend(source);
+                actual.blend(source);
+                assert_eq!(
+                    actual.0,
+                    ((reference.alpha as u32) << 24)
+                        | ((reference.red as u32) << 16)
+                        | ((reference.green as u32) << 8)
+                        | reference.blue as u32
+                );
+            }
+        }
+    }
+    #[test]
+    fn diagnostic_xrgb_matches_renderer_channel_packing() {
+        let mut target = KmsXrgb::from_rgb(71, 122, 190);
+        let mut reference = PremultipliedRgbaColor::from_rgb(71, 122, 190);
+        for color in [
+            PremultipliedRgbaColor {
+                red: 25,
+                green: 15,
+                blue: 10,
+                alpha: 80,
+            },
+            PremultipliedRgbaColor {
+                red: 8,
+                green: 32,
+                blue: 63,
+                alpha: 128,
+            },
+        ] {
+            target.blend(color);
+            reference.blend(color);
+            assert_eq!(
+                target.0,
+                ((reference.alpha as u32) << 24)
+                    | ((reference.red as u32) << 16)
+                    | ((reference.green as u32) << 8)
+                    | reference.blue as u32
+            );
+        }
+    }
     #[test]
     fn replay_rejects_partial_events_and_unbounded_times() {
         for text in [

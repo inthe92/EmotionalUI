@@ -1,3 +1,13 @@
+# Public preview builds · v0.1.0-preview.1
+
+The two release variants retain Slint1.13.1 and the locked dependencies. Software uses `EMOTIONAL_KMS_FEATURE=linuxkms-direct`; experimental GPU uses `linuxkms-gpu` with an SDK matching the observed native EGL/GBM libraries. No Mali driver or system libraries are redistributed. Both use tools/arm64/build.sh and the documented Zig/SDK environment below.
+
+For distributed artifacts the build additionally used `RUSTFLAGS="--remap-path-prefix=$HOME=/build"` and `CFLAGS_aarch64_unknown_linux_gnu="-ffile-prefix-map=$HOME=/build"`. These replace personal compiler/source paths without changing the interface. Save the software ELF before building GPU, which otherwise replaces the same Cargo output filename. The installer checks the device loader before graphics; building ARM64 is not physical validation.
+
+---
+
+## Earlier build notes retained
+
 # Compilación completa Linux ARM64 · fase 3
 
 Estado del 2026-10-18: **ELF completo enlazado y ejecutado por CLI en la RG353V**. La interfaz gráfica LinuxKMS no se ha iniciado todavía.

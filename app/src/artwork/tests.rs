@@ -95,6 +95,29 @@ fn full_boxart_survives_and_stays_opaque() {
     assert_eq!(image.get_pixel(150, 215)[0], 19);
 }
 #[test]
+fn display_corners_are_antialiased_without_mutating_cached_artwork() {
+    let f = Fixture::new();
+    let r = f.request(vec![f.image("mask.png", 100, 200, Role::Boxart)]);
+    let mut cache = f.cache();
+    let mut display = cache.prepare(&r).unwrap();
+    let original = display.pixels.clone();
+    round_display_corners(&mut display, 8);
+    assert_eq!(display.pixels[3], 0);
+    assert_eq!(
+        display.pixels
+            [(((display.height / 2) * display.width + display.width / 2) * 4 + 3) as usize],
+        255
+    );
+    assert!(display
+        .pixels
+        .chunks_exact(4)
+        .any(|p| p[3] > 0 && p[3] < 255));
+    for (shown, cached) in display.pixels.chunks_exact(4).zip(original.chunks_exact(4)) {
+        assert_eq!(&shown[..3], &cached[..3]);
+    }
+    assert_eq!(cache.prepare(&r).unwrap().pixels, original);
+}
+#[test]
 fn screenshot_uses_nearest_and_bands() {
     let image = DynamicImage::ImageRgba8(RgbaImage::from_fn(2, 2, |x, y| {
         Rgba([

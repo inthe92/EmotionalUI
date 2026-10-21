@@ -7,6 +7,27 @@ use rusqlite::{params, Connection};
 use std::path::Path;
 pub struct Store(pub(super) Connection);
 impl Store {
+    pub fn last_valid_time(&self) -> rusqlite::Result<Option<chrono::NaiveDateTime>> {
+        use rusqlite::OptionalExtension;
+        let value: Option<String> = self
+            .0
+            .query_row(
+                "SELECT value FROM settings WHERE key='last_valid_local_time'",
+                [],
+                |r| r.get(0),
+            )
+            .optional()?;
+        Ok(value
+            .and_then(|v| chrono::NaiveDateTime::parse_from_str(&v, "%Y-%m-%dT%H:%M:%S").ok())
+            .filter(|d| emotional_core::environment::plausible_time(*d)))
+    }
+    fn save_last_valid_time(&self, value: chrono::NaiveDateTime) -> rusqlite::Result<()> {
+        if !emotional_core::environment::plausible_time(value) {
+            return Ok(());
+        }
+        self.0.execute("INSERT INTO settings VALUES('last_valid_local_time',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value", [value.format("%Y-%m-%dT%H:%M:%S").to_string()])?;
+        Ok(())
+    }
     pub fn launch_rom(&self, id: &str) -> rusqlite::Result<Option<std::path::PathBuf>> {
         use rusqlite::OptionalExtension;
         self.0
@@ -469,6 +490,7 @@ pub struct Persistence {
     thread: Option<std::thread::JoinHandle<()>>,
 }
 enum Command {
+    Clock(chrono::NaiveDateTime),
     Save(Save),
     Privacy(emotional_core::product::Privacy),
     Clear,
@@ -498,6 +520,13 @@ struct Save {
     ids: Vec<String>,
 }
 impl Persistence {
+    pub fn clock(&self, value: chrono::NaiveDateTime) -> Result<(), Box<dyn std::error::Error>> {
+        self.sender
+            .as_ref()
+            .ok_or("Storage closed")?
+            .try_send(Command::Clock(value))?;
+        Ok(())
+    }
     pub fn start(mut store: Store) -> Self {
         let (sender, rx) = std::sync::mpsc::sync_channel::<Command>(8);
         let (tx, results) = std::sync::mpsc::channel();
@@ -508,6 +537,9 @@ impl Persistence {
         let thread = std::thread::spawn(move || {
             while let Ok(save) = rx.recv() {
                 let result = match save {
+                    Command::Clock(value) => {
+                        store.save_last_valid_time(value).map_err(|e| e.to_string())
+                    }
                     Command::Save(save) => store
                         .save_state(&save.games, Some((&save.slot, &save.ids)))
                         .map_err(|e| e.to_string()),
@@ -636,6 +668,50 @@ impl Drop for Persistence {
 #[cfg(test)]
 mod audit_tests {
     use super::*;
+    #[test]
+    fn last_valid_time_roundtrips_and_ignores_corrupt_or_invalid_values() {
+        let s = Store::open(Path::new(":memory:")).unwrap();
+        assert_eq!(s.last_valid_time().unwrap(), None);
+        let date =
+            chrono::NaiveDateTime::parse_from_str("2026-10-20T09:30:00", "%Y-%m-%dT%H:%M:%S")
+                .unwrap();
+        s.save_last_valid_time(date).unwrap();
+        assert_eq!(s.last_valid_time().unwrap(), Some(date));
+        s.0.execute(
+            "UPDATE settings SET value='not a date' WHERE key='last_valid_local_time'",
+            [],
+        )
+        .unwrap();
+        assert_eq!(s.last_valid_time().unwrap(), None);
+        s.0.execute(
+            "UPDATE settings SET value='1970-01-01T00:00:00' WHERE key='last_valid_local_time'",
+            [],
+        )
+        .unwrap();
+        assert_eq!(s.last_valid_time().unwrap(), None);
+    }
+    #[test]
+    fn clock_checkpoint_survives_writer_and_reopen() {
+        let unique = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let path = std::env::temp_dir().join(format!(
+            "emotional-clock-{}-{unique}.sqlite",
+            std::process::id()
+        ));
+        let date =
+            chrono::NaiveDateTime::parse_from_str("2026-10-20T09:30:00", "%Y-%m-%dT%H:%M:%S")
+                .unwrap();
+        let mut writer = Persistence::start(Store::open(&path).unwrap());
+        writer.clock(date).unwrap();
+        writer.finish().unwrap();
+        drop(writer);
+        let reopened = Store::open(&path).unwrap();
+        assert_eq!(reopened.last_valid_time().unwrap(), Some(date));
+        drop(reopened);
+        std::fs::remove_file(path).unwrap();
+    }
     #[test]
     fn imported_catalog_feeds_gui_and_revalidates_availability() {
         let root = std::env::temp_dir().join(format!("emotional-catalog-{}", std::process::id()));

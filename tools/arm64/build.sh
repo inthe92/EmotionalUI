@@ -11,7 +11,7 @@ fi
 : "${EMOTIONAL_GLIBC_FLOOR:=2.36}"
 : "${EMOTIONAL_KMS_FEATURE:=linuxkms}"
 case "$EMOTIONAL_KMS_FEATURE" in
-    linuxkms|linuxkms-direct|simulator) ;;
+    linuxkms|linuxkms-direct|linuxkms-gpu|simulator) ;;
     *) echo 'Unsupported KMS feature' >&2; exit 1 ;;
 esac
 export EMOTIONAL_GLIBC_FLOOR
@@ -26,4 +26,9 @@ export PKG_CONFIG_PATH=
 : "${CARGO_BUILD_JOBS:=4}"
 export CARGO_BUILD_JOBS
 cd "$emotional_root"
-exec "${EMOTIONAL_CARGO:-$HOME/.cargo/bin/cargo}" build --locked --release -p emotional-ui --target "$emotional_target" --no-default-features --features "$EMOTIONAL_KMS_FEATURE"
+: "${EMOTIONAL_ARM64_BIN:=emotional-ui}"
+case "$EMOTIONAL_ARM64_BIN" in
+    emotional-ui|gpu-probe|gpu-pipeline-probe) ;;
+    *) echo 'Unsupported ARM64 binary' >&2; exit 1 ;;
+esac
+exec "${EMOTIONAL_CARGO:-$HOME/.cargo/bin/cargo}" build --locked --release -p emotional-ui --bin "$EMOTIONAL_ARM64_BIN" --target "$emotional_target" --no-default-features --features "$EMOTIONAL_KMS_FEATURE"

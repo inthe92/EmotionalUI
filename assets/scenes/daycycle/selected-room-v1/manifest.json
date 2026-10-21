@@ -1,0 +1,52 @@
+{
+  "master": "anochecer.png",
+  "size": [
+    640,
+    480
+  ],
+  "status": "private-reference-derived-provisional",
+  "resources": [
+    {
+      "id": "madrugada",
+      "generated_source": "exec-cd24853d-9e0d-4ffa-98fd-db3444eeaa8d.png",
+      "sha256": "3b19cdcd5784818862f74d8ba34d62070942a79a9842e048f5f856ec96843172",
+      "bytes": 406433
+    },
+    {
+      "id": "manana_temprana",
+      "generated_source": "exec-b3bfb7cc-e46c-4859-82a9-8c647899a67a.png",
+      "sha256": "794a4a37b8b61f6cce669ca7be46329e0687e7a7b024db24442ed6ab6d3421cb",
+      "bytes": 489689
+    },
+    {
+      "id": "media_manana",
+      "generated_source": "exec-e93ec85d-9b72-4dfa-b5e7-a1f5ac5fb6f7.png",
+      "sha256": "f8ab984e149dcadc35a57eb7cb57b939545ffede3ddf2fb37824d9121c87cbce",
+      "bytes": 521480
+    },
+    {
+      "id": "primera_tarde",
+      "generated_source": "exec-be34801e-0292-4887-9c0d-77b6787babfc.png",
+      "sha256": "e22a30da30e5d2d535a5f0d0e011eda473566586943065603bde6e65f2bc8636",
+      "bytes": 540521
+    },
+    {
+      "id": "media_tarde",
+      "generated_source": "exec-4bde82b5-74e5-4ffe-8ac6-7daea6d0ca74.png",
+      "sha256": "ce50fe81192fa47f3facf818a38c11ea4b8416e35c97663cbeac23ee011c612b",
+      "bytes": 483180
+    },
+    {
+      "id": "anochecer",
+      "generated_source": "Propuesta-640x480.png",
+      "sha256": "36678e9eb9509a1718cb0f3cb83922811b1f4c545eea2590b509f2ddd078e665",
+      "bytes": 443480
+    },
+    {
+      "id": "noche",
+      "generated_source": "exec-e94c7dc4-959f-48ea-9f3a-090db2ca852c.png",
+      "sha256": "879c02c945bac0b65e214e5be995052d3fa977e49dbfbcc5becf8e376bf33cbf",
+      "bytes": 417533
+    }
+  ]
+}

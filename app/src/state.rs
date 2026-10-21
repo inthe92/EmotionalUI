@@ -12,6 +12,8 @@ use emotional_services::{clock::Clock, weather::Weather};
 use slint::ComponentHandle;
 use std::{error::Error, time::Instant};
 pub(super) struct State {
+    pub(super) navigation: crate::navigation::NavigationMemory,
+    pub(super) modal_return: Option<crate::navigation::FocusSnapshot>,
     pub(super) system_focus: bool,
     pub(super) system_return_dock: Option<usize>,
     pub(super) system_open: bool,
@@ -58,6 +60,7 @@ pub(super) struct State {
     pub(super) audio_panel: bool,
     pub(super) audio_index: usize,
     pub(super) clock: Clock,
+    pub(super) ambient: emotional_services::ambient::Runtime,
     pub(super) weather: Weather,
     pub(super) config: Config,
     pub(super) refresh: u64,
@@ -96,6 +99,12 @@ impl State {
         line
     }
     pub(super) fn sync_context(&mut self, ui: &Home) -> Result<(), Box<dyn Error>> {
+        if let Some(at) = self.clock.persistable_now() {
+            self.clock.restore_last_known(Some(at));
+            if let Err(e) = self.writer.clock(at) {
+                eprintln!("Clock checkpoint skipped: {e}");
+            }
+        }
         let slot = self
             .clock
             .known_now()
@@ -122,6 +131,7 @@ impl State {
         }
     }
     pub(super) fn rerank(&mut self) -> Result<(), Box<dyn Error>> {
+        let focused = (self.layout == 4).then(|| self.focus_snapshot());
         let date = self.clock.known_now().map(|d| d.date());
         let signals = emotional_core::editorial::Signals {
             date,
@@ -168,6 +178,12 @@ impl State {
             .map(|i| self.games[*i].id.clone())
             .collect::<Vec<_>>();
         self.writer.save(&self.games, &self.slot, ids)?;
+        self.order = crate::discovery_presentation::presentation_order(
+            &self.order,
+            self.recent,
+            &self.games.iter().map(|g| g.available).collect::<Vec<_>>(),
+        );
+
         self.selected = if self.layout == 4 {
             emotional_core::continuity::clamp(
                 self.selected,
@@ -181,9 +197,13 @@ impl State {
         } else {
             0
         };
+        if let Some(focused) = focused {
+            self.restore_focus(focused);
+        }
         Ok(())
     }
     pub(super) fn paint(&self, ui: &Home) {
+        let _timing = crate::performance::span("paint_model_ms");
         ui.set_system_focused(self.system_focus);
         ui.set_system_open(self.system_open);
         ui.set_dock_cursor(self.dock_focus.map(|v| v as i32).unwrap_or(-1));
@@ -304,34 +324,104 @@ impl State {
             Weather::Snow => emotional_core::scene::Conditions::Snow,
             _ => emotional_core::scene::Conditions::Unknown,
         };
-        let date = self.clock.known_now().map(|d| d.date());
-        let events = self.calendar.active(date, &self.config.region);
-        let scene = emotional_core::scene::Scene::select(
-            self.clock.known_now(),
-            conditions,
-            &events,
+        use emotional_core::ambient::{WeatherKind, WeatherSource};
+        let demo_weather = match self.weather {
+            Weather::Clear => WeatherKind::Clear,
+            Weather::Rain => WeatherKind::Rain,
+            Weather::Cloud => WeatherKind::Cloud,
+            Weather::Fog => WeatherKind::Fog,
+            Weather::Snow => WeatherKind::Snow,
+            _ => WeatherKind::Unknown,
+        };
+        let ambient = self
+            .ambient
+            .capture(&self.clock, demo_weather, self.config.reduced_motion);
+        let environmental = ambient.scene();
+        let theme = emotional_core::ambient_art::AmbientTheme::resolve(
+            &ambient,
+            &self.ambient.settings,
             self.privacy.neutral,
         );
-        ui.set_scene_season(
-            scene
-                .season
-                .map(|s| match s {
-                    emotional_core::calendar::Season::Winter => 0,
-                    emotional_core::calendar::Season::Spring => 1,
-                    emotional_core::calendar::Season::Summer => 2,
-                    emotional_core::calendar::Season::Autumn => 3,
-                })
-                .unwrap_or(4),
+        let at = environmental
+            .time
+            .local
+            .filter(|_| environmental.time.reliable);
+        let date = at.map(|d| d.date());
+        let events = self.calendar.active(date, &self.config.region);
+        let scene =
+            emotional_core::scene::Scene::select(at, conditions, &events, self.privacy.neutral);
+        let selected = emotional_core::environment::SceneResolver::resolve(
+            &environmental,
+            self.privacy.neutral,
         );
+        ui.set_scene_id(selected.id.into());
+        ui.set_scene_moment(environmental.moment.map(|m| m.index() as i32).unwrap_or(-1));
+        ui.set_scene_background(selected.background as i32);
+
+        ui.set_ambient_clock_reliable(ambient.time.reliable);
+        ui.set_ambient_season_known(ambient.season.is_some());
+        let season_name = match ambient.season {
+            Some(emotional_core::calendar::Season::Spring) => "Primavera",
+            Some(emotional_core::calendar::Season::Summer) => "Verano",
+            Some(emotional_core::calendar::Season::Autumn) => "Otoño",
+            Some(emotional_core::calendar::Season::Winter) => "Invierno",
+            None => {
+                if ambient.time.reliable {
+                    "Estación sin configurar"
+                } else {
+                    "Reloj no fiable"
+                }
+            }
+        };
+        let label = if ambient.time.source == emotional_core::environment::TimeSource::Simulated
+            || ambient.weather.source == WeatherSource::Demo
+            || self.ambient.demo_season.is_some()
+            || self.ambient.demo_context()
+        {
+            format!(
+                "DEMO · {season_name} · Clima {}",
+                match ambient.weather.source {
+                    WeatherSource::Demo => "DEMO",
+                    WeatherSource::Cached => "CACHED",
+                    WeatherSource::Live => "LIVE",
+                    WeatherSource::Stale => "STALE",
+                    WeatherSource::Unknown => "UNKNOWN",
+                }
+            )
+        } else if ambient.weather.source == WeatherSource::Cached {
+            if self.ambient.weather_attributed() {
+                "CACHED · https://open-meteo.com (modelo)".into()
+            } else {
+                "Clima en caché · no es observación en directo".into()
+            }
+        } else if ambient.weather.source == WeatherSource::Live {
+            "LIVE · https://open-meteo.com (modelo)".into()
+        } else if ambient.weather.source == WeatherSource::Stale {
+            "STALE · clima caducado, sin efecto actual".into()
+        } else if self.ambient.weather_configured() {
+            "UNKNOWN · clima sin datos vigentes".into()
+        } else {
+            String::new()
+        };
+        ui.set_ambient_label(label.into());
+        let [r, g, b, a] = selected.tint_rgba;
+        ui.set_scene_tint(slint::Color::from_argb_u8(a, r, g, b));
+        ui.set_scene_lamp(selected.lamp);
+        ui.set_scene_season(theme.season_index());
         ui.set_scene_phase(scene.phase.index());
-        ui.set_scene_weather(match scene.weather {
-            emotional_core::scene::Conditions::Rain => 2,
-            emotional_core::scene::Conditions::Cloud => 1,
-            emotional_core::scene::Conditions::Fog => 3,
-            emotional_core::scene::Conditions::Snow => 4,
-            _ => 0,
-        });
-        ui.set_scene_decoration(scene.decoration);
+        ui.set_scene_weather(theme.weather_index());
+        ui.set_scene_decoration(theme.event.decoration());
+        crate::scene_raster::refresh(ui);
+        crate::ambient_motion::update(
+            ui,
+            theme.day,
+            theme.season_index(),
+            theme.weather_index(),
+            theme.event.decoration(),
+            self.config.reduced_motion || !ui.get_motion_ready(),
+        );
+        crate::scene_raster::refresh_near(ui);
+        crate::scene_cache::refresh(ui);
         self.audio.context(emotional_core::audio::Context {
             phase: scene.phase,
             weather: scene.weather,
@@ -390,7 +480,10 @@ impl State {
             ui.set_library_titles(slint::ModelRc::new(slint::VecModel::from(titles)));
             ui.set_library_offset(offset as i32);
         }
-        let known = self.clock.known_now();
+        let known = environmental
+            .time
+            .local
+            .filter(|_| environmental.time.reliable);
         let mood = known.map(Mood::at).unwrap_or(Mood::Shelter);
         ui.set_rain(known.is_some() && self.weather == Weather::Rain);
         ui.set_season(known.map(|d| ((d.month() % 12) / 3) as i32).unwrap_or(0));
@@ -411,28 +504,35 @@ impl State {
         );
         let old = ui.get_mood();
         ui.set_reduced(self.config.reduced_motion);
-        let section = if self.resume { 0.0 } else { 1.0 };
-        let pan = emotional_core::product::panorama(
-            self.resume,
-            self.config.reduced_motion,
-            self.layout == 4 && self.privacy.ambient_motion && !self.privacy.neutral,
+        let destination = if self.menu {
+            3
+        } else if self.library {
+            2
+        } else if self.resume {
+            0
+        } else {
+            1
+        };
+        crate::motion::sync(
+            ui,
+            destination,
+            ui.get_navigation_direction(),
+            self.config.reduced_motion || !ui.get_motion_ready(),
         );
-        // Disabling ambient motion must stop the room immediately; functional
-        // section feedback can still run independently.
-        if pan == 0.0 {
-            ui.set_pan_position(0.0);
-        }
-        if ui.get_section_target() != section
-            || ui.get_pan_target() != pan
-            || self.config.reduced_motion
-        {
-            crate::motion::transition(
-                ui,
-                section,
-                pan,
-                self.config.reduced_motion || !ui.get_motion_ready(),
-            );
-        }
+        let modal = if self.system_open {
+            1
+        } else if self.game_options.is_some() {
+            2
+        } else if self.audio_panel {
+            3
+        } else {
+            0
+        };
+        crate::motion::modal(
+            ui,
+            modal,
+            self.config.reduced_motion || !ui.get_motion_ready(),
+        );
         ui.set_animate_palette((old >= 2) == (mood.index() >= 2));
         ui.set_mood(mood.index());
         ui.set_greeting(
@@ -530,8 +630,8 @@ impl State {
             "Está entre tus favoritos. Puedes elegirlo también para este momento."
         } else if hero.editorial.exploration.is_some_and(|v| v >= 70) {
             "Su ficha editorial propone explorar sin perder la curiosidad."
-        } else if hero.started {
-            "Un camino que ya has empezado. Puedes retomarlo a tu ritmo."
+        } else if hero.editorial.mystery.is_some_and(|v| v >= 70) {
+            "Su ficha propone una experiencia de misterio. Puedes descubrirla a tu ritmo."
         } else {
             "Una propuesta de tu colección. Tú eliges si este es su momento."
         };
@@ -568,14 +668,7 @@ impl State {
         }
     }
     pub(super) fn activate(&mut self, ui: &Home, index: usize) -> Result<(), Box<dyn Error>> {
-        if self.game_options.is_some() {
-            return Ok(());
-        }
-        if self
-            .launch
-            .as_ref()
-            .is_some_and(|c| c.pending.is_some() || c.committed.is_some())
-        {
+        if self.modal_active() {
             return Ok(());
         }
         if (self.launch.is_some() || self.trial_mode)
@@ -689,6 +782,12 @@ impl State {
             .map(|i| self.games[*i].id.clone())
             .collect::<Vec<_>>();
         self.writer.save(&self.games, &self.slot, ids)?;
+        self.order = crate::discovery_presentation::presentation_order(
+            &self.order,
+            self.recent,
+            &self.games.iter().map(|g| g.available).collect::<Vec<_>>(),
+        );
+
         self.paint(ui);
         Ok(())
     }
@@ -764,6 +863,8 @@ impl State {
         self.action(ui, action)
     }
     pub(super) fn action(&mut self, ui: &Home, action: Action) -> Result<(), Box<dyn Error>> {
+        crate::performance::input();
+        let _timing = crate::performance::span("action_model_ms");
         if self
             .launch
             .as_ref()
@@ -775,11 +876,34 @@ impl State {
             return Ok(());
         }
         use emotional_services::feedback::Cue;
-        if self.game_options.is_some() {
-            return self.game_options_action(ui, action);
+        // B belongs to the top modal only and closes it synchronously. No
+        // transition timer or underlying section can consume the same input.
+        if self.game_options.is_some() || self.audio_panel || self.system_open {
+            if crate::navigation::modal_input(action) == crate::navigation::ModalInput::Close {
+                self.close_modal();
+                self.paint(ui);
+                return Ok(());
+            }
+            // Shoulder buttons have no explicit modal action. In particular,
+            // audio settings must not recursively forward them to the section.
+            if crate::navigation::modal_input(action) == crate::navigation::ModalInput::Consume {
+                return Ok(());
+            }
+            if self.game_options.is_some() {
+                return self.game_options_action(ui, action);
+            }
+            if self.audio_panel {
+                return self.modal_audio_action(ui, action);
+            }
+            self.status_action(ui, action);
+            return Ok(());
         }
-        if self.audio_panel {
-            return self.audio_action(ui, action);
+        // Global shoulders operate independently of dock/status focus and of
+        // visual transitions; each accepted press advances one logical section.
+        if self.layout == 4 && matches!(action, Action::Previous | Action::Next) {
+            self.step_section(ui, action == Action::Next);
+            self.audio.cue(Cue::Panel);
+            return Ok(());
         }
         if self.layout == 4 && self.status_action(ui, action) {
             return Ok(());
@@ -868,7 +992,7 @@ impl State {
                         match self.menu_index {
                             0 => self.config.reduced_motion = !self.config.reduced_motion,
                             1 => {
-                                self.audio_panel = true;
+                                self.begin_modal(crate::navigation::Modal::Audio);
                                 self.audio_index = 0;
                             }
                             2 => self.privacy.statistics = !self.privacy.statistics,
@@ -945,6 +1069,23 @@ impl State {
                 }
                 cue = Some(Cue::Confirm);
             }
+            Action::Back if self.layout == 4 && (self.menu || self.library) => {
+                let target = if self.menu && self.menu_from_library {
+                    2
+                } else if self.resume {
+                    0
+                } else {
+                    1
+                };
+                ui.set_navigation_direction(if target >= ui.get_active_section() as usize {
+                    1
+                } else {
+                    -1
+                });
+                self.change_section(ui, target, false);
+                ui.set_message("".into());
+                return Ok(());
+            }
             Action::Back => {
                 self.library = self.menu && self.menu_from_library;
                 self.menu = false;
@@ -965,6 +1106,24 @@ impl State {
                 ui.set_message("".into());
                 cue = Some(Cue::Cancel);
             }
+            Action::Library if self.layout == 4 => {
+                let target = if self.library {
+                    if self.resume {
+                        0
+                    } else {
+                        1
+                    }
+                } else {
+                    2
+                };
+                ui.set_navigation_direction(if target >= ui.get_active_section() as usize {
+                    1
+                } else {
+                    -1
+                });
+                self.change_section(ui, target, false);
+                return Ok(());
+            }
             Action::Library => {
                 self.dock_focus = None;
                 self.history_panel = false;
@@ -972,6 +1131,28 @@ impl State {
                 self.library = !self.library;
                 self.menu = false;
                 cue = Some(Cue::Panel);
+            }
+            Action::Menu if self.layout == 4 => {
+                let from_library = self.library;
+                let target = if self.menu {
+                    if self.menu_from_library {
+                        2
+                    } else if self.resume {
+                        0
+                    } else {
+                        1
+                    }
+                } else {
+                    3
+                };
+                ui.set_navigation_direction(if target >= ui.get_active_section() as usize {
+                    1
+                } else {
+                    -1
+                });
+                self.change_section(ui, target, false);
+                self.menu_from_library = target == 3 && from_library;
+                return Ok(());
             }
             Action::Menu => {
                 self.dock_focus = None;
@@ -984,30 +1165,6 @@ impl State {
                     self.menu = true;
                 }
                 cue = Some(Cue::Panel);
-            }
-            Action::Previous | Action::Next if self.layout == 4 => {
-                cue = Some(Cue::Panel);
-                if self.resume {
-                    self.resume_focus = self.selected;
-                } else {
-                    self.emotional_focus = self.selected;
-                }
-                self.resume = !self.resume;
-                self.selected = if self.resume {
-                    emotional_core::continuity::clamp(
-                        self.resume_focus,
-                        true,
-                        self.order.len(),
-                        self.recent.is_some(),
-                        self.continuity_order.len(),
-                    )
-                } else {
-                    self.emotional_focus
-                };
-                self.library = false;
-                self.menu = false;
-                self.history_panel = false;
-                ui.set_library_offset(-1);
             }
             Action::Previous => {
                 self.library = false;

@@ -65,6 +65,34 @@ pub struct Worker {
     pub request: mpsc::SyncSender<Request>,
     pub ready: mpsc::Receiver<Thumbnail>,
 }
+// The software backend clips image children rectangularly. Apply only the
+// presentation mask on the worker's owned result; cached compositions stay
+// opaque and reusable. Cost is bounded by four small corners, not image area.
+fn round_display_corners(p: &mut Prepared, radius: u32) {
+    let radius = radius.min(p.width / 2).min(p.height / 2);
+    let limit = (radius * 8).pow(2);
+    for y in 0..radius {
+        for x in 0..radius {
+            let mut covered = 0;
+            for sy in [1, 3, 5, 7] {
+                for sx in [1, 3, 5, 7] {
+                    let dx = radius * 8 - (x * 8 + sx);
+                    let dy = radius * 8 - (y * 8 + sy);
+                    covered += u32::from(dx * dx + dy * dy <= limit);
+                }
+            }
+            for (cx, cy) in [
+                (x, y),
+                (p.width - 1 - x, y),
+                (x, p.height - 1 - y),
+                (p.width - 1 - x, p.height - 1 - y),
+            ] {
+                let alpha = &mut p.pixels[((cy * p.width + cx) * 4 + 3) as usize];
+                *alpha = ((u32::from(*alpha) * covered + 8) / 16) as u8;
+            }
+        }
+    }
+}
 fn allowed(path: &Path, root: &Path) -> Option<PathBuf> {
     let root = root.canonicalize().ok()?;
     let path = path.canonicalize().ok()?;
@@ -517,7 +545,15 @@ impl Worker {
                         std::thread::sleep(std::time::Duration::from_millis(ms.min(2000)));
                     }
                 }
-                let prepared = cache.prepare(&r);
+                let prepared = cache.prepare(&r).map(|mut prepared| {
+                    let radius = match r.presentation {
+                        Presentation::Tile => 6,
+                        Presentation::Hero if r.width < r.height => 8,
+                        Presentation::Hero => 12,
+                    };
+                    round_display_corners(&mut prepared, radius);
+                    prepared
+                });
                 if tx.send(Thumbnail { id: r.id, prepared }).is_err() {
                     break;
                 }

@@ -1,3 +1,96 @@
+# Orden de publicación · comprobación local del candidato · 21-10-2026
+
+Publicación expresamente autorizada tras verificaciones; no se solicita otra aprobación genérica. GitHub confirmado PUBLIC tras autorización específica; página accesible sin autenticación. Supervisión/autorización gráfica actual también pendiente, por lo que no se ha iniciado sesión gráfica ni prueba de instalación física.
+
+**VERIFICADO:** compilaciones ARM64 software y FemtoVG 0.1.0-preview.1, remapeo de rutas Rust/C (sin rutas personales del Mac en ambos ELF), 27 tests focalizados de distribución/instalador y git diff --check. Avisos completos recibidos conservados; dos declaraciones MIT sin archivo/license propio llevan suplemento estándar identificado y atribución original sin copyright inventado. Escaneo completo de284blobs históricos y301fuentes candidatas sin patrones comprobados de secretos, rutas personales, IP privadas, ciudad configurada o ROM/BIOS; metadatos normales de autor Git conservados.
+
+**ZIP LOCAL:** EmotionalUI-RG353V-v0.1.0-preview.1.zip, 29720773 bytes; SHA-256 `5d7f6a499e349f9be97095f0a3a9293384ea13d7876f463c85f841996058eded`. Integridad ZIP, hashes del manifiesto y de sus301fuentes, permisos ejecutables y ciclo de copia propia/restauración/desinstalación comprobados en directorio aislado del Mac. Estas operaciones no ejecutan el ELF ni certifican EmulationStation.
+
+**NO PROBADO:** instalación gráfica del ZIP en RG353V, recorrido de las cuatro vistas/controlador/audio, salida, restauración visible y desinstalación. No se publica antes de verificarlo. No se ha cambiado visibilidad, creado tag ni publicado Release. Source snapshot y candidatos previos preservados; no hay nueva optimización.
+
+---
+
+## Preparación anterior conservada — el estado actual está arriba
+
+# Fase 16 · pruebas de distribución · 21-10-2026
+
+**VERIFICADO LOCAL:** 11 tests nuevos de distribución +16 existentes del instalador pasan. Cubren dArkOS con identidad Debian y marcador de dispositivo, rechazo de paquete privado, manifiestos/hashes, permisos ejecutables tras extraer ZIP, allowlist de fuentes sin archivos privados ajenos, integridad, instalación propia/restauración/desinstalación, recuperación independiente en el plan systemd, selección software/GPU, exclusión de variables diagnósticas, procesos de emuladores y rechazo de rutas/ejecución root. Los fallos iniciales del test de árbol y de rutas temporales macOS se corrigieron y se repitió la suite afectada.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p test_preview_distribution.py -v
+PYTHONPATH=tests PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_phase11_tools.Installer -v
+```
+
+La prueba ZIP usa ELF sintéticos de cabecera, NO los ejecuta, NO certifica ARM64 ni gráficos y NO produce el ZIP real para usuarios. `tools/package_preview.py` rechaza la preparación real mientras estén pendientes habitación, notices y privacidad; no hay ZIP público ni SHA inventado. No se reejecutan compilaciones ni replays de renderizado sin cambios Rust/Slint durante esta preparación.
+
+**EXPERIMENTAL:** acceso gráfico desde Ports preparado con servicio transitorio y recuperación PID1; software por defecto y GPU optativa. Rechaza dependencias faltantes antes de ceder pantalla; --trial bloquea juegos. No cambia servicios persistentes, arranque ni datos de biblioteca. El límite de 15 minutos es sólo de la demo.
+
+**PROCEDENCIA ACTUALIZADA:** el propietario confirma Foto 1 propia; declaración registrada para preparar las siete pinturas. No se afirma verificación independiente ni nueva prueba gráfica. **BLOQUEADO:** revisión de dos avisos upstream todavía incompletos, privacidad, ZIP exacto y autorización final de inventario/historial. La actualización de README conserva los dos commits remotos documentales, sin checkout/merge ni publicación.
+
+**NO PROBADO:** ZIP exacto, instalación desde ES, audio audible, recorrido de mandos, salida/restauración/desinstalación y duración de instalación en consola. Requiere presencia actual, autorización específica, dos conexiones SSH y recuperación comprobada; ninguna prueba gráfica se ha iniciado en esta Fase16. No se anuncian 30/60 FPS estables ni diez minutos. [Puertas](RELEASE_READINESS.md).
+
+---
+
+## Evidencias previas conservadas
+
+# Verificación vigente · investigación del pipeline GPU
+
+Dos tests Rust llaman fit9slice1.13.1 en seis tamaños reales y controlRepeat; cuatro Python verifican conteo DRM/grupos incompletos/seguridad y un test de duración del prototipo pasa con desktop+linuxkms-gpu. A mínima ELF64ARM64 compilada y auditada:ecd6ed82…; hashes del paquete correctos. Sin métricas físicas nuevas, sin modificación del analizador del replay13acciones y sin ensayo mientras el usuario está ausente. Ver [GPU_RENDER_PIPELINE_AUDIT](GPU_RENDER_PIPELINE_AUDIT.md).
+
+---
+
+# Verificación vigente · Fase 15.3 en preparación
+
+Compilación GPU ARM64 de perfilado y simulator correcta; tres tests de etapas CPU, nueve del protocolo/fallback y trece herramientasF12 pasan. Corrección de overflow: nueve casos/54capturas/27pares locales640×480; cero diferencias fuera de las tarjetas secundarias. Título100 completo en Start. Primera pasada rechazada porfixturesWAL, reemplazada por `title-verified/`; GPU/LCD de esta corrección pendiente. Hash209d68e5… y loader verificados por SSH, recursosfixture intactos. Instrumentación por etapas sólo con diagnóstico; no mide ejecuciónGPU. Tres ensayos físicos de60s autorizados y completados, con confirmación humana de ESvisible. Software/GPUreferencia/A: cadencia agrupada13,10/19,84/22,00Hz; mediana66,743/50,040/33,361ms; p95100,043/100,069/100,068ms. Ninguna demuestra30FPS sostenidos. RSS en reposo83,06/156,20/156,74MiB, CPU3,31/3,23/3,19% de un núcleo; cero pageflips en reposo y errores DRM observados. Mejora de mediana A no elimina cola larga ni está repetida; frecuenciasGPU distintas declaradas. Misma UI y ELF209d68e5 en ambas pasadasGPU. Capturas de títulos son locales: aún no incluyen pruebaGPU/LCD. El protocolo/analizador DRM15.2 se conserva; resultados anteriores permanecen debajo. [Detalle](GPU_ACCELERATION.md).
+
+---
+
+# Verificación vigente · Fase 15.2
+
+macOS simulator y ARM64 software/FemtoVG compilan con Slint1.13.1 conservado; loader y hashes verificados en dArkOS.3 pruebas replay,4 caché,8 motion,3 estadísticas DRM,9 Python GPU/analizador y13 herramientas F12 pasan; replay local32 pasos pasa. fmt/diff-check correctos. Prototipo GPU físico con retorno visible confirmado;8 capturas Slint reales640×480 de las cuatro vistas, comparación revisada. Dos recorridos físicos automáticos13 acciones/60s terminan sin errores y ES activo:28/49 intervalos de animación, mediana66,726/33,376ms,p95100,058/83,396ms, cadencia agrupada13,015/21,602Hz. Sin30/60FPS sostenidos. Cero confirmaciones DRM en reposo30–55s; GPU3,19% CPU de un núcleo y155,61MiB RSS en24,10s. Muestreador software no arrancó: CPU/RSS de reposo comparables NO MEDIDOS. Último flip no confirmado excluido y timers−2..+27ms declarados; análisis PARTIAL, sin errores de traza. Tipografía no píxel idéntica y un salto de línea distinto; no se ha rediseñado. Valoración física final pendiente. [Protocolo, hashes y límites](GPU_ACCELERATION.md).
+
+---
+
+# Verificación vigente · Fase 15
+
+4tests de caché,8motion,2máscaras,3simulator,2estadísticas DRM y32pasos de navegación pasan. Build simulator/ARM64, fmt y diff-check correctos.18 comparaciones Slint/XRGB640×480 pixelidénticas, con cuatro contextos y fotogramas R/L fijados al mismo tiempo. Sonda sólo simulator; no mide FPS.
+
+`tools/check_phase15_cache.py --binary BIN --seed SEED --fixtures FIXTURES --out NUEVA --mode visual|profile` reproduce el A/B mediante `EMOTIONAL_PERF=full EMOTIONAL_SCENE_CACHE=off|layers`; `base` conserva el experimento intermedio. Perfil sin capturas ni generación por foco: una preparación de cada composición en7pintados. Mac6,1% menos mediana, no extrapolar al LCD. Ensayos físicos A/B completados y retorno visible confirmado. Últimos agregados: raster76,146→65,402ms; intervalos kernel medianos83,395→66,716ms.39/36acciones manuales distintas: no benchmark idéntico ni60 FPS. Recorte de título alternativo señalado, pendiente de reproducir/corregir. Véase [PHASE15_REPORT.md](PHASE15_REPORT.md).
+
+---
+
+Ensayo físico2f0ed169 de un minuto: cierre correcto y ES visible confirmado; propietario nota más suavidad.60 FPS no medidos/alcanzados. Experimento EmbedForSoftwareRenderer descartado por cambios de tipografía y p95 peor; configuración original conservada.
+
+Actualización XRGB: test65.536 pares alpha y tres buffers RGB640×480 idénticos al baseline. Perfil comparado de ruta fija Mac; nuevo ARM64 no probado físicamente. Ver PHASE14_REPORT.md.
+
+Actualización tras ensayo de300 s: retorno visible a ES confirmado; ajuste local posterior de ritmo360/240 ms pasa8 pruebas motion y32 pasos. ARM64ec124ea0 no probado en LCD. Evidencias en PHASE14_REPORT.md.
+
+# Fase 14 · comprobación vigente · 21-10-2026
+
+Build release simulator y LinuxKMS AArch64 correctos; fmt/diff-check pasan. Primera integración: 256 Rust; 101 Python (99 pasan, 2 skips de arte privado históricos); navegación existente174 pasos. Corrección final: 7 pruebas motion (incluye anchura completa y bordes L/R) y replay32 pasos de retarget/reversión/wrap/modal/reducido pasan; no se repiten suites ajenas.
+
+`tools/check_phase14_motion.py --mode regression|capture|profile --binary ELF_HOST --seed SQLITE_FIXTURE --fixtures RAIZ --out CARPETA_NUEVA` reproduce regresión, seis secuencias o perfil. `--baseline` compara el binario anterior en profile/capture. Capturas de buffer real Slint RGB640×480; no son evidencia LCD ni tiempos de presentación. Perfil sin codificación de PNG; métricas/caveats en [PHASE14_REPORT.md](PHASE14_REPORT.md).
+
+Fallo encontrado: reducido mantenía cámara±1; se corrigió la condición, conservando la aserción pan=0. Las pasadas fallidas siguen en evidencia privada. Ensayo F14 f2193b4e completado con fluidez y retorno confirmados por el propietario. Candidato posterior1e635ac6 con viewport640 corregido: todavía NO PROBADO en LCD; regresión exige tamaño igual al viewport real del simulador.
+
+---
+
+Corrección posterior de cápsula: replay focalizado de 82 pasos pasa; macOS/ARM64 compilan. No repetir suite global por este enlace de foco. Prueba física pendiente.
+
+# Fase 13 · resultados vigentes · 21-10-2026
+
+- `cargo test --locked --workspace --features simulator`: 245 pasan.
+- `python3 -m unittest discover -s tests -p 'test_*.py'` (runtime con PIL/tomllib): 101 casos, 99 pasan, dos skips explícitos de arte legado privado.
+- `cargo build --locked --release -p emotional-ui --no-default-features --features simulator` y `tools/arm64/build.sh` con SDK existente y `EMOTIONAL_KMS_FEATURE=linuxkms-direct`: correctos. `cargo fmt --check` y `git diff --check`: correctos.
+- `tools/check_phase13_navigation.py --binary RUTA --out CARPETA_NUEVA --seed SEED --fixture-root FIXTURES`: 160 pasos en tres replays, seed intacto. Fixtures propios de `tools/visual_pair.py`; no ROMs.
+- `tools/capture_phase13.py --binary RUTA --seed SEED --rom-root FIXTURES --out CARPETA_NUEVA`: RGB Slint 640×480, casos de interfaz/foco/vacío/arte/título largo. `--cases` limita regeneraciones a casos afectados.
+- Diagnóstico simulator optativo: `EMOTIONAL_PERF=full EMOTIONAL_PERF_TARGET=xrgb EMOTIONAL_PERF_VERIFY_SHADOW=1` compara RAM retenida contra repintado completo y tres copias RAM. Verificados 121 frames, sin certificación LCD.
+- Diagnóstico físico `tools/profile_drm_memory.c`: buffer propio y ejecución acotada, sin master/framebuffer/pageflip. Mide la memoria, no FPS de la GUI. Para GUI hace falta autorización/supervisión/recuperación actuales.
+
+Resultados, hashes y limitaciones en [PHASE13_REPORT](PHASE13_REPORT.md). Dos ensayos físicos del ELF f04c8668…: B mucho más rápido según propietario; retorno visible a ES confirmado. La corrección posterior de acceso lateral a cápsula aún no tiene prueba física. Los resultados inferiores son históricos.
+
+---
+
 # Revisión definitiva de diseño y navegación · 19-10-2026
 
 Resultados de esta intervención; los informes inferiores son históricos. No se ha accedido ni modificado la RG353V.

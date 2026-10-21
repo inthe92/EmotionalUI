@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+<defs><clipPath id="glass"><path d="M350 35L513 84L513 300L350 314Z M299 14L333 27L333 315L299 319Z"/></clipPath><linearGradient id="wet" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a9bfc9" stop-opacity="0"/><stop offset=".5" stop-color="#a9bfc9" stop-opacity=".24"/><stop offset="1" stop-color="#a9bfc9" stop-opacity="0"/></linearGradient></defs>
+<g clip-path="url(#glass)" stroke="#d1dedc" stroke-width="1" opacity=".48" stroke-linecap="round"><path d="M307 44l-2 11"/><path d="M325 104l-2 11"/><path d="M310 190l-2 11"/><path d="M330 272l-2 11"/><path d="M359 59l-2 11"/><path d="M385 97l-2 11"/><path d="M416 77l-2 11"/><path d="M447 118l-2 11"/><path d="M489 113l-2 11"/><path d="M505 151l-2 11"/><path d="M371 169l-2 11"/><path d="M409 201l-2 11"/><path d="M452 230l-2 11"/><path d="M492 270l-2 11"/><path d="M357 282l-2 11"/><path d="M468 160l-2 11"/></g>
+<g clip-path="url(#glass)" fill="none" stroke="url(#wet)" stroke-width="3" stroke-linecap="round"><path d="M319 28c-1 42 2 92 0 141"/><path d="M372 49c3 31-3 48-1 91"/><path d="M493 104c-2 41 1 83-2 129"/></g>
+</svg>

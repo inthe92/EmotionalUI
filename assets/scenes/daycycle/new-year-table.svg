@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+<!-- Original small folded star on the same tabletop. -->
+<ellipse cx="604" cy="335" rx="11" ry="2" fill="#151712" opacity=".3"/>
+<path d="M604 315l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z" fill="#baaf90"/>
+<path d="M604 315v17l-5-4 8-6" fill="none" stroke="#8f897b" stroke-width="1"/>
+</svg>
