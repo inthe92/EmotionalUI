@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
   <!-- Own vector mask, inside the main glass pane; never touches room or lamp. -->
-  <defs><linearGradient id="foliage" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity="0"/><stop offset=".38" stop-color="white" stop-opacity=".6"/><stop offset="1" stop-color="white" stop-opacity=".95"/></linearGradient></defs>
-  <path d="M352 172 C370 166 382 182 398 196 C420 185 434 206 452 213 C474 205 489 224 512 222 L512 310 L352 310 Z" fill="url(#foliage)"/>
+  <defs><linearGradient id="foliage" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity="0"/><stop offset=".38" stop-color="white" stop-opacity=".6"/><stop offset="1" stop-color="white" stop-opacity=".95"/></linearGradient><clipPath id="glass"><path d="M350 35L513 84L513 298L496 298L493 301L350 314Z M299 14L333 27L333 315L299 319Z"/></clipPath></defs>
+  <path d="M352 172 C370 166 382 182 398 196 C420 185 434 206 452 213 C474 205 489 224 512 222 L512 310 L352 310 Z" fill="url(#foliage)" clip-path="url(#glass)"/>
 </svg>

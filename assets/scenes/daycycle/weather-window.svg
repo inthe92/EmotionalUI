@@ -1,4 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
-<!-- Original main and narrow glass masks; no frame, furniture or lamp. -->
-<path d="M350 35L513 84L513 300L350 314Z M299 14L333 27L333 315L299 319Z" fill="white"/>
+<!-- Glass only; the lower-right notch leaves the foreground cup untouched. -->
+<path d="M350 35L513 84L513 298L496 298L493 301L350 314Z M299 14L333 27L333 315L299 319Z" fill="white"/>
 </svg>

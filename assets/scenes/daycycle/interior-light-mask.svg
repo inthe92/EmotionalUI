@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
 <!-- Own soft room-surface light mask. Holes preserve the view and lantern core. -->
 <defs><linearGradient id="room" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity=".65"/><stop offset=".55" stop-color="white" stop-opacity="1"/><stop offset="1" stop-color="white" stop-opacity=".7"/></linearGradient></defs>
-<path fill-rule="evenodd" d="M0 0H640V480H0Z M350 35L513 84L513 300L350 314Z M299 14L333 27L333 315L299 319Z M569 278H581V316H569Z" fill="url(#room)"/>
+<path fill-rule="evenodd" d="M0 0H640V480H0Z M350 35L513 84L513 298L496 298L493 301L350 314Z M299 14L333 27L333 315L299 319Z M569 278H581V316H569Z" fill="url(#room)"/>
 </svg>

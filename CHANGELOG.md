@@ -1,10 +1,12 @@
 # Changelog
 
-## 0.1.0-preview.1 — preparation, unreleased
+## 0.1.0-preview.1 — 2026-10-22
 
-Preserved phase13–15 navigation, compact layouts, 360 ms interrupted transitions, parallax, composition cache and optional Mali-G52/FemtoVG. Software remains default; stable 30/60 FPS are not claimed. Local title-overflow fix is retained. Trial mode continues to block game launches.
+First experimental interface preview for Anbernic RG353V / the tested dArkOS environment. Four sections, original ambient room, contextual recommendations, existing-library import and preserved phase13–15 navigation, 360 ms interruptible transitions, parallax and composition cache.
 
-Distribution: bilingual owner story preserved from newer remote README commits, explicit package/source allowlist and clearance gates, own-files installer plus experimental graphical Ports entry with independent transient recovery. dArkOS detection handles the observed Debian identity. The owner has declared the room reference project-owned; dependency notices, privacy, exact public binaries/ZIP and physical installation acceptance remain blocking. No release/tag/publication yet.
+Software default; Mali-G52/FemtoVG experimental, without immediate-swap default or a sustained30/60FPS promise. Trial mode cannot launch games. System controls remain informational. No boot replacement, ROMs, BIOS, commercial covers, drivers or system libraries are bundled.
+
+Graphical Ports entries, own-files installation/removal, independent transient return to EmulationStation, corresponding sources and dependency notices. The exterior masks now respect the window sill and foreground cup; original paintings are unchanged. Audio starts quietly and may require a menu volume adjustment. Hardware/artifact acceptance and checksums are recorded in the release notes.
 
 ## Unreleased · 0.2.0 development
 

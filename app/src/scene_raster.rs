@@ -135,6 +135,37 @@ pub fn refresh(ui: &Home) {
 mod tests {
     use super::*;
     #[test]
+    fn exterior_layers_do_not_paint_the_foreground_cup_or_window_sill() {
+        // Coordinates refer to the approved 640x480 painting. Exercise the
+        // actual 664x498 cached SVG raster used by the physical renderer.
+        let alpha = |index, x: u32, y: u32| {
+            let pixels = raster(index).unwrap().to_rgba8_premultiplied().unwrap();
+            let px = x * 664 / 640;
+            let py = y * 498 / 480;
+            pixels.as_bytes()[((py * pixels.width() + px) * 4 + 3) as usize]
+        };
+        for index in [1, 2, 3, 4] {
+            for (x, y) in [(497, 301), (502, 305), (510, 308), (525, 320), (480, 312)] {
+                assert_eq!(
+                    alpha(index, x, y),
+                    0,
+                    "exterior layer {index} covers foreground at ({x},{y})"
+                );
+            }
+        }
+        assert!(alpha(1, 400, 250) > 0, "seasonal exterior retained");
+        assert!(alpha(2, 400, 250) > 0, "weather exterior retained");
+        assert!(
+            alpha(0, 502, 305) > 0,
+            "cup keeps the room's interior light"
+        );
+        assert_eq!(
+            alpha(0, 400, 250),
+            0,
+            "glass remains outside the interior tint"
+        );
+    }
+    #[test]
     fn foreground_is_bounded_and_feathered_without_changing_the_source() {
         let source = image::RgbaImage::from_pixel(664, 498, image::Rgba([100, 80, 60, 255]));
         let strip = foreground_strip(&source);

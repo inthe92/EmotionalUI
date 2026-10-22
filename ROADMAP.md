@@ -1,8 +1,8 @@
-# Tarea activa · Fase 16 — First Public Preview
+# Active delivery · v0.1.0-preview.1
 
-Distribución, seguridad, integración y documentación de v0.1.0-preview.1. Sin nuevas funciones ni optimizaciones. Software predeterminado, Mali-G52 experimental; no swap inmediato por defecto. Código local conservado; README remotos preservados. Propietario confirma Foto 1 propia; procedencia despejada para preparar el paquete. Orden de publicación recibida: avisos y selección revisados; falta decisión específica de visibilidad PRIVATE→PUBLIC (ya autorizada y realizada) y prueba física del ZIP exacto. Instalador gráfico preparado localmente, pero ZIP exacto/instalación/audio/desinstalación físicos todavía no probados. Hay autorización expresa de commit/push/tag/pre-release tras superar las verificaciones; presencia y autorización gráfica actual siguen pendientes. [Preparación y puertas](RELEASE_READINESS.md).
+Publish the isolated, reversible RG353V/dArkOS trial preview after exact-ZIP hardware acceptance. Software default, Mali-G52 experimental. No game launching, system-setting changes, boot replacement or sustained30/60FPS promise in this package. Owner has explicitly authorized publication and PUBLIC visibility. Do not resume GPU optimization or add Daily Driver code during this delivery.
 
-La investigación de pipeline queda pausada, no es un requisito para esta preview y no autoriza más ensayos. La orden vigente autoriza commit/push/Release verificados, sin nueva aprobación de publicación. No cambiar visibilidad sin decisión específica ni habilitar install-main.
+Public release notes record artifact identity, installation/return/removal results and remaining limits. Preserve later functional development separately; it does not block this demonstration.
 
 ---
 

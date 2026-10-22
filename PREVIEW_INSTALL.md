@@ -9,8 +9,8 @@ Target: Anbernic RG353V, Linux ARM64, dArkOS. The observed image reports Debian 
 ## Graphical installation
 
 1. Download `EmotionalUI-RG353V-v0.1.0-preview.1.zip` and verify the SHA-256 shown with that release. Use the SHA256SUMS asset from the same release.
-2. Extract its contents into the **existing Ports directory configured by EmulationStation** on the ROM card. Keep the hidden `.emotional-ui-preview-package` folder. Do not overwrite an existing EmotionalUI extraction; preserve it separately. The selected console currently uses its second card's Ports directory, but paths must be checked rather than guessed.
-3. Refresh EmulationStation's game list using its normal controls if necessary. Select **EmotionalUI — Modo prueba**. Its first run verifies hashes, model, firmware and native loader, then copies only manifest-owned files to `~/.local/opt/EmotionalUI-preview-1`.
+2. Extract all its contents directly into the **existing Ports directory configured by EmulationStation**, not a nested folder on the ROM card. Keep the hidden `.emotional-ui-preview-package` folder. Do not overwrite an existing EmotionalUI extraction; preserve it separately. The selected console currently uses its second card's Ports directory, but paths must be checked rather than guessed.
+3. Refresh EmulationStation's game list using its normal controls if necessary; if entries are still absent, restart EmulationStation from its menu. Select **EmotionalUI — Modo prueba**. Its first run verifies hashes, model, firmware and native loader, then copies only manifest-owned files to `~/.local/opt/EmotionalUI-preview-1`.
 4. The software entry is the default. **EmotionalUI — GPU experimental** selects FemtoVG explicitly and checks its native dependencies before releasing the screen. If unavailable, select software; no driver replacement occurs.
 5. Explore Continue / Your moment / Library / Settings with L/R, D-pad, A/B and Start. Some system capsule controls remain informational. Analog sticks and all system-capsule hardware functions are not certified.
 6. Close through Ajustes → Volver a la consola. The independent transient systemd unit starts EmulationStation after normal exit, failure or the 15-minute trial safety limit. Trial mode cannot launch games.
@@ -27,7 +27,7 @@ This path requires no Rust, compilation, SSH or terminal for normal use. Install
 
 ## Audio, library and privacy
 
-Only original runtime audio and licensed fonts are included. Audio starts quietly; hardware audibility is pending. The importer reads the existing library; without gamelists it may be empty. No commercial game artwork or synthetic play history is bundled. Weather remains optional, with no location, weather credentials or automatic network consent supplied by the package. Demo weather must be labelled DEMO.
+Only original runtime audio and licensed fonts are included. Audio starts quietly. The owner confirmed audible playback after increasing the volume in the console menu; adjust volume if initially silent. The importer reads the existing library; without gamelists it may be empty. No commercial game artwork or synthetic play history is bundled. Weather remains optional, with no location, weather credentials or automatic network consent supplied by the package. Demo weather must be labelled DEMO.
 
 ## Español
 

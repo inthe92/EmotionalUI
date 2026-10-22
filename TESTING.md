@@ -1,3 +1,13 @@
+# Preview acceptance · 22-10-2026
+
+The release notes identify the exact ZIP, source commit and supervised installation/return/removal results. Existing regressions below remain historical evidence, not automatic certification of a new artifact. Public preview excludes subsequent Daily Driver changes.
+
+Cup masking regression reproduced in the actual664×498 SVG raster: seasonal layer alpha233 over cup point(497,301), where it must be0. Glass clipping and matching interior/weather masks correct it. Three Rust raster tests and five focused Python ambient checks pass. Four real Slint640×480 before/after pairs cover Continue/Your moment in clear winter and fog; changes remain near the window sill/cup, with all seven original paintings unchanged. ARM64 software/GPU rebuilt and inspected without RPATH or personal Mac build paths.
+
+The earlier package ran through Ports on the real RG353V; both renderer logs report640×480. The owner confirmed smooth appearance and audible audio after increasing menu volume. Exact final ZIP acceptance, checksums and remaining limitations belong to its release notes. No sustained30/60FPS or ten-minute installation claim.
+
+---
+
 # Orden de publicación · comprobación local del candidato · 21-10-2026
 
 Publicación expresamente autorizada tras verificaciones; no se solicita otra aprobación genérica. GitHub confirmado PUBLIC tras autorización específica; página accesible sin autenticación. Supervisión/autorización gráfica actual también pendiente, por lo que no se ha iniciado sesión gráfica ni prueba de instalación física.
