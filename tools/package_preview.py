@@ -7,6 +7,7 @@ No private-package fallback, directory-wide source copy, or external system libr
 import argparse
 import hashlib
 import json
+import re
 import struct
 import tarfile
 import tempfile
@@ -53,6 +54,9 @@ def review(plan, root=ROOT):
 
 def build(plan, receipt, software, gpu, output, root=ROOT):
     snapshot = review(plan, root)
+    source_commit = receipt.get('source_commit')
+    if source_commit is not None and not re.fullmatch(r'[0-9a-f]{40}', source_commit):
+        raise ValueError('Invalid source commit')
     if receipt.get('source_snapshot_sha256') != snapshot:
         raise ValueError('Build receipt does not match the reviewed source snapshot')
     for renderer, binary in [('software', software), ('femtovg', gpu)]:
@@ -82,7 +86,7 @@ def build(plan, receipt, software, gpu, output, root=ROOT):
             target.chmod(0o755 if name in ('emotional-ui', 'emotional-ui-gpu') else 0o644)
         (package/'release-plan.json').write_text(json.dumps(plan, indent=2, sort_keys=True)+'\n')
         (package/'build-receipt.json').write_text(json.dumps(
-            dict(source_snapshot_sha256=snapshot,
+            dict(source_snapshot_sha256=snapshot, source_commit=source_commit,
                  binaries={key: receipt['binaries'][key] for key in ('software', 'femtovg')}),
             indent=2, sort_keys=True)+'\n')
         with tarfile.open(package/'corresponding-source.tar.gz', 'w:gz') as tar:
@@ -99,7 +103,7 @@ def build(plan, receipt, software, gpu, output, root=ROOT):
                         architecture='aarch64', main_install_enabled=False, public_release=True,
                         default_renderer='software', experimental_renderer='femtovg',
                         executable_files=['emotional-ui', 'emotional-ui-gpu'],
-                        source_snapshot_sha256=snapshot, files=files)
+                        source_snapshot_sha256=snapshot, source_commit=source_commit, files=files)
         (package/'package.json').write_text(json.dumps(manifest, indent=2, sort_keys=True)+'\n')
         (base/'READ-ME-FIRST.md').write_bytes(checked(root, 'PREVIEW_INSTALL.md', plan['source_files']['PREVIEW_INSTALL.md']).read_bytes())
         for name, action in ENTRIES.items():
