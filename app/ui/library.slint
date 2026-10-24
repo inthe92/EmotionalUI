@@ -49,7 +49,11 @@ export component LibraryBrowser inherits Rectangle {
             Rectangle {
                 x:(row.header?0px:20px)+(1-parent.reveal)*6px;y:2px;width:parent.width - (row.header?0px:20px);height:40px;border-radius:10px;
                 background:root.content-focused&&!root.toolbar&&!root.editing&&root.cursor==index?#91c8ff24:row.header?#ffffff09:transparent;
-                border-width:root.content-focused&&!root.toolbar&&!root.editing&&root.cursor==index?1px:0px;border-color:#a8c8ff;
+                // Same turquoise/blue/violet focus as game cards; transparent interior.
+                if root.content-focused&&!root.toolbar&&!root.editing&&root.cursor==index: Image {
+                    width:parent.width;height:parent.height;
+                    source:@image-url("../../assets/illustrations/library-focus.png",nine-slice(10));
+                }
                 if row.header: Image {x:8px;y:6px;width:28px;height:28px;source:row.icon==1?@image-url("../../assets/icons/library-handheld.svg"):row.icon==2?@image-url("../../assets/icons/library-disc.svg"):@image-url("../../assets/icons/library-controller.svg");}
                 Text {x:row.header?46px:12px;y:2px;width:parent.width - (row.header?150px:24px);height:36px;text:row.title;wrap:word-wrap;overflow:elide;color:AtmosphereDesign.ink;font-size:row.header?15px:14px;font-weight:row.header?600:400;vertical-alignment:center;}
                 if row.header: Text {x:parent.width - 100px;width:70px;height:40px;text:row.detail;horizontal-alignment:right;vertical-alignment:center;color:AtmosphereDesign.muted;font-size:11px;}

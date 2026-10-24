@@ -1,6 +1,6 @@
 # Library by system
 
-The Library now groups the existing imported collection by system. Each header shows an icon, a system name, the number of available games and an expansion indicator. One system can be expanded at a time.
+The Library now groups the existing imported collection by system. Each header shows an icon, a system name, the number of available games and an expansion indicator. One system can be expanded at a time. System and game selection use the same turquoise/blue/violet focus palette as the approved game cards, with a transparent interior and a prepared antialiased contour.
 
 - D-pad/joystick: move through systems and games; **A** expands a header or selects a game. Right opens a system, left closes it.
 - **B** closes the keyboard, then the expanded system, then clears a search, then returns to the previous section. Reopening a system and moving down recalls its previous selected game.
@@ -19,7 +19,7 @@ A game row resolves to its original catalog entry and uses the existing launcher
 
 ## Review captures
 
-These are JPEG exports of actual 640×480 Slint software captures with owned synthetic **test fixtures**, not a real collection or a physical screen. Raw PNGs are reproducible with the replay tool.
+These are JPEG exports of actual 640×480 Slint software captures with owned synthetic **test fixtures**, not a real collection or a physical screen. Raw PNGs are reproducible with the replay tool. The public images below precede the turquoise/blue/violet focus follow-up; its new captures were verified privately and are not uploaded.
 
 ![System groups](images/library/systems.jpg)
 ![Global search](images/library/search.jpg)
