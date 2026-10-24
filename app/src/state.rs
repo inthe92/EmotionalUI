@@ -50,6 +50,8 @@ pub(super) struct State {
     pub(super) order: Vec<usize>,
     pub(super) selected: usize,
     pub(super) library_index: usize,
+    pub(super) browser: crate::library_browser::Browser,
+    pub(super) browser_painted: std::cell::Cell<u64>,
     pub(super) library: bool,
     pub(super) menu: bool,
     pub(super) menu_index: usize,
@@ -438,6 +440,7 @@ impl State {
             self.layout == 4 && self.privacy.ambient_motion && !self.privacy.neutral,
         );
         ui.set_imported(self.imported);
+        if self.layout == 4 && !self.history_panel {self.paint_library(ui);} else {
         let count = if self.history_panel {
             self.history.sessions.len()
         } else {
@@ -479,6 +482,7 @@ impl State {
             };
             ui.set_library_titles(slint::ModelRc::new(slint::VecModel::from(titles)));
             ui.set_library_offset(offset as i32);
+        }
         }
         let known = environmental
             .time
@@ -671,6 +675,11 @@ impl State {
         if self.modal_active() {
             return Ok(());
         }
+        if self.layout==4 && self.library && !self.history_panel && index>=10 {
+            self.dock_focus=None;self.system_focus=false;
+            if let Some(game)=self.browser.toggle(index-10){self.library_index=game;self.launch_game(ui,game);}
+            self.paint(ui);return Ok(());
+        }
         if (self.launch.is_some() || self.trial_mode)
             && !self.menu
             && !self.history_panel
@@ -851,6 +860,7 @@ impl State {
         self.selected = 0;
     }
     pub(super) fn key(&mut self, ui: &Home, key: &str) -> Result<(), Box<dyn Error>> {
+        if self.library_text(ui,key) {return Ok(());}
         let Some(action) = self.keyboard.press(key) else {
             return Ok(());
         };
@@ -908,6 +918,7 @@ impl State {
         if self.layout == 4 && self.status_action(ui, action) {
             return Ok(());
         }
+        if self.library_action(ui,action) {return Ok(());}
         if self.layout == 4 && self.dock_action(ui, action) {
             return Ok(());
         }

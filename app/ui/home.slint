@@ -1,3 +1,4 @@
+import { LibraryBrowser, LibraryEntry } from "library.slint";
 import { MotionDesign } from "motion.slint";
 import { SystemControls } from "system-controls.slint";
 export { Design } from "design.slint";
@@ -131,6 +132,16 @@ export component Home inherits Window {
     in-out property <int> confirmation-generation:0;
     in-out property <int> reveal-generation:0;
     in-out property <float> reveal:1;
+    in property <[LibraryEntry]> library-rows;
+    in property <int> library-cursor;
+    in property <int> library-revision;
+    in property <bool> library-toolbar;
+    in property <bool> library-editing;
+    in property <string> library-query;
+    in property <int> library-results;
+    in property <int> library-keyboard-index;
+    callback library-search();
+    callback library-key(int);
     in property <bool> library-open:false;
     in property <[string]> library-titles;
     in property <int> library-offset:-1;
@@ -262,10 +273,19 @@ export component Home inherits Window {
         opacity:show;visible:show>0;
         x:24px+root.page-offsets[2]*1px;y:root.concept==4?152px:60px;width:592px;height:root.concept==4?280px:392px;border-radius:root.concept==4?AtmosphereDesign.radius-l:Design.panel-radius;background:root.concept==4?transparent:root.base;border-width:root.concept==4?0px:1px;border-color:root.accent;
         TouchArea {enabled:root.library-open;}
-        if root.library-titles.length==0: Text {x:16px;y:24px;width:560px;height:60px;text:root.history-panel?"Todavía no hay sesiones registradas.":"Tu biblioteca está vacía. Los juegos disponibles aparecerán aquí.";wrap:word-wrap;font-size:15px;color:AtmosphereDesign.muted;}
+        if (root.concept!=4||root.history-panel)&&root.library-titles.length==0: Text {x:16px;y:24px;width:560px;height:60px;text:root.history-panel?"Todavía no hay sesiones registradas.":"Tu biblioteca está vacía. Los juegos disponibles aparecerán aquí.";wrap:word-wrap;font-size:15px;color:AtmosphereDesign.muted;}
         Text {visible:root.concept!=4;x:22px;y:19px;text:root.history-panel?"Tu historial":"Tu biblioteca";font-size:Design.greeting-size;font-weight:600;color:root.ink;}
         Text {visible:root.concept!=4;x:22px;y:54px;text:root.native-controls?"A elegir   ·   B volver":"Z elegir   ·   X volver";font-size:Design.secondary-size;color:root.muted;}
-        for name[index] in root.library-titles : Rectangle {x:12px;y:(root.concept==4?12px:85px)+index*44px;width:568px;height:40px;border-radius:AtmosphereDesign.radius-m;background:root.dock-cursor<0&&root.library-index==index+root.library-offset?root.accent.with-alpha(0.14):transparent;border-width:root.dock-cursor<0&&root.library-index==index+root.library-offset?Design.focus-width:0px;border-color:root.accent;
+        if root.concept==4&&!root.history-panel: LibraryBrowser {
+            width:parent.width;height:parent.height;rows:root.library-rows;cursor:root.library-cursor;
+            revision:root.library-revision;toolbar:root.library-toolbar;editing:root.library-editing;
+            query:root.library-query;results:root.library-results;reduced:root.reduced;
+            keyboard-index:root.library-keyboard-index;
+            content-focused:root.dock-cursor<0&&!root.system-focused;
+            enabled:root.library-open&&!root.game-options-open&&!root.system-open&&!root.audio-open;
+            choose(i)=>{root.activate(10+i);} search=>{root.library-search();} keyboard(i)=>{root.library-key(i);}
+        }
+        for name[index] in (root.concept!=4||root.history-panel?root.library-titles:[]) : Rectangle {x:12px;y:(root.concept==4?12px:85px)+index*44px;width:568px;height:40px;border-radius:AtmosphereDesign.radius-m;background:root.dock-cursor<0&&root.library-index==index+root.library-offset?root.accent.with-alpha(0.14):transparent;border-width:root.dock-cursor<0&&root.library-index==index+root.library-offset?Design.focus-width:0px;border-color:root.accent;
             Text {x:16px;width:parent.width - 32px;text:name;wrap:word-wrap;color:root.ink;vertical-alignment:center;height:parent.height;font-size:name.character-count>65?AtmosphereDesign.tile-size:Design.action-size;}
             TouchArea {enabled:root.library-open;clicked=>{root.activate(10+index+root.library-offset);}}
         }
