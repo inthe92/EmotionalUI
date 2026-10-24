@@ -38,6 +38,32 @@ impl Store {
             )
             .optional()
     }
+    pub fn library_systems(
+        &self,
+        root: &Path,
+    ) -> rusqlite::Result<std::collections::BTreeMap<String, String>> {
+        let canonical = root.canonicalize().unwrap_or_else(|_| root.to_owned());
+        let root = canonical.as_path();
+        let mut query = self.0.prepare("SELECT id,source_xml FROM imported_games")?;
+        let rows = query
+            .query_map([], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?
+            .map(|row| {
+                row.map(|(id, source)| {
+                    let parent = std::path::Path::new(&source).parent();
+                    let key = parent
+                        .and_then(|p| p.strip_prefix(root).ok())
+                        .and_then(|p| p.components().next())
+                        .map(|c| c.as_os_str())
+                        .or_else(|| parent.filter(|p| *p == root).and_then(|p| p.file_name()))
+                        .and_then(|p| p.to_str())
+                        .unwrap_or("unknown")
+                        .to_string();
+                    (id, key)
+                })
+            })
+            .collect();
+        rows
+    }
     pub fn last_launched(&self) -> rusqlite::Result<Option<String>> {
         use rusqlite::OptionalExtension;
         self.0.query_row("SELECT game_id FROM launch_log WHERE outcome='exited-success' ORDER BY rowid DESC LIMIT 1",[],|r|r.get(0)).optional()
@@ -467,6 +493,54 @@ PRAGMA user_version=4;COMMIT;")?;
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn library_systems_use_import_sources_not_rom_subfolders() {
+        let store = Store::open(Path::new(":memory:")).unwrap();
+        for (id, source) in [
+            ("a", "/collection/snes/gamelist.xml"),
+            ("b", "/collection/gba/gamelist.xml"),
+            ("c", "/external/gamelist.xml"),
+        ] {
+            store
+                .0
+                .execute(
+                    "INSERT INTO imported_games VALUES(?1,?2,?3,'')",
+                    params![id, "/collection/snes/rpg/game.sfc", source],
+                )
+                .unwrap();
+        }
+        let systems = store.library_systems(Path::new("/collection")).unwrap();
+        assert_eq!(systems["a"], "snes");
+        assert_eq!(systems["b"], "gba");
+        assert_eq!(systems["c"], "unknown");
+        assert_eq!(
+            store
+                .library_systems(Path::new("/collection/snes"))
+                .unwrap()["a"],
+            "snes"
+        );
+    }
+    #[cfg(unix)]
+    #[test]
+    fn library_systems_resolve_an_authorized_symlinked_root_once() {
+        let base =
+            std::env::temp_dir().join(format!("emotional-library-roots-{}", std::process::id()));
+        let real = base.join("real");
+        let alias = base.join("alias");
+        std::fs::create_dir_all(real.join("snes")).unwrap();
+        let real = real.canonicalize().unwrap();
+        std::os::unix::fs::symlink(&real, &alias).unwrap();
+        let store = Store::open(Path::new(":memory:")).unwrap();
+        store
+            .0
+            .execute(
+                "INSERT INTO imported_games VALUES('a','game.fixture',?1,'')",
+                [real.join("snes/gamelist.xml").to_string_lossy().to_string()],
+            )
+            .unwrap();
+        assert_eq!(store.library_systems(&alias).unwrap()["a"], "snes");
+        std::fs::remove_dir_all(base).unwrap();
+    }
     #[test]
     fn persistence_roundtrip() {
         let mut s = Store::open(Path::new(":memory:")).unwrap();

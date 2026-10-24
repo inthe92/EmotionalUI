@@ -272,6 +272,14 @@ struct Step {
     mood: Option<i32>,
     atmosphere_contains: Option<String>,
     library_index: Option<usize>,
+    library_cursor: Option<usize>,
+    library_scroll_max: Option<f32>,
+    library_query: Option<String>,
+    library_results: Option<usize>,
+    library_rows: Option<usize>,
+    library_editing: Option<bool>,
+    library_game_title: Option<String>,
+    pointer: Option<ReplayPointer>,
     hero_title: Option<String>,
     resume: Option<bool>,
     scene_phase: Option<i32>,
@@ -297,6 +305,13 @@ struct Step {
     capture: Option<std::path::PathBuf>,
     motion_sample_ms: Option<u32>,
 }
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ReplayPointer {
+    x: f32,
+    y: f32,
+    down: Option<bool>,
+}
 impl Scenario {
     fn validate(&self) -> Result<(), Box<dyn Error>> {
         self.mapping.validate()?;
@@ -318,6 +333,14 @@ impl Scenario {
                 || (step.text.is_some() && (!self.keyboard || step.kind.is_some()))
             {
                 return Err("Invalid replay order, duration or event fields".into());
+            }
+            if step.pointer.as_ref().is_some_and(|p| {
+                !p.x.is_finite()
+                    || !p.y.is_finite()
+                    || !(0.0..=640.0).contains(&p.x)
+                    || !(0.0..=480.0).contains(&p.y)
+            }) {
+                return Err("Pointer replay must stay inside the 640x480 test window".into());
             }
             previous = step.at_ms;
             if step
@@ -377,10 +400,19 @@ pub fn replay(
                     "left"=>char::from(slint::platform::Key::LeftArrow).to_string(),
                     "right"=>char::from(slint::platform::Key::RightArrow).to_string(),
                     "enter"=>char::from(slint::platform::Key::Return).to_string(),
+                    "backspace"=>char::from(slint::platform::Key::Backspace).to_string(),
                     "escape"=>char::from(slint::platform::Key::Escape).to_string(),
                     _=>text.clone(),
                 }.into();
                 ui.window().dispatch_event(if pressed {slint::platform::WindowEvent::KeyPressed{text}}else{slint::platform::WindowEvent::KeyReleased{text}});
+            }
+            if let Some(pointer)=&step.pointer {
+                let position=slint::LogicalPosition::new(pointer.x,pointer.y);
+                ui.window().dispatch_event(match pointer.down {
+                    Some(true)=>slint::platform::WindowEvent::PointerPressed{position,button:slint::platform::PointerEventButton::Left},
+                    Some(false)=>slint::platform::WindowEvent::PointerReleased{position,button:slint::platform::PointerEventButton::Left},
+                    None=>slint::platform::WindowEvent::PointerMoved{position},
+                });
             }
             let mut state = state.borrow_mut();
             let now = Duration::from_millis(step.at_ms);
@@ -450,6 +482,13 @@ pub fn replay(
                 step.mood.is_none_or(|v|ui.get_mood()==v),
                 step.atmosphere_contains.as_ref().is_none_or(|v|ui.get_atmosphere().contains(v)),
                 step.library_index.is_none_or(|v|state.library_index==v),
+                step.library_cursor.is_none_or(|v|state.browser.cursor==v),
+                step.library_scroll_max.is_none_or(|v|ui.get_library_scroll()<=v),
+                step.library_query.as_ref().is_none_or(|v|&state.browser.query==v),
+                step.library_results.is_none_or(|v|state.browser.result_count()==v),
+                step.library_rows.is_none_or(|v|state.browser.rows.len()==v),
+                step.library_editing.is_none_or(|v|state.browser.editing==v),
+                step.library_game_title.as_ref().is_none_or(|v|state.browser.selected_game().and_then(|i|state.games.get(i)).map(|g|g.title.as_str()).unwrap_or("")==v),
                 step.hero_title.as_ref().is_none_or(|v|ui.get_hero_title().as_str()==v),
                 step.resume.is_none_or(|v|state.resume==v),
                 step.scene_phase.is_none_or(|v|ui.get_scene_phase()==v),

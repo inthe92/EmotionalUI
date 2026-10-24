@@ -7,6 +7,8 @@ mod controls;
 mod discovery_presentation;
 mod game_options;
 mod launch_ui;
+mod library_browser;
+mod library_view;
 #[cfg(any(debug_assertions, feature = "simulator"))]
 mod moments;
 mod motion;
@@ -845,6 +847,12 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         } else {
             0
         };
+    let systems = if let Some(root) = trial_root.as_deref().filter(|p| p.is_dir()) {
+        store.library_systems(root)?
+    } else {
+        Default::default()
+    };
+    let browser = library_browser::Browser::new(&games, &systems);
     let mut state = State {
         navigation: Default::default(),
         modal_return: None,
@@ -895,6 +903,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         order,
         selected,
         library_index: 0,
+        browser,
+        browser_painted: std::cell::Cell::new(u64::MAX),
         library: false,
         menu: false,
         menu_index: 0,
@@ -942,6 +952,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             state.continuity_order.len(),
         );
         state.library = back.position.library;
+        state.browser.select_game(
+            state
+                .games
+                .iter()
+                .position(|g| g.id == back.position.game_id)
+                .unwrap_or(usize::MAX),
+        );
         state.library_index = back
             .position
             .library_index
@@ -1051,6 +1068,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                 state.close_modal();
                             }
                             state.atlas_explanations = update.explanations;
+                            state.browser.replace(&update.games, &update.systems);
                             state.games = update.games;
                             state.local_art = update.art;
                             ui.set_artwork_generation(ui.get_artwork_generation().wrapping_add(1));
@@ -1272,7 +1290,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     let s = shared.clone();
     ui.on_key_action(move |k| {
         if let Some(ui) = weak.upgrade() {
-            if ui.get_native_controls() {
+            if ui.get_native_controls() && !(s.borrow().library && s.borrow().browser.editing) {
                 return;
             } // Native profile owns buttons; ignore virtual keyboard echoes.
             if let Err(e) = s.borrow_mut().key(&ui, &k) {
@@ -1314,6 +1332,36 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     });
     let weak = ui.as_weak();
     let s = shared.clone();
+    ui.on_library_search({
+        let weak = ui.as_weak();
+        let s = shared.clone();
+        move || {
+            if let Some(ui) = weak.upgrade() {
+                let mut state = s.borrow_mut();
+                if state.library && !state.modal_active() {
+                    state.dock_focus = None;
+                    state.system_focus = false;
+                    state.browser.editing = true;
+                    state.browser.toolbar = true;
+                    state.browser.key = 0;
+                    state.paint(&ui);
+                }
+            }
+        }
+    });
+    ui.on_library_key({
+        let weak = ui.as_weak();
+        let s = shared.clone();
+        move |key| {
+            if let Some(ui) = weak.upgrade() {
+                let mut state = s.borrow_mut();
+                if state.library && state.browser.editing && !state.modal_active() {
+                    state.browser.keyboard_choose(key.max(0) as usize);
+                    state.paint(&ui);
+                }
+            }
+        }
+    });
     ui.on_activate(move |i| {
         if let Some(ui) = weak.upgrade() {
             if let Err(e) = s.borrow_mut().activate(&ui, i as usize) {

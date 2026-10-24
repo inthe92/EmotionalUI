@@ -8,6 +8,7 @@ use std::{
 };
 pub struct Update {
     pub games: Vec<Game>,
+    pub systems: crate::library_browser::Systems,
     pub art: BTreeMap<String, Vec<crate::artwork::Resource>>,
     pub message: String,
     pub explanations: BTreeMap<String, String>,
@@ -79,6 +80,7 @@ pub fn start(
             let Some(root) = root.filter(|r| r.is_dir()) else {
                 tx.send(Ok(Update {
                     games: vec![],
+                    systems: Default::default(),
                     art: BTreeMap::new(),
                     explanations: BTreeMap::new(),
                     message: "Modo prueba · No encontramos una biblioteca disponible.".into(),
@@ -134,6 +136,7 @@ pub fn start(
                 let art = store.art_paths(&root)?;
                 tx.send(Ok(Update {
                     games,
+                    systems: store.library_systems(&root)?,
                     explanations: explanations.clone(),
                     art,
                     message: format!(
@@ -150,7 +153,7 @@ pub fn start(
                 if let Some(a) = &atlas {
                     a.apply(&store, &mut games)?;
                 }
-                tx.send(Ok(Update {games,explanations,art:store.art_paths(&root)?,message:"Modo prueba · Sin gamelist.xml disponibles; puedes volver cuando conectes tu colección.".into()}))?;
+                tx.send(Ok(Update {systems:store.library_systems(&root)?,games,explanations,art:store.art_paths(&root)?,message:"Modo prueba · Sin gamelist.xml disponibles; puedes volver cuando conectes tu colección.".into()}))?;
             }
             Ok(())
         })();

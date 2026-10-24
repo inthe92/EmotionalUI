@@ -165,3 +165,7 @@ Demostrados: GUI en el LCD, botones y retorno temporal a ES, según confirmació
 Siguiente paso inmediato: cerrar la escucha sincronizada con GUI visible; resolver el audio antes de avanzar al ciclo RetroArch. Después repetir la importación con las optimizaciones y cerrar las regresiones Docker, preparar un único homebrew autorizado con configuración/guardados aislados y recuperación ligada al proceso, sin watchdog fijo de juego.
 
 </details>
+
+## Library by system and global search · 24-10-2026
+
+GitHub branch `codex/library-systems-search`, [PR #2](https://github.com/inthe92/EmotionalUI/pull/2): in-memory grouping/search over the existing catalog, one expanded system, buttons/touch keyboard, virtualized list and original launcher mapping. Implemented and simulator-verified; macOS/ARM64 builds checked. Published preview and device installation unchanged. Next minimum check: supervised grouped-library navigation and one existing authorized game/return on RG353V. Older unpublished local visual/system changes remain separate.

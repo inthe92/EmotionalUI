@@ -155,7 +155,11 @@ impl State {
             ),
             Section::Library => (
                 self.library_index,
-                (!self.history_panel).then_some(self.library_index),
+                if self.history_panel {
+                    None
+                } else {
+                    self.browser.selected_game()
+                },
             ),
             Section::Settings => (self.menu_index, None),
         };
@@ -229,6 +233,15 @@ impl State {
                 self.dock_return = self.selected;
             }
             Section::Library => {
+                if !self.history_panel {
+                    if let Some(index) = focus
+                        .game_id
+                        .as_ref()
+                        .and_then(|id| self.games.iter().position(|g| &g.id == id))
+                    {
+                        self.browser.select_game(index);
+                    }
+                }
                 self.library_index = if self.history_panel {
                     focus
                         .index
@@ -456,7 +469,11 @@ impl State {
         let first = if self.menu {
             self.menu_index == 0
         } else if self.library {
-            self.library_index == 0
+            if self.history_panel {
+                self.library_index == 0
+            } else {
+                self.browser.toolbar
+            }
         } else {
             self.selected == 0
         };

@@ -1,0 +1,84 @@
+import { ListView } from "std-widgets.slint";
+import { AtmosphereDesign } from "integrated.slint";
+export struct LibraryEntry { title:string, detail:string, header:bool, expanded:bool, icon:int }
+export component LibraryBrowser inherits Rectangle {
+    in property <[LibraryEntry]> rows;
+    in property <int> cursor;
+    in property <int> revision;
+    in property <bool> toolbar;
+    in property <bool> editing;
+    in property <string> query;
+    in property <int> results;
+    in property <bool> reduced;
+    in property <bool> enabled;
+    in property <bool> content-focused;
+    in property <int> keyboard-index;
+    callback choose(int);
+    callback search();
+    callback scrolled(float);
+    callback keyboard(int);
+    private property <[string]> letters:["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9","esp","←","×","✓"];
+    background:transparent;
+    function ensure-visible() {
+        if root.cursor*44px + list.viewport-y < 0px {list.viewport-y=-root.cursor*44px;}
+        if (root.cursor+1)*44px + list.viewport-y > list.visible-height {list.viewport-y=list.visible-height - (root.cursor+1)*44px;}
+        list.viewport-y=min(0px,max(list.visible-height - list.viewport-height,list.viewport-y));
+    }
+    changed cursor => {root.ensure-visible();}
+    changed revision => {root.ensure-visible();}
+    changed editing => {root.ensure-visible();}
+    Rectangle {
+        x:12px;y:8px;width:parent.width - 24px;height:32px;border-radius:16px;
+        background:root.toolbar||root.editing?#ffffff14:transparent;
+        border-width:root.toolbar||root.editing?1px:0px;border-color:#9bcfff;
+        Image {x:10px;y:6px;width:20px;height:20px;source:@image-url("../../assets/icons/library-search.svg");}
+        Text {x:40px;width:parent.width - 110px;height:parent.height;text:root.query==""?(root.editing?"Escribe el nombre de un juego…":"Buscar en toda tu colección"):root.query+(root.editing?"│":"");overflow:elide;color:root.query==""?AtmosphereDesign.muted:AtmosphereDesign.ink;font-size:13px;vertical-alignment:center;}
+        Text {x:parent.width - 70px;width:58px;height:parent.height;text:root.results+(root.results==1?" juego":" juegos");horizontal-alignment:right;vertical-alignment:center;font-size:10px;color:AtmosphereDesign.muted;}
+        TouchArea {enabled:root.enabled;clicked=>{root.search();}}
+    }
+    list:=ListView {
+        x:8px;y:46px;width:parent.width - 16px;height:root.editing?44px:parent.height - 82px;
+        viewport-width:self.visible-width;
+        mouse-drag-pan-enabled:root.enabled;
+        changed viewport-y => {root.scrolled(self.viewport-y/1px);}
+        for row[index] in root.rows: Rectangle {
+            private property <float> reveal:0;
+            init=>{self.reveal=1;}
+            animate reveal {duration:root.reduced?0ms:130ms;easing:ease-out;}
+            width:list.visible-width;height:44px;opacity:self.reveal;
+            Rectangle {
+                x:(row.header?0px:20px)+(1-parent.reveal)*6px;y:2px;width:parent.width - (row.header?0px:20px);height:40px;border-radius:10px;
+                background:root.content-focused&&!root.toolbar&&!root.editing&&root.cursor==index?#91c8ff24:row.header?#ffffff09:transparent;
+                // Same turquoise/blue/violet focus as game cards; transparent interior.
+                if root.content-focused&&!root.toolbar&&!root.editing&&root.cursor==index: Image {
+                    width:parent.width;height:parent.height;
+                    source:@image-url("../../assets/illustrations/library-focus.png",nine-slice(10));
+                }
+                if row.header: Image {x:8px;y:6px;width:28px;height:28px;source:row.icon==1?@image-url("../../assets/icons/library-handheld.svg"):row.icon==2?@image-url("../../assets/icons/library-disc.svg"):@image-url("../../assets/icons/library-controller.svg");}
+                Text {x:row.header?46px:12px;y:2px;width:parent.width - (row.header?150px:24px);height:36px;text:row.title;wrap:word-wrap;overflow:elide;color:AtmosphereDesign.ink;font-size:row.header?15px:14px;font-weight:row.header?600:400;vertical-alignment:center;}
+                if row.header: Text {x:parent.width - 100px;width:70px;height:40px;text:row.detail;horizontal-alignment:right;vertical-alignment:center;color:AtmosphereDesign.muted;font-size:11px;}
+                if row.header: Text {x:parent.width - 24px;width:16px;height:40px;text:row.expanded?"⌄":"›";vertical-alignment:center;horizontal-alignment:center;font-size:19px;color:AtmosphereDesign.muted;}
+                TouchArea {enabled:root.enabled&&!root.editing;clicked=>{root.choose(index);}}
+            }
+        }
+    }
+    if root.rows.length==0: Text {
+        x:24px;y:root.editing?48px:90px;width:parent.width - 48px;height:root.editing?38px:80px;
+        text:root.query==""?"Tu colección aparecerá aquí cuando esté disponible.":"No encontramos ese juego. Prueba con otra palabra.";
+        wrap:word-wrap;font-size:14px;color:AtmosphereDesign.muted;horizontal-alignment:center;vertical-alignment:center;
+    }
+    if root.editing: Rectangle {
+        x:12px;y:98px;width:parent.width - 24px;height:140px;border-radius:12px;background:#142025ed;
+        for letter[index] in root.letters: Rectangle {
+            x:8px+mod(index,10)*(parent.width - 16px)/10;y:8px+floor(index/10)*31px;
+            width:(parent.width - 16px)/10 - 4px;height:27px;border-radius:7px;
+            background:root.keyboard-index==index?#99d7fa45:#ffffff0c;
+            border-width:root.keyboard-index==index?1px:0px;border-color:#a8d4ff;
+            Text {text:letter;width:parent.width;height:parent.height;horizontal-alignment:center;vertical-alignment:center;font-size:14px;color:AtmosphereDesign.ink;}
+            TouchArea {enabled:root.enabled;clicked=>{root.keyboard(index);}}
+        }
+    }
+    Text {x:20px;y:parent.height - 32px;width:parent.width - 40px;height:28px;
+        text:root.editing?"Espacio · Borrar · Limpiar · Listo":root.cursor>=0&&root.cursor<root.rows.length&&!root.rows[root.cursor].header?root.rows[root.cursor].title:"A · abrir   B · cerrar   ↑ · buscar";
+        wrap:word-wrap;overflow:elide;font-size:11px;color:AtmosphereDesign.muted;vertical-alignment:center;}
+}
