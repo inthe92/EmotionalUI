@@ -134,6 +134,7 @@ export component Home inherits Window {
     in-out property <float> reveal:1;
     in property <[LibraryEntry]> library-rows;
     in property <int> library-cursor;
+    in-out property <float> library-scroll;
     in property <int> library-revision;
     in property <bool> library-toolbar;
     in property <bool> library-editing;
@@ -283,6 +284,7 @@ export component Home inherits Window {
             keyboard-index:root.library-keyboard-index;
             content-focused:root.dock-cursor<0&&!root.system-focused;
             enabled:root.library-open&&!root.game-options-open&&!root.system-open&&!root.audio-open;
+            scrolled(y)=>{root.library-scroll=y;}
             choose(i)=>{root.activate(10+i);} search=>{root.library-search();} keyboard(i)=>{root.library-key(i);}
         }
         for name[index] in (root.concept!=4||root.history-panel?root.library-titles:[]) : Rectangle {x:12px;y:(root.concept==4?12px:85px)+index*44px;width:568px;height:40px;border-radius:AtmosphereDesign.radius-m;background:root.dock-cursor<0&&root.library-index==index+root.library-offset?root.accent.with-alpha(0.14):transparent;border-width:root.dock-cursor<0&&root.library-index==index+root.library-offset?Design.focus-width:0px;border-color:root.accent;

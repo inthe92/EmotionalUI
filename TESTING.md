@@ -459,3 +459,15 @@ Historial completo anterior: [TESTING de fase 3](docs/simulator/history/TESTING-
 Registro final: docs/phase12/docker-runtime-calibration-final/report.json, 52 comprobaciones externas correctas, suites anidadas sin sumar. Rust 156 macOS / 158 Linux / 159 simulator; 71 Python en macOS y Linux ARM64. fmt, Clippy/build correctos y ELF release ARM64 auditado. Fuentes originales y banco normal conservados; banco diagnóstico reproducido byte por byte.
 
 La carátula se valida mediante local_art_ready dentro del plazo original de proceso de tres segundos; catálogo/controles a 900 ms se conservan. Las pasadas fallidas anteriores permanecen. El usuario se marcha: no hay escucha del banco calibrado confirmada dentro de EmotionalUI, no se repite automáticamente ni se lanza un emulador. ES activo; las pruebas físicas quedan detenidas.
+
+## Library systems and global search · 2026-10-24
+
+Use `cargo test --offline --locked -p emotional-ui --bin emotional-ui --no-default-features --features simulator library_` for the focused model/store tests. They cover available systems, one expansion, case/accent filtering, original game-index mapping, collapse/restore, Unicode backspace, import refresh, an authorized symlinked root and 20,000 titles. Repeating the same query does not rebuild the view.
+
+`python3 tools/check_library_browser.py --binary <simulator-binary> --out <new-private-directory>` exercises buttons, physical text, touch, scrolling, long names, game options and the trial launch guard. Its files are synthetic text fixtures, not ROMs. Each case uses its own copied database. Add `--cases controller idle --motion` for normal finite animation and the bounded idle repaint check. Simulator captures/rasters do not measure LCD FPS or hardware latency.
+
+Verification: macOS simulator and desktop builds; ARM64 LinuxKMS/FemtoVG build with software fallback. Five functional replay cases pass (168 steps); the normal-motion controller replay (56 steps) and idle check (9 steps) also pass. The latter records zero simulator raster frames during elapsed seconds 3–7 after transient work; no device CPU, RAM or LCD cadence is inferred. See [Library](docs/LIBRARY.md) for the captured UI. Device deployment, physical touch/controls, the real collection and an emulator round trip from the grouped list remain pending authorization and supervision.
+
+The source-only application suite reports 109 passed and four pre-existing failures: `artwork::tests::original_png_is_bounded` needs the excluded historical room master; three `atlas::tests` require unversioned Atlas databases. The same four failures were reproduced on unchanged `fbe6451c1b38a6c4ee23089f48d85f229280696d`. They were not hidden by changing those tests or uploading private resources.
+
+ARM64 Library candidate SHA-256: `8b3e740ac8a7e9ed4387fad269f7b3b45815690b4db9637e3da6ace29c0addbb`. It has not been deployed or physically validated. Existing backend/linker warnings remain; no dependency upgrades.
