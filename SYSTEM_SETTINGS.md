@@ -28,6 +28,30 @@ beta.3 mantiene la home, los fondos, los materiales y la navegación existentes.
   detiene la planificación. Las claves sin sistema correspondiente se cuentan;
   no se renombran ni se asocian por aproximación.
 
+## Selector de emulador: preparación sin activar
+
+El planificador identifica combinaciones RetroArch y núcleo que el XML declara,
+que tienen archivos ELF de arquitectura compatible y que admiten extensiones
+de la biblioteca. Si varios directorios usan el mismo nombre de sistema, sólo
+propone la intersección para evitar romper una colección al cambiar otra. No
+ofrece emuladores independientes ni núcleos inferidos, y comprobar cabeceras ELF
+no acredita que funcionen los juegos. La lectura en la RG353V encontró 64
+sistemas con 202 combinaciones y un sistema con varias carpetas; no abrió la
+interfaz ni ejecutó juegos.
+
+El inventario adicional se calcula bajo demanda con `player_menu.py --check`,
+no al abrir normalmente la aplicación. Una medición única de lectura en esa
+consola tardó 6,6 s con el plan anterior y 9,5 s con el inventario adicional;
+no es una prueba de arranque repetida ni una medida de rendimiento gráfico.
+
+Se puede preparar en memoria un XML con la nueva elección preservando el resto
+de bytes, tanto en el formato de nodos hermanos como en el formato con raíz. Se
+rechazan declaraciones DTD, duplicados y estructuras ambiguas. Las pruebas
+reconstruyen perfiles usando únicamente archivos temporales propios. **Todavía no
+hay selector en pantalla ni escritura de preferencias de la consola**: faltan
+la transacción atómica con copia de seguridad, la protección ante cambios
+concurrentes, la integración con el supervisor y la prueba física supervisada.
+
 ## Cesión a las herramientas originales
 
 La aplicación libera gráficos, entrada y audio antes de abrir una herramienta.

@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('darkos_profiles', ROOT/'tools/darkos_launcher_profiles.py')
 profiles = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(profiles)
+preference_spec = importlib.util.spec_from_file_location('darkos_preferences', ROOT/'tools/darkos_preferences.py')
+preferences = importlib.util.module_from_spec(preference_spec)
+preference_spec.loader.exec_module(preferences)
 
 
 def elf(path, architecture='aarch64', kind=3, executable=False):
@@ -153,6 +156,56 @@ class DarkosProfiles(unittest.TestCase):
         self.assertEqual(len(plan['report']['included']), 2)
         self.assertEqual(len({p['root'] for p in tomllib.loads(plan['profiles'])['launchers']}), 2)
         self.assertEqual(plan['report']['skipped'][0]['reason'], 'duplicate canonical root')
+
+    def test_selector_intersects_installed_declared_choices_for_repeated_system_names(self):
+        for core in ('common', 'only_snes', 'only_sufami'):
+            self.installed(core)
+        self.system(name='snes', folder='snes', cores=('common', 'only_snes', 'missing'))
+        self.system(name='snes', folder='sufami', cores=('common', 'only_sufami'))
+        self.systems.write_bytes(ET.tostring(self.document))
+        settings = self.home/'.emulationstation/es_settings.cfg'
+        settings.parent.mkdir()
+        settings.write_text('<string name="snes.emulator" value="retroarch"/><string name="snes.core" value="only_snes"/>')
+        plan = profiles.build_plan(self.systems, self.home, self.library, self.data, self.binary, functional=True, include_emulator_catalog=True)
+        self.assertEqual(plan['emulator_catalog'], [{
+            'system': 'snes', 'roots': 2, 'current_emulator': 'retroarch',
+            'current_core': 'only_snes', 'choices': [{'emulator': 'retroarch', 'core': 'common'}]}])
+        self.assertEqual(settings.read_text(), '<string name="snes.emulator" value="retroarch"/><string name="snes.core" value="only_snes"/>')
+        self.assertFalse(self.data.exists())
+
+    def test_selector_rejects_implicit_and_standalone_and_mismatched_architectures(self):
+        self.installed('snes9x')
+        self.installed('wrong', core_arch='arm32')
+        self.system(name='snes', folder='snes', cores=('snes9x', 'wrong'), default='standalone')
+        self.system(name='nds', folder='nds', cores=None, default='drastic', suffixes='.nds')
+        self.systems.write_bytes(ET.tostring(self.document))
+        plan = profiles.build_plan(self.systems, self.home, self.library, self.data, self.binary, functional=True, include_emulator_catalog=True)
+        self.assertEqual([(s['system'], s['choices']) for s in plan['emulator_catalog']], [
+            ('snes', [{'emulator': 'retroarch', 'core': 'snes9x'}])])
+        # A second active system with the same name but no declared choices
+        # makes the shared ES preference unsafe for all of those roots.
+        self.system(name='snes', folder='other-snes', cores=None)
+        self.systems.write_bytes(ET.tostring(self.document))
+        plan = profiles.build_plan(self.systems, self.home, self.library, self.data, self.binary, functional=True, include_emulator_catalog=True)
+        self.assertEqual(plan['emulator_catalog'], [])
+
+    def test_prepared_selection_changes_a_rebuilt_fixture_plan_and_preserves_other_bytes(self):
+        self.installed('snes9x')
+        self.installed('snes9x2010')
+        self.system(cores=('snes9x', 'snes9x2010'))
+        self.systems.write_bytes(ET.tostring(self.document))
+        settings = self.home/'.emulationstation/es_settings.cfg'
+        settings.parent.mkdir()
+        before = b'<?xml version="1.0"?>\n<!-- keep -->\n<string name="snes.core" value="snes9x"/>\n<bool name="other" value="true"/>\n'
+        settings.write_bytes(before)
+        prepared = preferences.prepare_emulator_preferences(before, 'snes', 'retroarch', 'snes9x2010')
+        # Simulated persistence to an owned temporary fixture, not the console.
+        settings.write_bytes(prepared)
+        plan = profiles.build_plan(self.systems, self.home, self.library, self.data, self.binary, functional=True)
+        self.assertEqual(plan['report']['included'][0]['core'], 'snes9x2010')
+        self.assertIn(b'<!-- keep -->', prepared)
+        self.assertIn(b'<bool name="other" value="true"/>', prepared)
+        self.assertEqual(profiles.read_preferences(settings)['snes.emulator'], 'retroarch')
 
     def test_escape_symlink_root_and_non_game_systems_are_excluded(self):
         self.installed()
