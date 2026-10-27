@@ -53,3 +53,11 @@ temporales y exigió elegir sistema para un ZIP ambiguo; un detector QR leyó
 correctamente la captura de desarrollo. Las pruebas automatizadas incluyen
 autenticación, duplicados, rutas, interrupción y copia exclusiva alternativa.
 El replay en simulador prueba la navegación, no los mandos o la pantalla físicos.
+
+La beta.5 sustituye la capa opaca del panel QR por el material compartido del
+panel de controles, y oculta los controles mientras se muestra el código. En
+capturas GPU locales de los modos claro y oscuro, el QR se pudo decodificar y
+un replay de 42 pasos pasó. El ejecutable ARM64 tiene SHA-256
+`c81483a36b15c89fbab874218bfb2f03c6499c48fb217424c8ba90c561da608c` y el ZIP
+`18715f8845e4c69314768e796d7f781013efb8743b88b69d9c9e443bc8b1e253`.
+La apariencia y la lectura del QR siguen pendientes de validación en la consola.

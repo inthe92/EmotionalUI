@@ -51,6 +51,8 @@ export component SystemControls inherits Rectangle {
         frost-x:344px;frost-y:44px;x:344px;y:44px+(1-self.show)*4px;width:272px;height:322px;
         visible:self.show>0;opacity:self.show;radius:AtmosphereDesign.radius-l;
         TouchArea {enabled:root.expanded;}
+        if !root.drop-open: Rectangle {
+        width:parent.width;height:parent.height;background:transparent;
         Text {x:16px;y:12px;width:240px;height:20px;text:"Controles del sistema";font-size:15px;font-weight:600;color:AtmosphereDesign.glass-ink;}
         for label[index] in ["Wi-Fi","Bluetooth"]: Rectangle {
             x:16px+index*124px;y:42px;width:116px;height:40px;border-radius:10px;
@@ -107,14 +109,18 @@ export component SystemControls inherits Rectangle {
             Text {width:parent.width;height:parent.height;text:"A  ·  Ajustes completos";font-size:13px;font-weight:600;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
             TouchArea {enabled:root.expanded;clicked=>{root.settings();}}
         }
+        }
         if root.drop-open: Rectangle {
-            width:272px;height:322px;border-radius:AtmosphereDesign.radius-l;background:#18283bf8;
+            // Reuse the parent panel's existing material; hide the controls
+            // underneath so there is only one layer of glass and no ghosting.
+            width:272px;height:322px;background:transparent;
             TouchArea {enabled:root.expanded;}
-            Text {x:16px;y:10px;width:240px;height:22px;text:"Emotional Drop";font-size:15px;font-weight:600;color:#fff9f0;}
+            Text {x:16px;y:10px;width:240px;height:22px;text:"Emotional Drop";font-size:15px;font-weight:600;color:AtmosphereDesign.glass-ink;}
             Image {x:40px;y:36px;width:192px;height:192px;source:root.drop-image;image-fit:contain;}
-            Text {x:16px;y:233px;width:240px;height:40px;text:root.drop-message;font-size:11px;color:#f1f3f8;wrap:word-wrap;horizontal-alignment:center;}
-            Rectangle {x:16px;y:280px;width:240px;height:28px;border-radius:14px;background:#f6dfbb;
-                Text {width:parent.width;height:parent.height;text:"A / B  ·  Cerrar conexión";font-size:12px;font-weight:600;color:#2a2a31;horizontal-alignment:center;vertical-alignment:center;}
+            Text {x:16px;y:233px;width:240px;height:40px;text:root.drop-message;font-size:11px;color:AtmosphereDesign.glass-ink;wrap:word-wrap;horizontal-alignment:center;}
+            Rectangle {x:16px;y:280px;width:240px;height:28px;border-radius:14px;background:AtmosphereDesign.active;
+                if root.expanded&&!root.blocked: FocusOutline {width:parent.width;height:parent.height;radius:14px;}
+                Text {width:parent.width;height:parent.height;text:"A / B  ·  Cerrar conexión";font-size:12px;font-weight:600;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
                 TouchArea {enabled:root.expanded;clicked=>{root.chosen(5);}}
             }
         }
