@@ -16,6 +16,7 @@ mod moments;
 mod motion;
 mod navigation;
 mod performance;
+mod rom_drop;
 #[cfg(test)]
 mod pipeline_audit_tests;
 mod scene_cache;
@@ -804,6 +805,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         system_service: None,
         system_snapshot: None,
         system_note: None,
+        drop_session: None,
+        drop_open: false,
+        drop_ready: false,
+        drop_refresh: false,
+        drop_message: String::new(),
+        drop_image: slint::Image::default(),
+        drop_profile: launcher_profile.clone().filter(|_| functional_mode),
         dock_focus: (selected == 2 && concept == 4).then_some(2),
         dock_return: 0,
         trial_mode,
@@ -999,7 +1007,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         ui.on_system_select(move |index| {
             if let Some(ui) = weak.upgrade() {
                 let mut state = state.borrow_mut();
-                state.system_index = index.clamp(0, 5) as usize;
+                state.system_index = index.clamp(0, 6) as usize;
                 state.system_action(&ui, emotional_core::controls::Action::Confirm);
             }
         });
@@ -1010,7 +1018,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         ui.on_system_adjust(move |index, forward| {
             if let Some(ui) = weak.upgrade() {
                 let mut state = state.borrow_mut();
-                state.system_index = index.clamp(0, 5) as usize;
+                state.system_index = index.clamp(0, 6) as usize;
                 state.system_action(
                     &ui,
                     if forward {
@@ -1036,6 +1044,10 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         });
     }
     // Start work only after window/model construction. No XML/thumbnail decode in callbacks.
+    let drop_refresh_profile = launcher_profile.clone().filter(|_| functional_mode);
+    let drop_refresh_db = path.clone();
+    let drop_refresh_root = trial_root.clone();
+    let drop_refresh_atlas = atlas_path.clone();
     let trial_updates = (trial_mode || functional_mode).then(|| {
         if let Some(profile) = launcher_profile.filter(|_| functional_mode) {
             return trial::start_functional(
@@ -1054,13 +1066,23 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         )
     });
     let trial_timer = slint::Timer::default();
-    if let Some(updates) = trial_updates {
+    if let Some(mut updates) = trial_updates {
         let weak = ui.as_weak();
         let s = shared.clone();
         trial_timer.start(
             slint::TimerMode::Repeated,
             std::time::Duration::from_millis(50),
             move || {
+                let refresh = {
+                    let mut state = s.borrow_mut();
+                    std::mem::take(&mut state.drop_refresh)
+                };
+                if refresh {
+                    if let Some(profile) = drop_refresh_profile.clone() {
+                        updates = trial::start_functional(drop_refresh_db.clone(), drop_refresh_root.clone(),
+                            drop_refresh_atlas.clone(), atlas_experimental, profile);
+                    }
+                }
                 if let (Some(ui), Ok(update)) = (weak.upgrade(), updates.try_recv()) {
                     let mut state = s.borrow_mut();
                     match update {

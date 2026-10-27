@@ -134,6 +134,10 @@ fn start_worker(
                 }))?;
                 return Ok(());
             };
+            // Every configured launcher root below is canonicalized before
+            // containment checks. Compare it to the same canonical library,
+            // including when the configured library itself is a symlink.
+            let root = root.canonicalize()?;
             let mut store = Store::open(&db)?;
             let atlas = atlas_path
                 .as_deref()
@@ -324,6 +328,29 @@ mod tests {
     fn explicit_disconnected_path_is_not_replaced() {
         let p = PathBuf::from("/emotional-ui-deliberately-absent");
         assert_eq!(root(Some(p.clone())), Some(p));
+    }
+    #[test]
+    fn functional_rescan_finds_a_new_profiled_file_without_rewriting_gamelist() {
+        let base = std::env::temp_dir().join(format!("emotional-drop-rescan-{}", std::process::id()));
+        let root = base.join("roms");
+        let system = root.join("nes");
+        std::fs::create_dir_all(&system).unwrap();
+        let xml = system.join("gamelist.xml");
+        std::fs::write(&xml, "<gameList/>").unwrap();
+        let profile = base.join("launchers.toml");
+        std::fs::write(&profile, format!("handoff='process-exit'\n[[launchers]]\nid='nes'\nroot={:?}\nexecutable='/usr/bin/true'\nworking_directory={:?}\narguments=['{{rom}}']\nwaits_for_exit=true\nextensions=['.nes']\n", system.to_str().unwrap(), base.to_str().unwrap())).unwrap();
+        let alias = base.join("library-alias");
+        std::os::unix::fs::symlink(&root, &alias).unwrap();
+        let db = base.join("catalog.sqlite");
+        let scan = || start_functional(db.clone(), Some(alias.clone()), None, false, profile.clone())
+            .into_iter().map(Result::unwrap).last().unwrap();
+        assert!(scan().games.is_empty());
+        std::fs::write(system.join("test.nes"), b"synthetic content").unwrap();
+        let update = scan();
+        assert_eq!(update.games.len(), 1);
+        assert_eq!(update.games[0].title, "test");
+        assert_eq!(std::fs::read_to_string(xml).unwrap(), "<gameList/>");
+        std::fs::remove_dir_all(base).unwrap();
     }
     #[test]
     fn cached_systems_publish_first_and_final_without_repeated_catalogs() {

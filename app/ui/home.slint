@@ -65,6 +65,9 @@ export component Home inherits Window {
     in property <int> system-selected;
     in property <string> system-help:"Consultando el sistema…";
     in property <bool> system-controls-enabled;
+    in property <bool> drop-open;
+    in property <image> drop-image;
+    in property <string> drop-message;
 
     out property <int> active-section:root.menu-open?3:root.library-open?2:root.resume-view?0:1;
     callback navigate(int);
@@ -382,6 +385,7 @@ export component Home inherits Window {
         blocked:root.audio-open||root.game-options-open;
         battery-percent:root.system-battery-percent;battery-charging:root.system-battery-charging;
         values:root.system-values;known:root.system-known;active:root.system-active;selected:root.system-selected;help:root.system-help;changes-allowed:root.system-controls-enabled;
+        drop-open:root.drop-open;drop-image:root.drop-image;drop-message:root.drop-message;
         chosen(index)=>{root.system-select(index);}
         adjusted(index,forward)=>{root.system-adjust(index,forward);}
         levels:root.system-levels;level-changed(index,value)=>{root.system-level(index,value);}

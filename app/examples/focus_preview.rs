@@ -5,6 +5,8 @@ mod focus;
 mod gpu_material;
 #[path = "../src/settings_browser.rs"]
 mod settings_browser;
+#[path = "../src/rom_drop.rs"]
+mod rom_drop;
 use slint::{ComponentHandle, ModelRc, SharedString, VecModel};
 use std::time::Duration;
 slint::include_modules!();
@@ -125,6 +127,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "70 %",
                 "80 %",
             ]));
+        }
+        "drop" => {
+            ui.set_system_open(true);
+            ui.set_modal_kind(1);
+            ui.set_modal_progress(1.);
+            ui.set_system_selected(5);
+            ui.set_drop_open(true);
+            ui.set_drop_image(rom_drop::qr_image("http://192.168.1.2:12345/#example-token-for-preview").map_err(|_| "QR")?);
+            ui.set_drop_message("Escanea con el móvil conectado a la misma red.".into());
         }
         _ => return Err("unknown focus pose".into()),
     }

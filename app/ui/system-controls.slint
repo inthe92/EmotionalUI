@@ -15,6 +15,9 @@ export component SystemControls inherits Rectangle {
     in property <int> selected;
     in property <string> help;
     in property <bool> changes-allowed;
+    in property <bool> drop-open;
+    in property <image> drop-image;
+    in property <string> drop-message;
     callback chosen(int);
     callback adjusted(int, bool);
     in property <[int]> levels;
@@ -45,7 +48,7 @@ export component SystemControls inherits Rectangle {
     }
     AmbientPanel {
         property <float> show:root.progress;
-        frost-x:344px;frost-y:44px;x:344px;y:44px+(1-self.show)*4px;width:272px;height:294px;
+        frost-x:344px;frost-y:44px;x:344px;y:44px+(1-self.show)*4px;width:272px;height:322px;
         visible:self.show>0;opacity:self.show;radius:AtmosphereDesign.radius-l;
         TouchArea {enabled:root.expanded;}
         Text {x:16px;y:12px;width:240px;height:20px;text:"Controles del sistema";font-size:15px;font-weight:600;color:AtmosphereDesign.glass-ink;}
@@ -93,11 +96,27 @@ export component SystemControls inherits Rectangle {
             Text {x:32px;width:200px;height:22px;text:"Batería · "+root.values[4];font-size:11px;color:AtmosphereDesign.glass-muted;vertical-alignment:center;}
             TouchArea {enabled:root.expanded;clicked=>{root.chosen(4);}}
         }
-        Text {x:16px;y:220px;width:240px;height:28px;text:root.help;font-size:10px;color:AtmosphereDesign.glass-muted;wrap:word-wrap;}
-        Rectangle {x:16px;y:252px;width:240px;height:28px;border-radius:self.height/2;background:AtmosphereDesign.active;
-            if root.expanded&&!root.blocked&&root.selected==5: FocusOutline {width:parent.width;height:parent.height;radius:parent.height/2;}
+        Rectangle {x:16px;y:221px;width:240px;height:27px;border-radius:8px;background:root.selected==5?AtmosphereDesign.active:transparent;
+            if root.expanded&&!root.blocked&&root.selected==5: FocusOutline {width:parent.width;height:parent.height;radius:8px;}
+            Text {x:8px;width:224px;height:27px;text:"Emotional Drop · Añadir juegos";font-size:12px;font-weight:600;color:AtmosphereDesign.glass-ink;vertical-alignment:center;}
+            TouchArea {enabled:root.expanded;clicked=>{root.chosen(5);}}
+        }
+        Text {x:16px;y:250px;width:240px;height:25px;text:root.help;font-size:10px;color:AtmosphereDesign.glass-muted;wrap:word-wrap;}
+        Rectangle {x:16px;y:280px;width:240px;height:28px;border-radius:self.height/2;background:AtmosphereDesign.active;
+            if root.expanded&&!root.blocked&&root.selected==6: FocusOutline {width:parent.width;height:parent.height;radius:parent.height/2;}
             Text {width:parent.width;height:parent.height;text:"A  ·  Ajustes completos";font-size:13px;font-weight:600;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
             TouchArea {enabled:root.expanded;clicked=>{root.settings();}}
+        }
+        if root.drop-open: Rectangle {
+            width:272px;height:322px;border-radius:AtmosphereDesign.radius-l;background:#18283bf8;
+            TouchArea {enabled:root.expanded;}
+            Text {x:16px;y:10px;width:240px;height:22px;text:"Emotional Drop";font-size:15px;font-weight:600;color:#fff9f0;}
+            Image {x:40px;y:36px;width:192px;height:192px;source:root.drop-image;image-fit:contain;}
+            Text {x:16px;y:233px;width:240px;height:40px;text:root.drop-message;font-size:11px;color:#f1f3f8;wrap:word-wrap;horizontal-alignment:center;}
+            Rectangle {x:16px;y:280px;width:240px;height:28px;border-radius:14px;background:#f6dfbb;
+                Text {width:parent.width;height:parent.height;text:"A / B  ·  Cerrar conexión";font-size:12px;font-weight:600;color:#2a2a31;horizontal-alignment:center;vertical-alignment:center;}
+                TouchArea {enabled:root.expanded;clicked=>{root.chosen(5);}}
+            }
         }
     }
 }

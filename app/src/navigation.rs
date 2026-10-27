@@ -291,6 +291,7 @@ impl State {
     }
 
     pub(super) fn close_modal(&mut self) {
+        self.stop_drop();
         self.game_options = None;
         self.audio_panel = false;
         self.system_open = false;

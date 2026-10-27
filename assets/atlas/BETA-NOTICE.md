@@ -1,4 +1,4 @@
-# Atlas incluido en EmotionalUI 0.2.0-beta.3
+# Atlas incluido en EmotionalUI 0.2.0-beta.4
 
 Exportación `0.4.0-ai-experimental.5-snes-research.2`, conservada byte por byte.
 SHA-256: `bb5d2304b9b9ad86a35ac559fa998e5e41a2f090f741013542fe0601dd24c7f4`.

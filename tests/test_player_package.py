@@ -16,7 +16,7 @@ class PlayerPackage(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             payload=Path(tmp)
             files=[ROOT/'platform/distribution'/name for name in ('manage.py','menu.py')]
-            files += [ROOT/'platform/darkos'/name for name in ('phase12_preview.py','functional_preview.py','functional_menu.py','player_menu.py','player_bootstrap.py')]
+            files += [ROOT/'platform/darkos'/name for name in ('phase12_preview.py','functional_preview.py','functional_menu.py','player_menu.py','player_bootstrap.py','rom_drop.py')]
             files += [ROOT/'tools/darkos_launcher_profiles.py']
             for source in files:shutil.copyfile(source,payload/source.name)
             package.verify_entrypoint_imports(payload)
