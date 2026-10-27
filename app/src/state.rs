@@ -59,6 +59,7 @@ pub(super) struct State {
     pub(super) menu: bool,
     pub(super) menu_index: usize,
     pub(super) options_open: bool,
+    pub(super) options_browser: crate::settings_browser::Browser,
     pub(super) system_options: Vec<emotional_services::system_options::Entry>,
     pub(super) menu_from_library: bool,
     pub(super) native_held: bool,
@@ -891,7 +892,7 @@ impl State {
                                 self.rerank()?;
                             }
                             4 => self.privacy.dark_mode = !self.privacy.dark_mode,
-                            11 => { self.options_open = true; self.menu_index = 0; },
+                            11 => { self.options_open = true; self.options_browser.reset(); self.menu_index = 0; },
                             12 => self.begin_modal(crate::navigation::Modal::System),
                             5 => self.privacy.ambient_motion = !self.privacy.ambient_motion,
                             6 => {
@@ -962,8 +963,8 @@ impl State {
                 cue = Some(Cue::Confirm);
             }
             Action::Back if self.options_open && self.menu => {
-                self.options_open = false;
-                self.menu_index = 11;
+                let outcome = self.options_browser.back();
+                self.apply_settings_outcome(ui, outcome);
             }
             Action::Back if self.layout == 4 && (self.menu || self.library) => {
                 let target = if self.menu && self.menu_from_library {

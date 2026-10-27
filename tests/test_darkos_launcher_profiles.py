@@ -25,6 +25,37 @@ def elf(path, architecture='aarch64', kind=3, executable=False):
 
 
 class DarkosProfiles(unittest.TestCase):
+    def test_native_sibling_xml_preferences_and_wrapped_xml_are_equivalent(self):
+        settings=self.root/'settings.cfg'
+        fragment='<string name="snes.core" value="snes9x"/><bool name="DrawClock" value="true"/>'
+        settings.write_text('<?xml version="1.0"?>\n'+fragment)
+        self.assertEqual(profiles.read_preferences(settings),{'snes.core':'snes9x'})
+        settings.write_text('<config>'+fragment+'</config>')
+        self.assertEqual(profiles.read_preferences(settings),{'snes.core':'snes9x'})
+        for invalid in ['<!DOCTYPE x><string name="x" value="y"/>', '<string',
+                        '<string name="snes.core" value="a"/><string name="snes.core" value="b"/>']:
+            settings.write_text(invalid)
+            with self.assertRaises(ValueError):profiles.read_preferences(settings)
+
+    def test_explicit_core_preference_is_honored_without_substitution(self):
+        self.installed('snes9x');self.installed('snes9x2010')
+        self.system(cores=('snes9x','snes9x2010'))
+        self.systems.write_bytes(ET.tostring(self.document))
+        settings=self.home/'.emulationstation/es_settings.cfg';settings.parent.mkdir()
+        settings.write_text('<?xml version="1.0"?><string name="snes.core" value="snes9x2010"/><string name="snes.emulator" value="retroarch"/>')
+        plan=profiles.build_plan(self.systems,self.home,self.library,self.data,self.binary,functional=True)
+        self.assertEqual(plan['report']['included'][0]['core'],'snes9x2010')
+        settings.write_text('<string name="snes.core" value="unavailable"/>')
+        plan=profiles.build_plan(self.systems,self.home,self.library,self.data,self.binary,functional=True)
+        self.assertEqual(plan['report']['included'],[])
+        settings.write_text('<string name="snes.emulator" value="standalone"/>')
+        plan=profiles.build_plan(self.systems,self.home,self.library,self.data,self.binary,functional=True)
+        self.assertEqual(plan['report']['included'],[])
+        self.assertIn('without substitution',plan['report']['skipped'][0]['reason'])
+        settings.write_text('<string name="Old System.emulator" value="standalone"/>')
+        plan=profiles.build_plan(self.systems,self.home,self.library,self.data,self.binary,functional=True)
+        self.assertEqual(plan['report']['unmatched_preferences'],['Old System.emulator'])
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name).resolve()

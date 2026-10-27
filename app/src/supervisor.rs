@@ -195,6 +195,13 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
             return Err("Invalid launch request".into());
         }
         if let Some(tool) = &position.system_option {
+            if !emotional_services::system::frontend_is_stopped() {
+                // A tool must not compete with ES, including while it is starting.
+                break;
+            }
+            let console_return = config.system_options_root.as_deref()
+                .and_then(|root| emotional_services::system_options::returns_to_console(root, tool).ok())
+                .unwrap_or(true);
             let child = config.system_options_root.as_deref()
                 .ok_or_else(|| std::io::Error::other("No installed Options root configured"))
                 .and_then(|root| emotional_services::system_options::spawn(root, tool));
@@ -214,6 +221,12 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
                     }
                 }
             };
+            if console_return || !emotional_services::system::frontend_is_stopped() {
+                // Some stock tools intentionally restart ES. The external
+                // recovery unit owns that return; do not restart Slint over it.
+                println!("OPTIONS handed back to the original frontend");
+                break;
+            }
             next = Some(Return { position, message: if result.is_ok() {
                 "De vuelta en Ajustes.".into()
             } else {

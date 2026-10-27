@@ -101,6 +101,7 @@ def main():
     if args.check:
         print(json.dumps({'profiles':len(plan['report']['included']),
             'skipped':len(plan['report']['skipped']), 'options':bool(options),
+            'unmatched_launcher_preferences':len(plan['report'].get('unmatched_preferences',[])),
             'physical_validated':False, 'graphics_started':False}))
         return
     functional_menu.preflight(destination/'emotional-ui')

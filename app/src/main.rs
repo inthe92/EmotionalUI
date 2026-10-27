@@ -28,6 +28,7 @@ mod store;
 mod supervisor;
 mod system_settings;
 mod settings_menu;
+mod settings_browser;
 mod trial;
 mod trial_replay;
 use chrono::{Datelike, NaiveDateTime};
@@ -73,6 +74,16 @@ impl Default for Config {
 fn main() -> Result<(), Box<dyn Error>> {
     if std::env::args().nth(1).as_deref() == Some("--version") {
         println!("EmotionalUI v{}", include_str!("../VERSION").trim());
+        return Ok(());
+    }
+    let inspect_args: Vec<String> = std::env::args().collect();
+    if inspect_args.iter().any(|a| a == "--system-settings-check") {
+        if inspect_args.len() != 3 || inspect_args[1] != "--system-settings-check" || !PathBuf::from(&inspect_args[2]).is_absolute() {
+            return Err("Use --system-settings-check with one absolute installed tools root".into());
+        }
+        use emotional_services::system_options;
+        let entries = system_options::discover(std::path::Path::new(&inspect_args[2]))?;
+        println!("{}", system_options::inventory_report(&entries));
         return Ok(());
     }
     let result = supervisor::dispatch().and_then(|handled| if handled { Ok(()) } else { run() });
@@ -839,6 +850,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         menu: false,
         menu_index: 0,
         options_open: false,
+        options_browser: settings_browser::Browser::default(),
         system_options: launcher_profile.as_deref().and_then(|profile| {
             let config: emotional_services::launcher::configured::Configuration = toml::from_str(&std::fs::read_to_string(profile).ok()?).ok()?;
             config.system_options_root.and_then(|root| emotional_services::system_options::discover(&root).ok())
@@ -886,7 +898,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         if let Some(tool) = &position.system_option {
             state.menu = true;
             state.options_open = true;
-            state.menu_index = state.system_options.iter().position(|e| &e.relative == tool).unwrap_or(0);
+            state.menu_index = state.options_browser.show_tool(tool, &state.system_options, false);
         }
         state.resume = position.resume;
         state.selected = emotional_core::continuity::clamp(

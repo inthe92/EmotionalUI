@@ -147,6 +147,32 @@ def isolation(data, ident, functional=False):
     return base/'isolation.cfg', text, directories
 
 
+def read_preferences(path):
+    """ES writes XML sibling nodes, not necessarily a single document root.
+
+    Read the native format without rewriting it. Invalid/ambiguous preferences
+    must not silently reset a user's emulator selection to our fallback.
+    """
+    raw = path.read_bytes()
+    if len(raw) > 1024*1024 or b'<!DOCTYPE' in raw.upper() or b'<!ENTITY' in raw.upper():
+        raise ValueError('Invalid EmulationStation preferences; preserved without fallback')
+    text = raw.decode('utf-8-sig')
+    text = re.sub(r'^\s*<\?xml[^>]*\?>', '', text, count=1)
+    try:
+        document = ET.fromstring('<emotional-settings-fragment>'+text+'</emotional-settings-fragment>')
+    except ET.ParseError as error:
+        raise ValueError('Unreadable EmulationStation preferences; preserved without fallback') from error
+    preferences = {}
+    for element in document.iter('string'):
+        name, value = element.get('name'), element.get('value')
+        if not name or value is None or not value.strip():
+            continue
+        if name in preferences:
+            raise ValueError('Ambiguous EmulationStation preferences; preserved without fallback')
+        preferences[name] = value
+    return preferences
+
+
 def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/retroarch/bin'), functional=False):
     """Read-only planning. This never launches content or creates directories."""
     systems = absolute(systems).resolve(strict=True)
@@ -174,12 +200,10 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
     preferences = {}
     settings = home/'.emulationstation/es_settings.cfg'
     if functional and settings.is_file():
-        settings_raw = settings.read_bytes()
-        if len(settings_raw) <= 1024*1024 and b'<!DOCTYPE' not in settings_raw.upper() and b'<!ENTITY' not in settings_raw.upper():
-            try:
-                preferences = {e.get('name'): e.get('value') for e in ET.fromstring(settings_raw).iter('string')}
-            except ET.ParseError:
-                pass
+        preferences = read_preferences(settings)
+    system_names = {(node.findtext('name') or '').strip() for node in nodes}
+    report['unmatched_preferences'] = sorted(key for key in preferences
+        if key.endswith(('.emulator', '.core')) and key.rsplit('.', 1)[0] not in system_names)
     profiles, append_configs, directories = [], {}, {data}
     seen = set()
     for node in nodes:
@@ -205,6 +229,11 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
             ra_nodes = [e for e in emulators if e.get('name') in RETROARCH]
             preferred_emulator = preferences.get(name+'.emulator', default)
             preferred_core = preferences.get(name+'.core')
+            explicit_emulator = preferences.get(name+'.emulator')
+            if explicit_emulator and explicit_emulator not in RETROARCH:
+                skip('explicit standalone emulator selection is not supported; preserved without substitution'); continue
+            if explicit_emulator:
+                ra_nodes = [e for e in ra_nodes if e.get('name') == explicit_emulator]
             ra_nodes.sort(key=lambda e: e.get('name') != preferred_emulator)
             declared = any(e.findall('./cores/core') for e in ra_nodes)
             if declared:
@@ -217,6 +246,11 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
                     candidates = [(e.get('name'), fixed, 'fixed-map') for e in ra_nodes]
                     candidates += [(e, fixed, 'fixed-map') for e in ('retroarch', 'retroarch32')
                                    if e not in [item[0] for item in candidates]]
+            if preferred_core:
+                candidates = [(emu, [core for core in cores if core == preferred_core], origin)
+                              for emu, cores, origin in candidates]
+            if explicit_emulator:
+                candidates = [candidate for candidate in candidates if candidate[0] == explicit_emulator]
             selected = None
             for emulator, cores, origin in candidates:
                 try:

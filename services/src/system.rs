@@ -393,6 +393,14 @@ trait Runner: Send + 'static {
     fn run(&mut self, program: &str, args: &[&str]) -> Result<String, CommandError>;
 }
 struct SystemRunner;
+
+/// Original dArkOS tools sometimes restart ES themselves. Never create a second
+/// graphical owner after such a handoff; an unknown service state is not free.
+pub fn frontend_is_stopped() -> bool {
+    if !cfg!(target_os = "linux") { return false; }
+    SystemRunner.run("/usr/bin/systemctl", &["show", "emulationstation.service", "--property=ActiveState", "--value"])
+        .is_ok_and(|state| matches!(state.trim(), "inactive" | "failed"))
+}
 impl Runner for SystemRunner {
     fn run(&mut self, program: &str, args: &[&str]) -> Result<String, CommandError> {
         let mut child = Command::new(program)

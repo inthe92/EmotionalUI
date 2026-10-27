@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0-beta.3 — experimental settings candidate, not a published release
+
+Adds categorized dArkOS tools, Spanish labels, cancelable confirmation and capsule
+links to the original Wi-Fi/Bluetooth managers. A transient tool service retains
+the host access needed by settings and backups without weakening game isolation;
+frontend ownership and session-bound recovery remain explicit. Reads ES sibling-node
+XML preferences and preserves explicit emulator/core choices without substitution.
+
+Prepared as a separate Ports trial. Full Start-menu parity, real tool handoff,
+advanced selectors and default-frontend migration remain pending. See SYSTEM_SETTINGS.md.
+
 ## 0.2.0-beta.2 — 2026-10-27
 
 Fixes the beta package's missing transitive `menu.py` launcher dependency, found

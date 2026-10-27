@@ -160,6 +160,8 @@ export component Home inherits Window {
     in property <int> menu-index:0;
     in property <int> menu-offset:0;
     in property <bool> options-open:false;
+    in property <string> settings-title:"Ajustes de dArkOS";
+    in property <string> settings-hint;
     in property <[string]> menu-titles:["Movimiento reducido", "Sonido", "Estadísticas", "Personalización", "Apariencia", "Movimiento ambiental"];
     in property <[string]> menu-values:[];
     in property <bool> sound-on:false;
@@ -354,8 +356,8 @@ export component Home inherits Window {
 
     if root.concept==4: SectionHeader {
         x:0px;y:0px;width:640px;height:100px;
-        title:root.audio-open?"Sonido":root.game-options-open?"Esta partida":root.menu-open?(root.options-open?"Opciones de dArkOS":"Ajustes"):root.library-open?(root.history-panel?"Historial":"Biblioteca"):root.section-title;
-        subtitle:root.ambient-label!=""?root.ambient-label:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?(root.message!=""?root.message:root.options-open?"Herramientas originales de tu consola.":"A tu manera."):root.library-open?(root.history-panel?"Tus momentos de juego.":"Toda tu colección, a tu ritmo."):root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
+        title:root.audio-open?"Sonido":root.game-options-open?"Esta partida":root.menu-open?(root.options-open?root.settings-title:"Ajustes"):root.library-open?(root.history-panel?"Historial":"Biblioteca"):root.section-title;
+        subtitle:root.ambient-label!=""?root.ambient-label:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?(root.message!=""?root.message:root.options-open?root.settings-hint:"A tu manera."):root.library-open?(root.history-panel?"Tus momentos de juego.":"Toda tu colección, a tu ritmo."):root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
         clock:root.clock;date:root.date;
     }
     if root.concept==4: SectionDock {

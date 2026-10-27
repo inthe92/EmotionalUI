@@ -265,6 +265,9 @@ struct Step {
     menu: Option<bool>,
     library: Option<bool>,
     menu_index: Option<usize>,
+    menu_choose: Option<i32>,
+    system_choose: Option<i32>,
+    settings_title: Option<String>,
     reduced: Option<bool>,
     held: Option<bool>,
     text: Option<String>,
@@ -374,6 +377,12 @@ pub fn replay(
         let Some(ui) = weak.upgrade() else { return; };
         while index < scenario.steps.len() && start.elapsed().as_millis() >= u128::from(scenario.steps[index].at_ms) {
             let step = &scenario.steps[index];
+            // Invoke the same callbacks used by TouchArea, before borrowing
+            // state; they synchronously route through the production controller.
+            if let Some(index)=step.menu_choose { ui.invoke_menu_select(index); }
+            if let Some(index)=step.system_choose {
+                if ui.get_system_open() { ui.invoke_system_select(index); }
+            }
             if let (Some(text),Some(pressed))=(&step.text,step.pressed) {
                 let text=match text.as_str() {
                     "up"=>char::from(slint::platform::Key::UpArrow).to_string(),
@@ -449,6 +458,7 @@ pub fn replay(
                 step.menu.is_none_or(|v| state.menu == v),
                 step.library.is_none_or(|v| state.library == v),
                 step.menu_index.is_none_or(|v| state.menu_index == v),
+                step.settings_title.as_ref().is_none_or(|v|ui.get_settings_title().as_str()==v),
                 step.reduced.is_none_or(|v| state.config.reduced_motion == v),
                 step.held.is_none_or(|v| controller.held() == v),
                 step.mood.is_none_or(|v|ui.get_mood()==v),

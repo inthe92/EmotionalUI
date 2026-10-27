@@ -166,8 +166,7 @@ impl State {
                 self.system_note = Some("Usa izquierda y derecha para ajustar.".into());
             }
             Action::Confirm if matches!(self.system_index, 0 | 1) => {
-                self.system_note =
-                    Some("Estado real. Gestión de conectividad pendiente de validar.".into());
+                self.open_connectivity_settings(ui, self.system_index == 1);
             }
             Action::Confirm => {
                 self.system_note =

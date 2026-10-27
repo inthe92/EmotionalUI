@@ -3,6 +3,8 @@
 mod focus;
 #[path = "../src/gpu_material.rs"]
 mod gpu_material;
+#[path = "../src/settings_browser.rs"]
+mod settings_browser;
 use slint::{ComponentHandle, ModelRc, SharedString, VecModel};
 use std::time::Duration;
 slint::include_modules!();
@@ -37,7 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ui.global::<DaycycleAssets>().set_palette_next_index(if dark { 6 } else { 3 });
     let page = match case.as_str() {
         "library" => 2,
-        "settings" => 3,
+        "settings" | "darkos" | "darkos-network" | "darkos-confirm" => 3,
         _ => 1,
     };
     let offsets = (0..4)
@@ -72,6 +74,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "settings" => {
             ui.set_menu_open(true);
             ui.set_menu_index(5);
+        }
+        "darkos" | "darkos-network" | "darkos-confirm" => {
+            let root=std::env::var("EMOTIONAL_SETTINGS_TOOL_ROOT")?;
+            let entries=emotional_services::system_options::discover(std::path::Path::new(&root))?;
+            let mut browser=settings_browser::Browser::default();
+            if case=="darkos-network" { browser.activate(1,&entries); }
+            if case=="darkos-confirm" { browser.show_tool("Wifi.sh",&entries,true); }
+            let rows=browser.rows(&entries);
+            ui.set_ambient_label("".into());
+            ui.set_menu_open(true);ui.set_options_open(true);ui.set_menu_index(0);
+            ui.set_settings_title(browser.title().into());
+            ui.set_settings_hint(browser.hint(0,&entries).into());
+            ui.set_menu_titles(ModelRc::new(VecModel::from(rows.iter().take(6).map(|r|r.0.clone().into()).collect::<Vec<SharedString>>())));
+            ui.set_menu_values(ModelRc::new(VecModel::from(rows.iter().take(6).map(|r|r.1.clone().into()).collect::<Vec<SharedString>>())));
         }
         "audio" => {
             ui.set_audio_open(true);
