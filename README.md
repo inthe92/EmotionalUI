@@ -2,7 +2,7 @@
 # EmotionalUI
 **Less searching. More playing.**
 
-> **New functional beta:** [v0.2.0-beta.1](https://github.com/inthe92/EmotionalUI/releases/tag/v0.2.0-beta.1) · [Beta installation and limits](BETA.md). Blue/gold GPU atmosphere, game launching, resume and experimental offline Atlas. RG353V / dArkOS ARM64; separate Ports entry, no boot replacement. This exact beta still requires physical validation. The [previous interface-only preview](https://github.com/inthe92/EmotionalUI/releases/tag/v0.1.0-preview.1) remains available.
+> **New functional beta:** [v0.2.0-beta.2](https://github.com/inthe92/EmotionalUI/releases/tag/v0.2.0-beta.2) · [Beta installation and limits](BETA.md). Blue/gold GPU atmosphere, game launching, resume and experimental offline Atlas. RG353V / dArkOS ARM64; separate Ports entry, no boot replacement. Installed on RG353V with files, loader and launcher planning checked; physical graphics/game validation remains pending. The [previous interface-only preview](https://github.com/inthe92/EmotionalUI/releases/tag/v0.1.0-preview.1) remains available.
 
 
 ### Games for every moment.

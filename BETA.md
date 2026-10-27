@@ -1,4 +1,8 @@
-# EmotionalUI 0.2.0-beta.1
+# EmotionalUI 0.2.0-beta.2
+
+Revisión del paquete: incluye el auxiliar `menu.py` que faltaba en beta.1 y verifica
+las importaciones desde el propio payload antes de crear el ZIP. La apariencia,
+Atlas y la lógica de juegos se conservan. Usar esta revisión en lugar de beta.1.
 
 Beta funcional para RG353V / dArkOS ARM64. Conserva la pantalla de inicio y el
 aspecto abstracto azul y dorado elegido por el propietario. No es el antiguo banco
@@ -9,8 +13,8 @@ Movimiento reducido detiene el giro. El camino software mantiene un borde estát
 
 ## Instalar sin sustituir EmulationStation
 
-1. Descargar `EmotionalUI-Beta-0.2.0-beta.1-RG353V.zip` y comprobar `SHA256SUMS`.
-2. Extraer la carpeta `EmotionalUI-Beta-0.2.0-beta.1` y `EmotionalUI - Beta.sh`
+1. Descargar `EmotionalUI-Beta-0.2.0-beta.2-RG353V.zip` y comprobar `SHA256SUMS`.
+2. Extraer la carpeta `EmotionalUI-Beta-0.2.0-beta.2` y `EmotionalUI - Beta.sh`
    en el mismo directorio **Ports** de la tarjeta. Conservar ambos juntos.
 3. Abrir **EmotionalUI - Beta** desde EmulationStation. El lanzador comprueba
    archivos, dispositivo y bibliotecas antes de ceder la pantalla.
@@ -71,12 +75,16 @@ se detiene al destruirlo y no sigue ejecutándose durante una partida. El fondo 
 su blur mantienen la caché; la actividad gráfica en reposo cambia respecto de la
 build sin animación. Su coste en la consola aún no está medido.
 
-**Esta beta exacta no está validada físicamente.** La build visual anterior sí tuvo
-una prueba supervisada de GPU/mando/retorno; no se traslada esa aceptación a este
-ELF. Faltan juego y Continuar reales, sonido, tacto/mandos del paquete, latencia,
-estabilidad prolongada y comparación equivalente con Slint software/FemtoVG.
-No se afirman 60 FPS sostenidos. La copia remota queda pendiente de autenticación
-SSH por el propietario; no hay ensayo gráfico programado.
+**Beta.2 instalada en RG353V / dArkOS, sin iniciar gráficos.** Se verificaron sus
+20 archivos, la carga de bibliotecas y la planificación de 114 perfiles compatibles
+(16 omitidos). La entrada propia de Ports quedó registrada; las 11 entradas
+anteriores y el proceso de EmulationStation se conservaron. [Informe de instalación](docs/beta-0.2.0-beta.2/REPORT.md).
+
+La interfaz y los juegos de este ELF todavía requieren validación física supervisada.
+La build visual anterior sí tuvo una prueba de GPU/mando/retorno; no se traslada
+esa aceptación a este ELF. Faltan juego y Continuar reales, sonido, tacto/mandos,
+latencia, estabilidad prolongada y comparación equivalente con Slint
+software/FemtoVG. No se afirman 60 FPS sostenidos; no hay ensayo gráfico programado.
 
 ## Compilar
 

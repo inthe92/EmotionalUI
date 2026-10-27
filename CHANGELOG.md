@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0-beta.2 — 2026-10-27
+
+Fixes the beta package's missing transitive `menu.py` launcher dependency, found
+by the device preflight before a Ports entry was registered or graphics started.
+The package builder now imports all entry modules in an isolated Python process
+and verifies they resolve from the payload. A regression test removes `menu.py`
+and confirms packaging verification rejects the incomplete delivery.
+
+Visuals, rotating gradients, Atlas data and game-launch logic are unchanged.
+Supersedes the incomplete beta.1 ZIP; existing installations remain preserved.
+
 ## 0.2.0-beta.1 — 2026-10-27
 
 Restores the blue/gold GPU build while retaining its Slint screens and navigation.

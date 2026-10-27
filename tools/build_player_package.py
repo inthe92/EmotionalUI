@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,6 +14,21 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def verify_entrypoint_imports(bundle):
+    code = """import importlib,sys
+from pathlib import Path
+root=Path(sys.argv[1]).resolve()
+sys.path.insert(0,str(root))
+for name in ['manage','phase12_preview','functional_preview','menu','functional_menu','player_menu','player_bootstrap','darkos_launcher_profiles']:
+    module=importlib.import_module(name)
+    assert Path(module.__file__).resolve().parent==root,name
+"""
+    result = subprocess.run([sys.executable,'-I','-B','-c',code,str(bundle.resolve())],
+                            capture_output=True,text=True,timeout=15)
+    if result.returncode:
+        raise RuntimeError('Incomplete player package: '+result.stderr[-1500:])
 
 
 def build(binary, output):
@@ -32,6 +49,7 @@ def build(binary, output):
         'emotional-atlas.db': ROOT/'assets/atlas/emotional-atlas.db',
         'emotional-atlas.json': ROOT/'assets/atlas/emotional-atlas.json',
         'manage.py': ROOT/'platform/distribution/manage.py',
+        'menu.py': ROOT/'platform/distribution/menu.py',
         'phase12_preview.py': ROOT/'platform/darkos/phase12_preview.py',
         'functional_preview.py': ROOT/'platform/darkos/functional_preview.py',
         'functional_menu.py': ROOT/'platform/darkos/functional_menu.py',
@@ -41,6 +59,7 @@ def build(binary, output):
     }
     for name, source in sources.items():
         shutil.copyfile(source, bundle/name)
+    verify_entrypoint_imports(bundle)
     (bundle/'emotional-ui').chmod(0o755)
     (bundle/'README.txt').write_text(
         'EmotionalUI '+version+' · RG353V / dArkOS ARM64\n'
