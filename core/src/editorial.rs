@@ -20,6 +20,7 @@ pub struct Profile {
     pub seasons: BTreeMap<String, u8>,
     pub celebrations: BTreeMap<String, u8>,
     pub extra: BTreeMap<String, u8>,
+    pub knowledge: crate::atlas::Knowledge,
 }
 impl Default for Profile {
     fn default() -> Self {
@@ -38,11 +39,13 @@ impl Default for Profile {
             seasons: BTreeMap::new(),
             celebrations: BTreeMap::new(),
             extra: BTreeMap::new(),
+            knowledge: Default::default(),
         }
     }
 }
 impl Profile {
     pub fn validate(&self) -> Result<(), String> {
+        self.knowledge.validate()?;
         let values = [
             self.calm,
             self.intensity,
@@ -204,6 +207,7 @@ pub struct Signals<'a> {
     pub events: Vec<&'a str>,
     pub daylight: Option<bool>,
     pub energy_preference: Option<u8>,
+    pub habits: Option<&'a crate::atlas::Habits>,
 }
 /// Context contributes at most 24 points. Choices/continuation can outweigh it.
 pub fn bonus(profile: &Profile, signals: &Signals<'_>, raining: bool) -> i64 {

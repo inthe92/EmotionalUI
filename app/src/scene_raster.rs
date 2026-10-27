@@ -191,3 +191,73 @@ mod tests {
         }
     }
 }
+
+// Rounded child clipping is rectangular in Slint's software backend. Bake only
+// this alpha mask at geometry/scene changes, and reuse the same image while moving.
+#[derive(PartialEq)]
+struct FrostKey(slint::Image, i32, i32, u32, u32, u32);
+thread_local! {
+    static FROST: std::cell::RefCell<Vec<(FrostKey, slint::Image)>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+pub fn install_glass(ui: &Home) {
+    ui.global::<AtmosphereDesign>().on_rounded_frost(|source, x, y, width, height, radius| {
+        if !(1..=640).contains(&width) || !(1..=480).contains(&height) { return slint::Image::default(); }
+        let key = FrostKey(source, x, y, width as u32, height as u32, radius.max(0) as u32);
+        FROST.with(|cache| {
+            let mut cache = cache.borrow_mut();
+            if let Some(index) = cache.iter().position(|(old, _)| old == &key) {
+                let entry = cache.remove(index);
+                let image = entry.1.clone();
+                cache.push(entry);
+                return image;
+            }
+            let Some(rgb) = key.0.to_rgb8() else { return slint::Image::default(); };
+            let Some(source) = image::RgbImage::from_raw(rgb.width(), rgb.height(), rgb.as_bytes().to_vec()) else { return slint::Image::default(); };
+            let cw = ((width as f32 / 664.0 * source.width() as f32).round() as u32).clamp(1,source.width());
+            let ch = ((height as f32 / 498.0 * source.height() as f32).round() as u32).clamp(1,source.height());
+            let sx = (((x+12) as f32 / 664.0 * source.width() as f32).round() as i32).clamp(0,(source.width()-cw) as i32) as u32;
+            let sy = (((y+9) as f32 / 498.0 * source.height() as f32).round() as i32).clamp(0,(source.height()-ch) as i32) as u32;
+            let crop = image::imageops::crop_imm(&source,sx,sy,cw,ch).to_image();
+            let pixels = image::imageops::resize(&crop,key.3,key.4,image::imageops::FilterType::Triangle);
+            let mut output = slint::SharedPixelBuffer::<slint::Rgba8Pixel>::new(key.3,key.4);
+            for (i,(src,dst)) in pixels.pixels().zip(output.make_mut_slice()).enumerate() {
+                let a = rounded_alpha(i as u32 % key.3,i as u32 / key.3,key.3,key.4,key.5);
+                *dst = slint::Rgba8Pixel::new(src[0],src[1],src[2],a);
+            }
+            let image = slint::Image::from_rgba8(output);
+            // Bound both count and worst-case RGBA allocation (8 MiB). This is
+            // a geometry cache, not a history of animated positions or frames.
+            let bytes = |k: &FrostKey| k.3 as usize*k.4 as usize*4;
+            while !cache.is_empty() && (cache.len()>=24 || cache.iter().map(|(k,_)| bytes(k)).sum::<usize>()+bytes(&key)>8*1024*1024) { cache.remove(0); }
+            cache.push((key,image.clone()));
+            image
+        })
+    });
+}
+fn rounded_alpha(x:u32,y:u32,width:u32,height:u32,radius:u32)->u8 {
+    let r = radius.min(width/2).min(height/2) as f32;
+    if r==0.0 { return 255; }
+    let mut inside=0;
+    for sy in 0..4 { for sx in 0..4 {
+        let px=x as f32+(sx as f32+0.5)/4.0;
+        let py=y as f32+(sy as f32+0.5)/4.0;
+        let dx=px-px.clamp(r,width as f32-r);
+        let dy=py-py.clamp(r,height as f32-r);
+        if dx*dx+dy*dy<=r*r { inside+=1; }
+    }}
+    (inside*255/16) as u8
+}
+#[cfg(test)]
+mod glass_tests {
+    #[test]
+    fn rounded_frost_has_no_square_corner_and_preserves_interior() {
+        for (w,h,r) in [(216,56,12),(176,28,14),(448,192,16)] {
+            assert_eq!(super::rounded_alpha(0,0,w,h,r),0);
+            assert_eq!(super::rounded_alpha(w-1,h-1,w,h,r),0);
+            assert_eq!(super::rounded_alpha(w/2,h/2,w,h,r),255);
+            for y in 0..h { for x in 0..w {
+                assert_eq!(super::rounded_alpha(x,y,w,h,r),super::rounded_alpha(w-x-1,h-y-1,w,h,r));
+            }}
+        }
+    }
+}

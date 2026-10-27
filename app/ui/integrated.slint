@@ -1,8 +1,13 @@
 import { MotionDesign } from "motion.slint";
+import { FocusOutline } from "focus.slint";
+import { GpuMaterialDesign, GpuMaterialSurface } from "gpu-material.slint";
 import "../../assets/fonts/DejaVuSans.ttf";
 import "../../assets/fonts/DejaVuSans-Bold.ttf";
 import { DaycycleAssets } from "../../assets/scenes/daycycle/assets.slint";
 export global AtmosphereDesign {
+    pure callback rounded-frost(image, int, int, int, int, int) -> image;
+    out property <color> glass-edge:#ffffff38;
+    out property <color> glass-focus:#ffffff88;
     // Only set by explicit EMOTIONAL_PERF diagnostics; never persisted.
     in-out property <int> diagnostic-mode:0;
     in-out property <[image]> scene-rasters:[];
@@ -22,6 +27,8 @@ export global AtmosphereDesign {
     out property <color> base:DaycycleAssets.base;
     out property <color> ink:DaycycleAssets.ink;
     out property <color> muted:DaycycleAssets.muted;
+    out property <color> glass-ink:DaycycleAssets.ink.mix(#ffffff,0.82);
+    out property <color> glass-muted:DaycycleAssets.muted.mix(self.glass-ink,0.15);
     out property <color> mark:DaycycleAssets.mark;
     out property <color> glass:DaycycleAssets.glass;
     out property <color> sheet:DaycycleAssets.sheet;
@@ -118,12 +125,18 @@ component EditorialArtwork inherits Rectangle {
 component AmbientSurface inherits Rectangle {
     in property <image> first;
     in property <image> second;
+    in property <float> coverage:DaycycleAssets.material-coverage;
+    in property <float> wash-scale:1;
     background:transparent;
     // Compensate source-over coverage (~94% inside the baked materials).
     // Both endpoints are exact; no translucent double layer remains at a keyframe.
-    Image {width:parent.width;height:parent.height;source:root.first;opacity:(1-DaycycleAssets.day-mix)/(1-DaycycleAssets.day-mix*DaycycleAssets.material-coverage);image-fit:fill;image-rendering:smooth;}
-    if DaycycleAssets.day-mix>0: Image {width:parent.width;height:parent.height;source:root.second;opacity:DaycycleAssets.day-mix;image-fit:fill;image-rendering:smooth;}
-    Image {width:parent.width;height:parent.height;source:root.first;colorize:DaycycleAssets.context-color;opacity:DaycycleAssets.surface-wash;image-fit:fill;image-rendering:smooth;}
+    in property <bool> focused:false;
+    in property <length> radius:16px;
+    if GpuMaterialDesign.enabled: GpuMaterialSurface {width:parent.width;height:parent.height;focused:root.focused;radius:root.radius;}
+    if !GpuMaterialDesign.enabled: Image {width:parent.width;height:parent.height;source:root.first;opacity:(1-DaycycleAssets.day-mix)/(1-DaycycleAssets.day-mix*root.coverage);image-fit:fill;image-rendering:smooth;}
+    if !GpuMaterialDesign.enabled&&DaycycleAssets.day-mix>0: Image {width:parent.width;height:parent.height;source:root.second;opacity:DaycycleAssets.day-mix;image-fit:fill;image-rendering:smooth;}
+    if !GpuMaterialDesign.enabled: Image {width:parent.width;height:parent.height;source:root.first;colorize:DaycycleAssets.context-color;opacity:DaycycleAssets.surface-wash*root.wash-scale;image-fit:fill;image-rendering:smooth;}
+    if !GpuMaterialDesign.enabled&&root.focused: FocusOutline {width:parent.width;height:parent.height;radius:root.radius;}
 }
 export component AmbientPanel inherits Rectangle {
     in property <bool> focused;
@@ -135,13 +148,22 @@ export component AmbientPanel inherits Rectangle {
     background:transparent;
     border-radius:root.radius;
     border-width:0px;
-    AmbientSurface {width:parent.width;height:parent.height;first:root.focused?root.focused-surface:root.surface;second:root.focused?root.next-focused-surface:root.next-surface;}
+    // Stable room anchors: only scene/geometry changes prepare a masked image.
+    // The rounded alpha is in the texture, also for software (rounded Clip unsupported).
+    in property <length> frost-x:24px;
+    in property <length> frost-y:152px;
+    if !GpuMaterialDesign.enabled: Image {width:parent.width;height:parent.height;image-fit:fill;
+        source:AtmosphereDesign.rounded-frost(DaycycleAssets.frost,round(root.frost-x/1px),round(root.frost-y/1px),round(root.width/1px),round(root.height/1px),round(root.radius/1px));}
+    if !GpuMaterialDesign.enabled&&DaycycleAssets.day-mix>0: Image {width:parent.width;height:parent.height;image-fit:fill;opacity:DaycycleAssets.day-mix;
+        source:AtmosphereDesign.rounded-frost(DaycycleAssets.frost-next,round(root.frost-x/1px),round(root.frost-y/1px),round(root.width/1px),round(root.height/1px),round(root.radius/1px));}
+    AmbientSurface {width:parent.width;height:parent.height;focused:root.focused;radius:root.radius;coverage:DaycycleAssets.glass-coverage;wash-scale:DaycycleAssets.glass-wash-scale;first:root.focused?root.focused-surface:root.surface;second:root.focused?root.next-focused-surface:root.next-surface;}
+
 }
 component GameTitle inherits Text {
     in property <bool> compact:false;
     font-family:AtmosphereDesign.family;
     font-size:root.compact?AtmosphereDesign.long-title-size:AtmosphereDesign.title-size;
-    font-weight:600;color:AtmosphereDesign.ink;wrap:word-wrap;
+    font-weight:600;color:AtmosphereDesign.glass-ink;wrap:word-wrap;
 }
 component AmbientAction inherits Rectangle {
     in property <string> label;
@@ -154,7 +176,7 @@ component AmbientAction inherits Rectangle {
     border-radius:AtmosphereDesign.action-radius;
     background:transparent;
     border-width:0px;
-    AmbientSurface {width:parent.width;height:parent.height;first:root.focused?AtmosphereDesign.action-material-focus:AtmosphereDesign.action-material;second:root.focused?DaycycleAssets.action-focus-next:DaycycleAssets.action-next;}
+    AmbientSurface {width:parent.width;height:parent.height;focused:root.focused;radius:AtmosphereDesign.action-radius;first:root.focused?AtmosphereDesign.action-material-focus:AtmosphereDesign.action-material;second:root.focused?DaycycleAssets.action-focus-next:DaycycleAssets.action-next;}
     property <length> inset:root.pressed&&!root.reduced?1px:0px;
     animate inset {duration:root.reduced?0ms:AtmosphereDesign.press-time;easing:ease-out;}
     Rectangle {x:12px+root.inset;y:(parent.height - AtmosphereDesign.action-icon)/2;width:AtmosphereDesign.action-icon;height:AtmosphereDesign.action-icon;border-radius:AtmosphereDesign.action-icon/2;background:root.focused?AtmosphereDesign.mark:AtmosphereDesign.muted;
@@ -164,23 +186,26 @@ component AmbientAction inherits Rectangle {
     TouchArea {enabled:root.enabled;clicked=>{root.chosen();}}
 }
 component CompactGame inherits AmbientPanel {
+    frost-y:380px;
     radius:AtmosphereDesign.radius-m;
     surface:AtmosphereDesign.tile-material;
     focused-surface:AtmosphereDesign.tile-material-focus;
     next-surface:DaycycleAssets.tile-next;next-focused-surface:DaycycleAssets.tile-focus-next;
     in property <string> title;
+    in property <string> detail;
     in property <image> prepared;
     in property <bool> available;
     in property <bool> demo;
     in property <int> index;
     in property <bool> enabled:true;
     callback chosen();
-    property <bool> has-art:root.available||root.demo;
+    property <bool> has-art:root.available||root.demo||root.detail!="";
     if root.has-art: EditorialArtwork {x:8px;y:(parent.height - AtmosphereDesign.tile-art-height)/2;width:AtmosphereDesign.tile-art-width;height:AtmosphereDesign.tile-art-height;radius:AtmosphereDesign.radius-xs;prepared:root.prepared;available:root.available;demo:root.demo;index:root.index;}
-    Text {x:root.has-art?84px:16px;y:4px;width:parent.width - self.x - 12px;height:parent.height - 8px;text:root.title;wrap:word-wrap;overflow:elide;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:root.title.character-count>36?AtmosphereDesign.body-size:AtmosphereDesign.tile-size;font-weight:600;color:AtmosphereDesign.ink;}
+    Text {x:root.has-art?84px:16px;y:4px;width:parent.width - self.x - 12px;height:root.detail!=""?32px:parent.height - 8px;text:root.title;wrap:word-wrap;overflow:elide;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:root.detail!=""?13px:root.title.character-count>36?AtmosphereDesign.body-size:AtmosphereDesign.tile-size;font-weight:600;color:AtmosphereDesign.glass-ink;}
+    if root.detail!="": Text {x:84px;y:38px;width:parent.width - 96px;height:32px;text:root.detail;wrap:word-wrap;overflow:elide;font-family:AtmosphereDesign.family;font-size:11px;color:AtmosphereDesign.glass-muted;}
     TouchArea {enabled:root.enabled;clicked=>{root.chosen();}}
 }
-// Global tabs share one geometry in every section. Active and focus are separate.
+// One moving capsule; inactive tabs remain unboxed. Rust owns circular selection.
 export component SectionDock inherits Rectangle {
     in property <int> active;
     in property <int> cursor:-1;
@@ -188,21 +213,39 @@ export component SectionDock inherits Rectangle {
     in property <bool> reduced;
     in property <float> position;
     callback chosen(int);
-    width:AtmosphereDesign.dock-width;height:AtmosphereDesign.dock-height;
-    border-radius:self.height/2;
-    background:AtmosphereDesign.sheet.with-alpha(0.76);
+    width:AtmosphereDesign.dock-width;height:32px;background:transparent;
+    Rectangle {
+        x:root.position*100px;y:1px;width:100px;height:30px;border-radius:15px;
+        background:transparent;
+        if GpuMaterialDesign.enabled: GpuMaterialSurface {width:100px;height:30px;radius:15px;}
+        if !GpuMaterialDesign.enabled: Image {x:0px;y:0px;width:100px;height:30px;source:DaycycleAssets.tab;image-fit:fill;}
+    }
     for label[index] in ["Continuar","Tu momento","Biblioteca","Ajustes"]: Rectangle {
-        x:index*100px;width:100px;height:32px;border-radius:AtmosphereDesign.radius-s;
-        background:root.active==index?AtmosphereDesign.active.with-alpha(0.65):transparent;
-        border-width:root.cursor==index&&!root.blocked?AtmosphereDesign.focus-width:0px;
-        border-color:AtmosphereDesign.mark;
-        Text {x:4px;width:92px;height:30px;text:label;horizontal-alignment:center;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:12px;font-weight:root.active==index?700:500;color:root.active==index?AtmosphereDesign.ink:AtmosphereDesign.muted;}
+        x:index*100px;width:100px;height:32px;border-radius:16px;background:transparent;
+        if root.cursor==index&&!root.blocked: FocusOutline {width:parent.width;height:parent.height;radius:16px;}
+        Text {x:4px;width:92px;height:32px;text:label;horizontal-alignment:center;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:12px;font-weight:root.active==index?700:500;color:root.active==index?AtmosphereDesign.ink:AtmosphereDesign.muted;}
         TouchArea {enabled:!root.blocked;clicked=>{root.chosen(index);}}
     }
-    Rectangle {
-        x:8px+root.position*100px;y:30px;width:84px;height:2px;border-radius:1px;
-        background:DaycycleAssets.dock-accent;
-    }
+}
+// Shared button legends; glyphs describe the existing mapping, never new actions.
+export component ButtonHint inherits Rectangle {
+    in property <string> glyph;
+    in property <string> label;
+    background:transparent;height:20px;
+    Rectangle {x:0px;y:1px;width:18px;height:18px;background:transparent;
+        Image {x:0px;y:0px;width:18px;height:18px;source:DaycycleAssets.hint;image-fit:fill;}
+        Text {x:0px;y:0px;width:parent.width;height:parent.height;text:root.glyph;horizontal-alignment:center;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:11px;font-weight:600;color:AtmosphereDesign.ink;}}
+    Text {x:25px;y:0px;width:parent.width - 25px;height:20px;text:root.label;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:11px;color:AtmosphereDesign.muted;}
+}
+export component ControlsFooter inherits Rectangle {
+    in property <bool> native;
+    in property <int> option-count:0;
+    in property <bool> modal:false;
+    background:transparent;height:20px;
+    ButtonHint {x:0px;y:0px;width:96px;glyph:root.native?"B":"X";label:"Volver";}
+    ButtonHint {x:104px;y:0px;width:176px;glyph:root.native?"≡":"S";label:root.option-count>0?root.option-count+" opciones":root.modal?(root.native?"Cerrar · Start":"Cerrar"):root.native?"Opciones · Start":"Opciones";}
+    ButtonHint {x:292px;y:0px;width:112px;glyph:root.native?"A":"Z";label:"Elegir";}
+    Text {visible:!root.modal;x:416px;y:0px;width:176px;height:20px;text:root.native?"L / R · Secciones":"Q / E · Secciones";horizontal-alignment:right;vertical-alignment:center;font-size:11px;color:AtmosphereDesign.muted;}
 }
 export component SectionHeader inherits Rectangle {
     in property <string> title;
@@ -230,7 +273,10 @@ export component RoomScene inherits Rectangle {
     property <length> effective-pan:AtmosphereDesign.diagnostic-mode>0?0px:root.pan*MotionDesign.far-travel;
     property <bool> base-cached:AtmosphereDesign.base-cache-ready&&AtmosphereDesign.diagnostic-mode<2;
     property <bool> near-cached:AtmosphereDesign.near-cache-ready&&AtmosphereDesign.diagnostic-mode<2;
+    animate tint,lamp {duration:root.reduced||AtmosphereDesign.diagnostic-mode>0?0ms:MotionDesign.ambient-ms*1ms;}
     background:AtmosphereDesign.base;clip:true;
+    if GpuMaterialDesign.enabled: Image {width:640px;height:480px;source:GpuMaterialDesign.backdrop;image-fit:fill;}
+    if !GpuMaterialDesign.enabled: Rectangle {width:parent.width;height:parent.height;background:transparent;
     Image {x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:root.base-cached?AtmosphereDesign.base-cache:DaycycleAssets.backgrounds[max(0,min(7,DaycycleAssets.palette-index))];image-fit:contain;}
     if !root.base-cached&&AtmosphereDesign.diagnostic-mode<2&&DaycycleAssets.day-mix>0: Image {x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:DaycycleAssets.backgrounds[max(0,min(7,DaycycleAssets.palette-next-index))];opacity:DaycycleAssets.day-mix;image-fit:contain;}
     // Derived near-field strip; cached on keyframe changes, not on navigation.
@@ -238,7 +284,6 @@ export component RoomScene inherits Rectangle {
     if DaycycleAssets.day-mix>0: Image {x:AtmosphereDesign.scene-left+round(root.pan/1px*MotionDesign.near-travel)*1px;y:336px;width:664px;height:root.near-cached?24px:153px;source:AtmosphereDesign.near-rasters[1];source-clip-width:664;source-clip-height:root.near-cached?24:153;opacity:DaycycleAssets.day-mix;image-fit:fill;}
     if root.near-cached: Image {x:AtmosphereDesign.scene-left+round(root.pan/1px*MotionDesign.near-travel)*1px;y:360px;width:664px;height:129px;source:AtmosphereDesign.near-cache;image-fit:fill;}
     // Two adjacent lighting studies share one room; updated once per minute.
-    animate tint,lamp {duration:root.reduced||AtmosphereDesign.diagnostic-mode>0?0ms:MotionDesign.ambient-ms*1ms;}
     // Reuses the former scene-tint pass; masks room surfaces, protecting glass
     // and the lantern core. Cached vector, no new animation or full-frame filter.
     Image {visible:AtmosphereDesign.diagnostic-mode<2&&(root.tint.alpha>0||DaycycleAssets.interior-tint.alpha>0);x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[0]:@image-url("../../assets/scenes/daycycle/interior-light-mask.svg");colorize:root.tint.alpha>0?root.tint:DaycycleAssets.interior-tint;image-fit:contain;}
@@ -261,6 +306,7 @@ export component RoomScene inherits Rectangle {
     if root.decoration==2: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[6]:@image-url("../../assets/scenes/daycycle/christmas-table.svg");image-fit:contain;}
     if root.decoration==3: Image {visible:AtmosphereDesign.diagnostic-mode<2;x:AtmosphereDesign.scene-left+round(root.effective-pan/1px)*1px;y:AtmosphereDesign.scene-top;width:AtmosphereDesign.scene-width;height:AtmosphereDesign.scene-height;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[7]:@image-url("../../assets/scenes/daycycle/new-year-table.svg");image-fit:contain;}
 
+    }
 }
 export component Integrated inherits Rectangle {
     in property <int> background-index:7;
@@ -295,6 +341,11 @@ export component Integrated inherits Rectangle {
     in property <string> detail;
     in property <int> artwork;
     in property <string> alternative;
+    in property <string> alternative-detail;
+    in property <string> third;
+    in property <string> third-detail;
+    in property <image> third-cover;
+    in property <bool> third-art-available;
     in property <string> clock;
     in property <string> date;
     in property <string> play;
@@ -342,32 +393,34 @@ export component Integrated inherits Rectangle {
             // This is a separate inset cover, not the panel's inner contour:
             // subtracting the 16px content padding erased its rounded corners.
             if self.cover-visible: EditorialArtwork {x:16px;y:16px;width:AtmosphereDesign.resume-art-width;height:AtmosphereDesign.resume-art-height;radius:AtmosphereDesign.radius-s;prepared:root.resume-cover;available:root.resume-art-available;demo:root.demo-art;index:root.recent-artwork;title:root.recent-title;category:root.category;}
-            Text {x:parent.text-x;y:16px;width:parent.width - self.x - 16px;height:14px;text:root.demo-history?"PARTIDAS DE MUESTRA":root.has-recent?"TU PARTIDA":"SIN PARTIDAS RECIENTES";font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.meta-size;letter-spacing:1px;color:AtmosphereDesign.muted;}
+            Text {x:parent.text-x;y:16px;width:parent.width - self.x - 16px;height:14px;text:root.demo-history?"PARTIDAS DE MUESTRA":root.has-recent?"TU PARTIDA":"SIN PARTIDAS RECIENTES";font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.meta-size;letter-spacing:1px;color:AtmosphereDesign.glass-muted;}
             GameTitle {x:parent.text-x;y:40px;width:parent.width - self.x - 16px;height:parent.long-title?72px:56px;text:root.recent-title;compact:parent.long-title;}
-            Text {x:parent.text-x;y:parent.long-title?112px:104px;width:parent.width - self.x - 16px;height:32px;text:root.has-recent?(root.resume-detail.character-count<=100?root.resume-detail:""):"Cuando abras un juego, encontrarás aquí tu lugar para volver.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+            Text {x:parent.text-x;y:parent.long-title?112px:104px;width:parent.width - self.x - 16px;height:32px;text:root.has-recent?(root.resume-detail.character-count<=100?root.resume-detail:""):"Cuando abras un juego, encontrarás aquí tu lugar para volver.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.glass-muted;}
             if root.has-recent: AmbientAction {x:parent.text-x;y:140px;label:root.has-recent?"Continuar":"Tu biblioteca";focused:root.selected==(root.has-recent?0:2)&&root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:root.resume&&!root.blocked;chosen=>{root.activated(root.has-recent?0:2);}}
         }
         Text {x:24px;y:348px;width:AtmosphereDesign.resume-card-width;height:16px;text:root.statistics;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.small-size;color:AtmosphereDesign.muted;}
         if root.resume-count>1: CompactGame {x:24px+(root.secondary-offsets[0]-root.page-offsets[0])*(MotionDesign.content-span/MotionDesign.page-span)*1px;y:root.resume-two.character-count>52?368px:376px;width:AtmosphereDesign.resume-secondary-width;height:root.resume-two.character-count>52?80px:56px;title:root.resume-two;prepared:root.resume-two-cover;available:root.resume-two-art-available;demo:root.demo-art;index:root.resume-two-artwork;focused:root.selected==4&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(4);}}
-        if root.resume-count>2: CompactGame {x:256px+(root.secondary-offsets[0]-root.page-offsets[0])*(MotionDesign.content-span/MotionDesign.page-span)*1px;y:root.resume-three.character-count>52?368px:376px;width:AtmosphereDesign.resume-secondary-width;height:root.resume-three.character-count>52?80px:56px;title:root.resume-three;prepared:root.resume-three-cover;available:root.resume-three-art-available;demo:root.demo-art;index:root.resume-three-artwork;focused:root.selected==5&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(5);}}
+        if root.resume-count>2: CompactGame {frost-x:256px;x:256px+(root.secondary-offsets[0]-root.page-offsets[0])*(MotionDesign.content-span/MotionDesign.page-span)*1px;y:root.resume-three.character-count>52?368px:376px;width:AtmosphereDesign.resume-secondary-width;height:root.resume-three.character-count>52?80px:56px;title:root.resume-three;prepared:root.resume-three-cover;available:root.resume-three-art-available;demo:root.demo-art;index:root.resume-three-artwork;focused:root.selected==5&&root.resume&&!root.blocked;enabled:root.resume&&!root.blocked;chosen=>{root.activated(5);}}
     }
 
     Rectangle {
         x:root.page-offsets[1]*(MotionDesign.content-span/MotionDesign.page-span)*1px;width:640px;height:480px;
         visible:root.show-content&&root.page-offsets[1]>-640&&root.page-offsets[1]<640;background:transparent;
         AmbientPanel {
-            x:24px;y:root.extended-title?152px:160px;width:400px;height:root.extended-title?216px:208px;
+            frost-y:160px;x:24px;y:root.extended-title?152px:160px;width:400px;height:root.extended-title?216px:208px;
             focused:root.selected==0&&!root.resume&&!root.blocked&&root.count>0;
             EditorialArtwork {x:12px;y:12px;width:AtmosphereDesign.discover-art-width;height:AtmosphereDesign.discover-art-height;radius:AtmosphereDesign.radius-s;prepared:root.local-cover;available:root.local-art-available;demo:root.demo-art&&root.count>0;index:root.artwork;title:root.count>0?root.title:"Tu colección te espera";category:root.category;}
-            Text {x:12px;y:128px;width:176px;height:68px;text:root.count>0?root.editorial-reason:"Cuando añadas juegos, encontrarás aquí una propuesta.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.muted;}
+            Text {x:12px;y:128px;width:176px;height:68px;text:root.count>0?root.editorial-reason:"Cuando añadas juegos, encontrarás aquí una propuesta.";wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:AtmosphereDesign.body-size;color:AtmosphereDesign.glass-muted;}
             GameTitle {x:204px;y:16px;width:184px;height:root.extended-title?140px:120px;text:root.count>0?root.title:"Tu colección te espera";compact:root.compact-title;}
+            if root.count>0: Text {x:204px;y:140px;width:184px;height:16px;text:root.category;overflow:elide;font-family:AtmosphereDesign.family;font-size:11px;color:AtmosphereDesign.glass-muted;}
             if root.count>0: AmbientAction {x:200px;y:160px;label:root.play;focused:root.selected==0&&!root.resume&&!root.blocked;pressed:root.confirmed;reduced:root.reduced;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(0);}}
         }
     }
     Rectangle {
         x:root.secondary-offsets[1]*(MotionDesign.content-span/MotionDesign.page-span)*1px;width:640px;height:480px;
         visible:root.show-content&&root.secondary-offsets[1]>-640&&root.secondary-offsets[1]<640;background:transparent;
-        if root.count>1: CompactGame {x:176px;y:root.extended-title?384px:380px;width:248px;height:root.alternative.character-count>52?64px:48px;title:root.alternative;prepared:root.alternative-cover;available:root.alternative-art-available;focused:root.selected==1&&!root.resume&&!root.blocked;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(1);}}
+        if root.count>1: CompactGame {frost-x:24px;frost-y:372px;x:24px;y:372px;width:288px;height:72px;title:root.alternative;detail:root.alternative-detail;prepared:root.alternative-cover;available:root.alternative-art-available;focused:root.selected==1&&!root.resume&&!root.blocked;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(1);}}
+        if root.count>2: CompactGame {frost-x:328px;frost-y:372px;x:328px;y:372px;width:288px;height:72px;title:root.third;detail:root.third-detail;prepared:root.third-cover;available:root.third-art-available;focused:root.selected==4&&!root.resume&&!root.blocked;enabled:!root.resume&&!root.blocked;chosen=>{root.activated(4);}}
     }
     }
 }

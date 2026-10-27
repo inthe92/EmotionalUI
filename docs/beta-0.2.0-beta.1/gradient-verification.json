@@ -1,0 +1,26 @@
+{
+  "gpu": "Apple M3 / OpenGL 4.1, not RG353V",
+  "actual_frame_comparison": [
+    {
+      "mode": "light",
+      "contour_samples": 2148,
+      "samples_changed_over_8_levels": 327,
+      "framebuffer_size": [
+        640,
+        480
+      ]
+    },
+    {
+      "mode": "dark",
+      "contour_samples": 2148,
+      "samples_changed_over_8_levels": 892,
+      "framebuffer_size": [
+        640,
+        480
+      ]
+    }
+  ],
+  "reduced_motion_no_continuous_frames": true,
+  "background_builds_per_context": 1,
+  "hardware_fps_verified": false
+}

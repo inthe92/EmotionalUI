@@ -21,6 +21,22 @@ impl State {
         let Some(game) = self.games.get(index).filter(|g| g.available) else {
             return;
         };
+        let request = supervisor::Request {
+            game_id: game.id.clone(),
+            recommended: !self.resume && !self.library && self.order.iter().take(3).any(|i|self.games[*i].id==game.id),
+            resume: self.resume && !self.library,
+            selected: self.selected,
+            library: self.library,
+            library_index: self.library_index,
+            system_option: None,
+        };
+        self.queue_launch(ui, request);
+    }
+    pub(super) fn queue_launch(&mut self, ui: &Home, request: supervisor::Request) {
+        if self.trial_mode {
+            self.notify(ui, "Esta acción requiere la versión funcional.");
+            return;
+        }
         if self.launch.is_some() && self.writer.audio(&self.audio_preferences).is_err() {
             self.notify(ui, "No pudimos guardar tus ajustes. Inténtalo de nuevo.");
             return;
@@ -36,13 +52,6 @@ impl State {
         if client.pending.is_some() || client.committed.is_some() {
             return;
         }
-        let request = supervisor::Request {
-            game_id: game.id.clone(),
-            resume: self.resume,
-            selected: self.selected,
-            library: self.library,
-            library_index: self.library_index,
-        };
         client.pending = Some(Pending {
             request,
             ticket: self.audio.suspend_for_game(),
@@ -50,7 +59,7 @@ impl State {
         });
         self.gate.release();
         self.keyboard.reset();
-        self.notify(ui, "Preparando tu juego…");
+        self.notify(ui, "Preparando…");
     }
     pub(super) fn cancel_launch(&mut self, ui: &Home) {
         if let Some(client) = &mut self.launch {
@@ -86,3 +95,45 @@ impl State {
     }
 }
 use slint::ComponentHandle;
+
+/// Rank/import can reorder a collection while a game is running. Restore the
+/// selected identity when it remains visible, then let the normal clamp handle
+/// a removed game. No filesystem or emulator work belongs in this operation.
+pub(super) fn restore_position(
+    saved: &supervisor::Request,
+    games: &[emotional_core::library::Game],
+    continuity: &[usize],
+) -> supervisor::Request {
+    let mut position = saved.clone();
+    if let Some(index) = games.iter().position(|g| g.id == saved.game_id && g.available) {
+        position.library_index = index;
+        if saved.resume {
+            if let Some(slot) = continuity.iter().take(3).position(|&i| i == index) {
+                position.selected = if slot == 0 { 0 } else { slot + 3 };
+            }
+        }
+    }
+    position
+}
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn returning_secondary_game_follows_identity_after_reordering() {
+        let games=emotional_core::library::demo_catalog();
+        let saved=super::supervisor::Request {recommended:false,game_id:games[1].id.clone(),resume:true,selected:4,library:false,library_index:0,system_option:None};
+        let restored=super::restore_position(&saved,&games,&[1,0]);
+        assert_eq!(restored.selected,0);
+        assert_eq!(restored.library_index,1);
+        let moved=vec![games[1].clone(),games[0].clone()];
+        let restored=super::restore_position(&saved,&moved,&[1,0]);
+        assert_eq!(restored.selected,4);
+        assert_eq!(restored.library_index,0);
+    }
+    #[test]
+    fn disappeared_game_keeps_existing_clamp_fallback_without_inventing_selection() {
+        let saved=super::supervisor::Request {recommended:false,game_id:"missing".into(),resume:true,selected:4,library:false,library_index:7,system_option:None};
+        let restored=super::restore_position(&saved,&[],&[]);
+        assert_eq!(restored.selected,4);
+        assert_eq!(restored.library_index,7);
+    }
+}

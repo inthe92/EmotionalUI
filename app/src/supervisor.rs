@@ -16,10 +16,14 @@ use std::{
 #[serde(deny_unknown_fields)]
 pub struct Request {
     pub game_id: String,
+    #[serde(default)]
+    pub recommended: bool,
     pub resume: bool,
     pub selected: usize,
     pub library: bool,
     pub library_index: usize,
+    #[serde(default)]
+    pub system_option: Option<String>,
 }
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Return {
@@ -30,8 +34,11 @@ fn option(args: &[String], name: &str) -> Option<String> {
     args.windows(2).find(|v| v[0] == name).map(|v| v[1].clone())
 }
 fn read<T: serde::de::DeserializeOwned>(p: &Path) -> Result<T, Box<dyn Error>> {
+    read_bounded(p, 65536)
+}
+fn read_bounded<T: serde::de::DeserializeOwned>(p: &Path, limit: u64) -> Result<T, Box<dyn Error>> {
     let m = fs::symlink_metadata(p)?;
-    if !m.is_file() || m.file_type().is_symlink() || m.len() > 65536 {
+    if !m.is_file() || m.file_type().is_symlink() || m.len() > limit {
         return Err("Invalid bounded launch document".into());
     }
     Ok(toml::from_str(&fs::read_to_string(p)?)?)
@@ -68,6 +75,9 @@ fn directory(path: PathBuf) -> Result<OwnedDirectory, Box<dyn Error>> {
 }
 pub fn dispatch() -> Result<bool, Box<dyn Error>> {
     let args = std::env::args().skip(1).collect::<Vec<_>>();
+    if args.iter().any(|v| v == "--trial") && args.iter().any(|v| v == "--functional") {
+        return Err("Trial mode cannot enable functional system controls".into());
+    }
     if args.iter().any(|v| v == "--trial")
         && args
             .iter()
@@ -100,7 +110,10 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
                 .into(),
         );
     }
-    let config: Configuration = read(Path::new(&config))?;
+    let config: Configuration = read_bounded(
+        Path::new(&config),
+        emotional_services::launcher::configured::MAX_CONFIGURATION_BYTES,
+    )?;
     config.validate()?;
     let db = PathBuf::from(
         option(&args, "--db").ok_or("Launcher requires an explicit persistent --db path")?,
@@ -176,10 +189,37 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
             return Err("Frontend did not exit cleanly; game launch refused".into());
         }
         if position.game_id.len() > 4096
-            || position.selected > 5
+            || position.selected > if position.system_option.is_some() { 4096 } else { 5 }
             || position.library_index > 1000000
         {
             return Err("Invalid launch request".into());
+        }
+        if let Some(tool) = &position.system_option {
+            let child = config.system_options_root.as_deref()
+                .ok_or_else(|| std::io::Error::other("No installed Options root configured"))
+                .and_then(|root| emotional_services::system_options::spawn(root, tool));
+            let result = match child {
+                Err(error) => Err(error),
+                Ok(mut child) => {
+                    let _ = fs::write(lock.0.join("active-game"), child.id().to_string());
+                    match child.wait() {
+                        Err(_) => {
+                            std::mem::forget(lock);
+                            return Err("Cannot confirm Options tool termination; frontend restart refused".into());
+                        }
+                        Ok(status) => {
+                            let _ = fs::remove_file(lock.0.join("active-game"));
+                            if status.success() { Ok(()) } else { Err(std::io::Error::other("The original tool reported an error")) }
+                        }
+                    }
+                }
+            };
+            next = Some(Return { position, message: if result.is_ok() {
+                "De vuelta en Ajustes.".into()
+            } else {
+                "No se pudo completar la herramienta. Puedes volver a intentarlo.".into()
+            }});
+            continue;
         }
         let attempt = SystemTime::now()
             .duration_since(UNIX_EPOCH)?
@@ -196,13 +236,15 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
             session_registered: false,
         };
         // The UI process is reaped. No graphical, input or audio owner survives in it.
+        let mut local_start = None;
         let mut spawned = false;
         let mut reaped = false;
         let result = (|| -> Result<(), Box<dyn Error>> {
             let rom = store
                 .launch_rom(&position.game_id)?
                 .ok_or("Game identifier is not in the imported library")?;
-            let resolved = config.resolve(&rom)?;
+            let resolved = config.resolve_for(&rom, position.resume)?;
+            resolved.seed_progress()?;
             record.profile = resolved.profile.id.clone();
             if option(&args, "--quit-file").is_some_and(|p| Path::new(&p).exists()) {
                 record.outcome = "cancelled".into();
@@ -211,6 +253,7 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
             let utc = chrono::Utc::now();
             if config.clock_confirmed && (2020..=2100).contains(&chrono::Datelike::year(&utc)) {
                 record.started_utc = Some(utc.timestamp());
+                local_start = Some(utc.with_timezone(&chrono::Local).naive_local());
             }
             let now = Instant::now();
             let mut game = resolved.spawn()?;
@@ -250,7 +293,7 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
             return Err("Cannot confirm game termination; frontend restart refused, independent recovery required".into());
         }
         // Keep attempts, actual process duration and reliable dated sessions distinct.
-        let storage = store.record_launch(&record);
+        let storage = store.record_launch_context(&record,position.recommended,local_start);
         println!(
             "LAUNCH result={} elapsed_ms={} session_registered={}",
             record.outcome, record.elapsed_ms, record.session_registered

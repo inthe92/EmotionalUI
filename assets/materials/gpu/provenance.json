@@ -1,0 +1,14 @@
+{
+  "beta_integration": true,
+  "source_provenance": "README.md",
+  "files": {
+    "ambient-day.png": {
+      "source": "experiments/emotional-glass/assets/ambient-day.png",
+      "sha256": "13f08af231070c493bf06f8b8855c698ecf0ec496873a3356ebcd1507c882d35"
+    },
+    "ambient-night.png": {
+      "source": "experiments/emotional-glass/assets/ambient-night.png",
+      "sha256": "6111c842d088bbd093ac857f59746e6bd32b8e1b3433d3f06e17a6de5d11b044"
+    }
+  }
+}

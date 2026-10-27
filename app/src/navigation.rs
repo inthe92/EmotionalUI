@@ -97,6 +97,8 @@ fn content_index(resume: bool, index: usize, recommendations: usize, continuing:
         }
     } else if recommendations == 0 {
         2
+    } else if index==4 && recommendations>2 {
+        4
     } else if index == 1 && recommendations > 1 {
         1
     } else {
@@ -118,7 +120,9 @@ fn card_focus(
         (true, 5, Action::Left) => 4,
         (true, 4 | 5, Action::Up) => 0,
         (false, 0, Action::Down) if recommendations > 1 => 1,
-        (false, 1, Action::Up) => 0,
+        (false, 1, Action::Right) if recommendations>2 => 4,
+        (false, 4, Action::Left) => 1,
+        (false, 1 | 4, Action::Up) => 0,
         _ => current,
     }
 }
@@ -149,8 +153,8 @@ impl State {
             ),
             Section::Moment => (
                 self.selected,
-                (self.selected <= 1)
-                    .then(|| self.order.get(self.selected).copied())
+                (self.selected <= 1 || self.selected==4)
+                    .then(|| self.order.get(if self.selected==4 {2} else {self.selected}).copied())
                     .flatten(),
             ),
             Section::Library => (
@@ -190,12 +194,12 @@ impl State {
                 } else {
                     &self.order
                 };
-                let previous = if self.resume && focus.index >= 4 {
+                let previous = if !self.resume && focus.index==4 {2} else if self.resume && focus.index >= 4 {
                     focus.index - 3
                 } else {
                     focus.index.min(1)
                 };
-                let visible = order.len().min(if self.resume { 3 } else { 2 });
+                let visible = order.len().min(3);
                 let position = retained_index(
                     previous,
                     focus.game_id.as_deref(),
@@ -207,11 +211,7 @@ impl State {
                     visible,
                 );
                 let index = if focus.game_id.is_some() {
-                    if self.resume && position > 0 {
-                        position + 3
-                    } else {
-                        position
-                    }
+                    if !self.resume && position==2 {4} else if self.resume && position > 0 {position+3} else {position}
                 } else {
                     focus.index
                 };
@@ -243,7 +243,7 @@ impl State {
                 };
             }
             Section::Settings => {
-                self.menu_index = focus.index.min(if self.layout == 4 { 9 } else { 2 })
+                self.menu_index = focus.index.min(self.settings_count().saturating_sub(1))
             }
         }
         self.system_focus = focus.target == FocusTarget::Status;
@@ -307,6 +307,8 @@ impl State {
         {
             return;
         }
+        self.system_index = 0;
+        self.system_note = None;
         self.begin_modal(Modal::System);
     }
 
@@ -380,6 +382,7 @@ impl State {
             self.system_focus = false;
         }
         ui.set_library_offset(-1);
+        ui.set_message("".into());
         self.paint(ui);
     }
 
@@ -394,11 +397,7 @@ impl State {
 
     pub(super) fn status_action(&mut self, ui: &Home, action: Action) -> bool {
         if self.system_open {
-            if action == Action::Confirm {
-                self.close_modal();
-                self.navigate(ui, 3);
-            }
-            self.paint(ui);
+            self.system_action(ui, action);
             return true;
         }
         if self.system_focus {
@@ -586,7 +585,7 @@ mod tests {
                     } else if resume {
                         selected == 0 || selected == 4 && count > 1 || selected == 5 && count > 2
                     } else {
-                        selected == 0 || selected == 1 && count > 1
+                        selected == 0 || selected == 1 && count > 1 || selected == 4 && count > 2
                     });
                 }
             }

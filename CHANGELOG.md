@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.0-beta.1 — 2026-10-27
+
+Restores the blue/gold GPU build while retaining its Slint screens and navigation.
+Adds the existing supervised player launcher, resume, isolated progress and return
+to the frontend. Unprofiled games remain launchable from Biblioteca. Appearance
+stays manual and persistent; light-mode focus now uses warm amber/linen, with the
+previous night focus retained. Focus colours rotate on GPU; reduced motion freezes
+the gradient and the software fallback stays static.
+
+Connects the latest completed experimental Atlas export: 1,841 provisional
+identities and 274 proposed profiles, with unknown dimensions preserved and no
+claim of complete review. Exact metadata/platform matching uses the existing
+reader; explicit SQLite profiles cannot be mixed silently with an older fallback.
+
+Ships as a separate, reversible ARM64 Ports beta. No ROMs, BIOS, drivers, personal
+history or boot/service configuration changes. Current-beta hardware acceptance,
+full legacy visual-suite reconciliation and sustained-FPS validation remain open.
+
 ## 0.1.0-preview.1 — 2026-10-22
 
 First experimental interface preview for Anbernic RG353V / the tested dArkOS environment. Four sections, original ambient room, contextual recommendations, existing-library import and preserved phase13–15 navigation, 360 ms interruptible transitions, parallax and composition cache.

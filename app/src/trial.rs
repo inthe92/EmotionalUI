@@ -38,7 +38,8 @@ pub fn sources(root: &Path) -> std::io::Result<Vec<(PathBuf, PathBuf)>> {
     for entry in std::fs::read_dir(&root)?.take(512) {
         let path = entry?.path();
         if let Ok(path) = path.canonicalize() {
-            if path.is_dir() && path.starts_with(&root) {
+            if path.is_dir() && path.starts_with(&root)
+                && !path.file_name().and_then(|s| s.to_str()).is_some_and(|s| ["ports", "movies", "cmds", "options"].contains(&s)) {
                 dirs.push(path);
             }
         }
@@ -73,6 +74,54 @@ pub fn start(
     atlas_path: Option<PathBuf>,
     experimental: bool,
 ) -> mpsc::Receiver<Result<Update, String>> {
+    start_worker(db, root, atlas_path, experimental, None)
+}
+pub fn start_functional(
+    db: PathBuf,
+    root: Option<PathBuf>,
+    atlas_path: Option<PathBuf>,
+    experimental: bool,
+    profile: PathBuf,
+) -> mpsc::Receiver<Result<Update, String>> {
+    start_worker(db, root, atlas_path, experimental, Some(profile))
+}
+fn configured_sources(
+    root: &Path,
+    profile: &Path,
+) -> Result<Vec<(PathBuf, PathBuf)>, Box<dyn std::error::Error>> {
+    use emotional_services::launcher::configured::{Configuration, MAX_CONFIGURATION_BYTES};
+    let info = std::fs::symlink_metadata(profile)?;
+    if !info.is_file() || info.file_type().is_symlink() || info.len() > MAX_CONFIGURATION_BYTES {
+        return Err("Invalid bounded launcher profile".into());
+    }
+    let config: Configuration = toml::from_str(&std::fs::read_to_string(profile)?)?;
+    config.validate()?;
+    let root = root.canonicalize()?;
+    let mut files = Vec::new();
+    // Use the explicit system roots, including nested ones such as PICO-8
+    // carts, rather than recursively scanning artwork or executable tools.
+    for launcher in config.launchers {
+        let Ok(dir) = launcher.root.canonicalize() else {
+            continue;
+        };
+        let Ok(xml) = dir.join("gamelist.xml").canonicalize() else {
+            continue;
+        };
+        if dir.is_dir() && dir.starts_with(&root) && xml.is_file() && xml.starts_with(&dir) {
+            files.push((xml, dir));
+        }
+    }
+    files.sort();
+    files.dedup();
+    Ok(files)
+}
+fn start_worker(
+    db: PathBuf,
+    root: Option<PathBuf>,
+    atlas_path: Option<PathBuf>,
+    experimental: bool,
+    profile: Option<PathBuf>,
+) -> mpsc::Receiver<Result<Update, String>> {
     let (tx, rx) = mpsc::sync_channel(1);
     std::thread::spawn(move || {
         let result = (|| -> Result<(), Box<dyn std::error::Error>> {
@@ -95,7 +144,11 @@ pub fn start(
                 .map(|a| a.explanations(&store))
                 .transpose()?
                 .unwrap_or_default();
-            let files = sources(&root)?;
+            let mut files = sources(&root)?;
+            if let Some(profile) = &profile {
+                files.extend(configured_sources(&root, profile)?);
+                files.sort(); files.dedup();
+            }
             let total = files.len();
             let mut warnings = 0;
             for (index, (xml, dir)) in files.iter().enumerate() {
@@ -131,6 +184,7 @@ pub fn start(
                 if let Some(a) = &atlas {
                     a.apply(&store, &mut games)?;
                 }
+                crate::atlas_classic::apply(&mut games)?;
                 let art = store.art_paths(&root)?;
                 tx.send(Ok(Update {
                     games,
@@ -144,13 +198,35 @@ pub fn start(
                     ),
                 }))?;
             }
-            if total == 0 {
+            if let Some(profile) = &profile {
+                use emotional_services::launcher::configured::Configuration;
+                let config: Configuration = toml::from_str(&std::fs::read_to_string(profile)?)?;
+                config.validate()?;
+                let mut roots = BTreeMap::<PathBuf, Vec<String>>::new();
+                for launcher in config.launchers {
+                    let suffixes = roots.entry(launcher.root).or_default();
+                    suffixes.extend(launcher.extensions);
+                    suffixes.sort(); suffixes.dedup();
+                }
+                let mut known: std::collections::HashSet<PathBuf> = store.catalog(&root)?.iter().filter_map(|g| store.launch_rom(&g.id).ok().flatten()).collect();
+                for (directory, suffixes) in roots {
+                    let directory = directory.canonicalize()?;
+                    if !directory.starts_with(&root) { continue; }
+                    // XML wins. File-only additions must never replace names/art.
+                    let discovered = emotional_services::emulationstation::discover_files(&directory, &suffixes, &known)?;
+                    known.extend(discovered.iter().map(|g| g.rom.clone()));
+                    store.import(&discovered)?;
+                }
+            }
+            if total == 0 || profile.is_some() {
                 let mut games = store.catalog(&root)?;
                 store.load(&mut games)?;
                 if let Some(a) = &atlas {
                     a.apply(&store, &mut games)?;
                 }
-                tx.send(Ok(Update {games,explanations,art:store.art_paths(&root)?,message:"Modo prueba · Sin gamelist.xml disponibles; puedes volver cuando conectes tu colección.".into()}))?;
+                crate::atlas_classic::apply(&mut games)?;
+                let message = if profile.is_some() { format!("Biblioteca lista · {} juegos", games.len()) } else { "Modo prueba · Sin gamelist.xml disponibles; puedes volver cuando conectes tu colección.".into() };
+                tx.send(Ok(Update {games,explanations,art:store.art_paths(&root)?,message}))?;
             }
             Ok(())
         })();
@@ -163,6 +239,29 @@ pub fn start(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn functional_sources_include_explicit_nested_systems_but_not_ports_or_escapes() {
+        let base = std::env::temp_dir().join(format!("emotional-functional-roots-{}", std::process::id()));
+        let root = base.join("roms");
+        for folder in ["roms/pico-8/carts", "roms/ports", "outside"] {
+            let dir = base.join(folder);
+            std::fs::create_dir_all(&dir).unwrap();
+            std::fs::write(dir.join("gamelist.xml"), "<gameList/>").unwrap();
+        }
+        let profile = base.join("launcher.toml");
+        let mut text = "handoff='process-exit'\n".to_owned();
+        for (index, folder) in ["roms/pico-8/carts", "outside"].iter().enumerate() {
+            text.push_str(&format!(
+                "\n[[launchers]]\nid='system-{index}'\nroot={root:?}\nexecutable='/usr/bin/true'\nworking_directory={cwd:?}\narguments=['{{rom}}']\nwaits_for_exit=true\n",
+                root=base.join(folder).to_str().unwrap(), cwd=base.to_str().unwrap()
+            ));
+        }
+        std::fs::write(&profile, text).unwrap();
+        let files = configured_sources(&root, &profile).unwrap();
+        assert_eq!(files.len(), 1);
+        assert_eq!(files[0].1, root.join("pico-8/carts").canonicalize().unwrap());
+        std::fs::remove_dir_all(base).unwrap();
+    }
     #[test]
     fn progressive_refresh_keeps_choices_by_id_without_reverting_metadata() {
         let mut previous = emotional_core::library::demo_catalog();

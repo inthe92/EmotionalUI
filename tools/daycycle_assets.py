@@ -5,6 +5,7 @@ No image generation, network, runtime preprocessing or new dependencies.
 The room PNGs are reviewed inputs, not synthesized by this script.
 """
 import json
+from PIL import Image, ImageFilter, ImageEnhance
 from pathlib import Path
 from room_materials import generate as materials, SURFACES
 
@@ -100,6 +101,15 @@ def slint_source(rows):
     for row in rows:
         lines.append(f'        @image-url("{row["scene"]}"), // {row["id"]}')
     lines.append('    ];')
+    # Shared, half-resolution backdrops; all blur work is offline.
+    lines += ['    private property <[image]> frost-values:['+','.join(
+        f'@image-url("materials/{row["id"]}/room-frost.png")' for row in rows)+'];',
+        '    out property <image> frost:self.frost-values[self.index];',
+        '    out property <image> frost-next:self.frost-values[self.next-index];',
+        '    out property <float> frost-opacity:'+str(response['glass_profile']['underlay_opacity'])+';',
+        '    out property <float> glass-wash-scale:'+str(response['glass_profile']['context_wash_scale'])+';',
+        '    private property <[float]> glass-coverages:['+','.join(str(round((max(0,rgba(row['colors']['surface_tint'])[3]-response['panel_profile']['top_alpha_reduction'])+max(0,rgba(row['colors']['surface_bottom'])[3]-response['panel_profile']['bottom_alpha_reduction']))/510,5)) for row in rows)+'];',
+        '    out property <float> glass-coverage:self.glass-coverages[self.next-index];']
     names = [name + suffix for name in SURFACES for suffix in ('', '-focus')
              if not (name == 'room-dock' and suffix)]
     names += ['room-dock-selection-' + suffix for suffix in ('active', 'focus', 'active-focus')]
@@ -116,10 +126,19 @@ def slint_source(rows):
 def generate():
     rows = catalog()
     for row in rows:
+        profile=json.loads((FOLDER/'responses.json').read_text())['glass_profile']
+        destination=FOLDER/'materials'/row['id']
+        destination.mkdir(parents=True,exist_ok=True)
+        with Image.open(FOLDER/row['scene']) as original:
+            frost=original.convert('RGB').resize((320,240),Image.Resampling.LANCZOS)
+            frost=frost.filter(ImageFilter.GaussianBlur(profile['blur_radius_at_half_resolution']))
+            frost=ImageEnhance.Brightness(frost).enhance(profile['brightness'])
+            frost.save(destination/'room-frost.png',optimize=True)
         c = row['colors']
         materials(FOLDER/'materials'/row['id'], tuple(rgba(c[k]) for k in
                   ('surface_tint', 'surface_bottom', 'surface_border', 'focus_accent')),
                   capsule_top=rgba(c['capsule_tint']),
+                  capsule_alpha_reduction=json.loads((FOLDER/'responses.json').read_text()).get('capsule_alpha_reduction',0),
                   panel_profile=json.loads((FOLDER/'responses.json').read_text())['panel_profile'])
     (FOLDER/'assets.slint').write_text(slint_source(rows))
 

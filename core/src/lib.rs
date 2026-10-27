@@ -4,6 +4,7 @@ pub mod ambient_art;
 pub mod calendar;
 pub mod controls;
 pub mod editorial;
+pub mod atlas;
 pub mod environment;
 pub mod input;
 pub mod library;

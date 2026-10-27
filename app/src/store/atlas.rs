@@ -30,6 +30,7 @@ impl Store {
             .and_then(|s| toml::from_str(&s).ok()))
     }
     pub fn save_reserve(&self, r: &Reserve) -> Result<(), Box<dyn Error>> {
+        if !self.privacy()?.record_history { return Ok(()); }
         self.0.execute("INSERT INTO settings VALUES('discovery_reserve',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value",[toml::to_string(r)?])?;
         Ok(())
     }

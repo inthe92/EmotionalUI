@@ -61,8 +61,8 @@ fn original_jpeg_thumbnail_is_decoded_without_new_framework() {
     assert_eq!(data.len(), (w * h * 4) as usize);
 }
 #[test]
-fn original_png_is_bounded() {
-    let p = Path::new(env!("CARGO_MANIFEST_DIR")).join("../assets/scenes/lofi-room-v2/master.png");
+fn published_png_is_bounded() {
+    let p = Path::new(env!("CARGO_MANIFEST_DIR")).join("../assets/materials/gpu/ambient-day.png");
     let (w, h, p) = decode(&p).unwrap();
     assert!(w <= 292 && h <= 232);
     assert_eq!(p.len(), (w * h * 4) as usize);

@@ -1,0 +1,30 @@
+import { FocusDesign } from "focus.slint";
+// The GPU owns ambient textures; Slint retains content and input.
+export global GpuMaterialDesign {
+    in-out property <bool> enabled:false;
+    in-out property <image> backdrop;
+    in-out property <image> material;
+    in-out property <int> environment-builds:0;
+    in-out property <int> rendered-frames:0;
+    in-out property <int> context-count:0;
+    in-out property <bool> capture-ready:false;
+}
+export component GpuMaterialSurface inherits Rectangle {
+    in property <length> radius:16px;
+    in property <bool> focused:false;
+    background:root.focused ? FocusDesign.color : #ffffff35;
+    border-radius:root.radius;
+    property <length> edge:root.focused?FocusDesign.width:1px;
+    Rectangle {
+        x:root.edge;y:root.edge;
+        width:max(0px,parent.width - root.edge*2);
+        height:max(0px,parent.height - root.edge*2);
+        border-radius:max(0px,root.radius - root.edge);
+        clip:true;background:#17202b;
+        // Sample window coordinates even while the card or its parent moves.
+        Image {
+            x:-parent.absolute-position.x;y:-parent.absolute-position.y;
+            width:640px;height:480px;source:GpuMaterialDesign.material;image-fit:fill;
+        }
+    }
+}

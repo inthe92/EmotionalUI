@@ -1,3 +1,6 @@
+mod contextual;
+pub use contextual::{explain, score, Score};
+use contextual::similarity;
 use crate::{library::Game, mood::Mood};
 use std::collections::HashSet;
 #[derive(Clone, Copy)]
@@ -46,95 +49,20 @@ pub fn rank_affinity(
         .enumerate()
         .filter(|(_, g)| g.available && !g.id.trim().is_empty() && seen.insert(g.id.as_str()))
         .map(|(i, g)| {
-            let fit = if g.editorial.session_minutes.unwrap_or(g.session_minutes) <= ctx.minutes {
-                18
-            } else {
-                -15
-            };
-            let ambient = if ctx.raining {
-                i64::from(g.emotions.calm) / 20
-            } else {
-                0
-            };
-            let quiet = if matches!(ctx.mood, Mood::Shelter | Mood::Silence) {
-                i64::from(g.emotions.immersion) / 25
-            } else {
-                i64::from(g.emotions.joy) / 25
-            };
-            let seed = g.id.bytes().fold(
-                ctx.slot.wrapping_add(ctx.refresh.wrapping_mul(7919)),
-                |a, b| a.wrapping_mul(31).wrapping_add(u64::from(b)),
-            );
-            let variety = (seed % 29) as i64;
-            let score = if personalized {
-                i64::from(affinity.get(&g.id).copied().unwrap_or(0).clamp(-1, 1)) * 100
-            } else {
-                0
-            } + i64::from(g.started) * 65
-                + if g.started {
-                    g.editorial.resume_ease.map_or(0, |v| i64::from(v) / 25)
-                } else {
-                    0
-                }
-                + (crate::editorial::bonus(&g.editorial, signals, ctx.raining)
-                    + i64::from(
-                        *g.editorial
-                            .extra
-                            .get(match ctx.mood {
-                                Mood::Dawn => "morning",
-                                Mood::Horizon => "afternoon",
-                                Mood::Shelter => "night",
-                                Mood::Silence => "late",
-                            })
-                            .unwrap_or(&0),
-                    ) / 25
-                    + if ctx.raining {
-                        i64::from(*g.editorial.extra.get("rain").unwrap_or(&0)) / 25
-                    } else {
-                        0
-                    })
-                .min(24)
-                + i64::from(g.favorite) * 18
-                + if personalized {
-                    i64::from(g.choices.min(10)) * 5
-                } else {
-                    0
-                }
-                - i64::from(g.recent_recommendations.min(10)) * 16
-                + if personalized {
-                    i64::from(g.choices_by_mood[ctx.mood.index() as usize].min(10)) * 5
-                } else {
-                    0
-                }
-                + if ctx.minutes <= 15 {
-                    // Authored suitability, not an invented duration or abandonment signal.
-                    i64::from(*g.editorial.extra.get("short_sessions").unwrap_or(&0)) / 10
-                } else {
-                    0
-                }
-                + fit
-                + ambient
-                + quiet
-                + variety;
+            let score = score(g, ctx, signals, personalized, affinity).total();
             (i, score)
         })
         .collect();
     ranked.sort_by(|(ia, sa), (ib, sb)| sb.cmp(sa).then_with(|| games[*ia].id.cmp(&games[*ib].id)));
-    // A near-tie may favor another genre in the two secondary places.
-    // Never displace the principal recommendation merely to force diversity.
+    // Greedy diversity only in the first three; never invent extra candidates.
     for pos in 1..ranked.len().min(3) {
-        let chosen: HashSet<&str> = ranked[..pos]
-            .iter()
-            .map(|(i, _)| games[*i].genre.as_str())
-            .collect();
-        let score = ranked[pos].1;
-        if let Some(offset) = ranked[pos..]
-            .iter()
-            .position(|(i, s)| score - *s <= 12 && !chosen.contains(games[*i].genre.as_str()))
-        {
-            let candidate = ranked.remove(pos + offset);
-            ranked.insert(pos, candidate);
-        }
+        let selected = &ranked[..pos];
+        let best = ranked[pos..].iter().enumerate().max_by_key(|(_, (i, value))| {
+            let penalty = selected.iter().map(|(j, _)| similarity(&games[*i], &games[*j])).max().unwrap_or(0);
+            (*value - penalty, std::cmp::Reverse(games[*i].id.as_str()))
+        }).map(|(offset,_)| pos + offset).unwrap_or(pos);
+        let candidate = ranked.remove(best);
+        ranked.insert(pos, candidate);
     }
     ranked.into_iter().map(|(i, _)| i).collect()
 }

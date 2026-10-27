@@ -1,4 +1,15 @@
-## Fase 16 — estado vigente de los avisos (21-10-2026)
+## Beta 0.2.0-beta.1 — 27-10-2026
+
+La beta recupera la integración GPU existente y añade la proyección del último
+Atlas exportado. No añade dependencias Rust: glow 0.16.0 y Slint 1.13.1 ya están
+inventariados. El paquete incluye los avisos DejaVu, los textos de dependencias y
+el aviso independiente de Atlas. El código mantiene GPL-3.0-only; el catálogo
+retiene atribuciones y condiciones por fuente, incluidas CC-BY-SA-4.0 cuando
+corresponde. Véanse assets/atlas/BETA-NOTICE.md y assets/materials/gpu/README.md.
+No se incluyen drivers, ROMs, BIOS ni arte comercial de juegos. Las notas siguientes
+son históricas y no acreditan la prueba física de esta beta.
+
+## Fase 16 — estado de los avisos (21-10-2026)
 
 Resolución Cargo ARM64 con linuxkms-gpu y lock intacto: 367 paquetes inventariados en docs/dependency-licenses.tsv, incluidos build/optativos; no se afirma que todos estén enlazados en los ELF. docs/dependency-notices.txt reúne los textos locales y los recuperados de commits upstream exactos. docs/dependency-notice-sources.json registra URLs y SHA-256. Los 17 huecos de términos legibles están documentados: 15 mediante textos upstream de commits exactos; drm-fourcc 2.2.0 (runtime) y simd_helpers 0.1.0 (proc-macro de compilación) conservan sus manifests originales y README con la declaración SPDX MIT. No suministran archivo de licencia ni aviso Copyright específico: no se inventa titular/año ni se afirma haber recibido ese aviso. Se adjuntan por separado los términos canónicos MIT como suplemento estándar identificado, con placeholders intactos, en docs/licenses/MIT-standard.txt. Trazabilidad en docs/dependency-notices-supplements.json. El campo license es una expresión SPDX según https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields ; texto estándar: https://spdx.org/licenses/MIT.html .
 
