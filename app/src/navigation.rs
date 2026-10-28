@@ -158,8 +158,8 @@ impl State {
                     .flatten(),
             ),
             Section::Library => (
-                self.library_index,
-                (!self.history_panel).then_some(self.library_index),
+                self.library_cursor(),
+                self.library_game(),
             ),
             Section::Settings => (self.menu_index, None),
         };
@@ -229,6 +229,11 @@ impl State {
                 self.dock_return = self.selected;
             }
             Section::Library => {
+                if self.grouped_library() {
+                    let index=if self.library_browser.system_page(){self.library_browser.cursor}else{focus.index};
+                    self.library_browser.restore(index,focus.game_id.as_deref());
+                    self.sync_library_game();
+                } else {
                 self.library_index = if self.history_panel {
                     focus
                         .index
@@ -241,6 +246,7 @@ impl State {
                         self.games.len(),
                     )
                 };
+                }
             }
             Section::Settings => {
                 self.menu_index = focus.index.min(self.settings_count().saturating_sub(1))
@@ -368,7 +374,7 @@ impl State {
                 index: match section {
                     Section::Continue => self.resume_focus,
                     Section::Moment => self.emotional_focus,
-                    Section::Library => self.library_index,
+                    Section::Library => self.library_cursor(),
                     Section::Settings => self.menu_index,
                 },
                 game_id: None,
@@ -436,7 +442,7 @@ impl State {
                     self.system_focus = true;
                 }
                 Action::Down | Action::Back => {
-                    let empty = self.library && self.games.is_empty()
+                    let empty = self.library && self.games.is_empty() && !self.grouped_library()
                         || !self.library
                             && !self.menu
                             && (self.resume && self.recent.is_none()
@@ -456,7 +462,7 @@ impl State {
         let first = if self.menu {
             self.menu_index == 0
         } else if self.library {
-            self.library_index == 0
+            self.library_cursor() == 0
         } else {
             self.selected == 0
         };

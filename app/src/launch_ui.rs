@@ -28,6 +28,7 @@ impl State {
             selected: self.selected,
             library: self.library,
             library_index: self.library_index,
+            library_view: self.library.then(||self.library_browser.saved()),
             system_option: None,
         };
         self.queue_launch(ui, request);
@@ -120,7 +121,7 @@ mod tests {
     #[test]
     fn returning_secondary_game_follows_identity_after_reordering() {
         let games=emotional_core::library::demo_catalog();
-        let saved=super::supervisor::Request {recommended:false,game_id:games[1].id.clone(),resume:true,selected:4,library:false,library_index:0,system_option:None};
+        let saved=super::supervisor::Request {recommended:false,game_id:games[1].id.clone(),resume:true,selected:4,library:false,library_index:0,library_view:None,system_option:None};
         let restored=super::restore_position(&saved,&games,&[1,0]);
         assert_eq!(restored.selected,0);
         assert_eq!(restored.library_index,1);
@@ -131,7 +132,7 @@ mod tests {
     }
     #[test]
     fn disappeared_game_keeps_existing_clamp_fallback_without_inventing_selection() {
-        let saved=super::supervisor::Request {recommended:false,game_id:"missing".into(),resume:true,selected:4,library:false,library_index:7,system_option:None};
+        let saved=super::supervisor::Request {recommended:false,game_id:"missing".into(),resume:true,selected:4,library:false,library_index:7,library_view:None,system_option:None};
         let restored=super::restore_position(&saved,&[],&[]);
         assert_eq!(restored.selected,4);
         assert_eq!(restored.library_index,7);

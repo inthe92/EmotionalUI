@@ -11,6 +11,8 @@ mod focus;
 #[cfg(feature = "gpu-material")]
 mod gpu_material;
 mod launch_ui;
+mod library_browser;
+mod library_ui;
 #[cfg(any(debug_assertions, feature = "simulator"))]
 mod moments;
 mod motion;
@@ -850,6 +852,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             .as_ref()
             .and_then(|n| moments::NAMES.iter().position(|v| v == n)),
         imported,
+        library_browser: library_browser::Browser::new(&games),
         games,
         order,
         selected,
@@ -920,6 +923,17 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         state.library_index = position
             .library_index
             .min(state.games.len().saturating_sub(1));
+        if position.library {
+            if let Some(view)=&position.library_view {
+                state.library_browser.restore_saved(view,&state.games,Some(&position.game_id));
+            } else {
+                // Older request files predate grouped navigation. Open all
+                // games, then recover the selected game by its stable ID.
+                state.library_browser.choose(1,&state.games);
+                state.library_browser.restore(position.library_index,Some(&position.game_id));
+            }
+            state.sync_library_game();
+        }
     }
     state.order = discovery_presentation::presentation_order(
         &state.order,
@@ -1114,6 +1128,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             }
                             state.atlas_explanations = update.explanations;
                             state.games = update.games;
+                            state.rebuild_library();
+                            ui.set_library_offset(-1);
                             state.local_art = update.art;
                             ui.set_artwork_generation(ui.get_artwork_generation().wrapping_add(1));
                             ui.set_local_art_id("".into());
@@ -1393,6 +1409,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                 eprintln!("Action failed: {e}");
                 ui.set_message("No pudimos guardar el cambio.".into());
             }
+        }
+    });
+    let weak = ui.as_weak();
+    let s = shared.clone();
+    ui.on_library_search_key(move |key| {
+        if let Some(ui)=weak.upgrade() {
+            if key>=0 {s.borrow_mut().library_search_key(&ui,key as usize);}
         }
     });
     let weak = ui.as_weak();

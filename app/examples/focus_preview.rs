@@ -7,6 +7,8 @@ mod gpu_material;
 mod settings_browser;
 #[path = "../src/rom_drop.rs"]
 mod rom_drop;
+#[path = "../src/library_browser.rs"]
+mod library_browser;
 use slint::{ComponentHandle, ModelRc, SharedString, VecModel};
 use std::time::Duration;
 slint::include_modules!();
@@ -40,7 +42,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ui.global::<DaycycleAssets>().set_palette_index(if dark { 6 } else { 3 });
     ui.global::<DaycycleAssets>().set_palette_next_index(if dark { 6 } else { 3 });
     let page = match case.as_str() {
-        "library" => 2,
+        "library" | "library-systems" | "library-search" | "library-results" | "library-console" => 2,
         "settings" | "darkos" | "darkos-network" | "darkos-confirm" => 3,
         _ => 1,
     };
@@ -72,6 +74,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             ]));
             ui.set_library_offset(0);
             ui.set_library_index(1);
+        }
+        "library-systems" | "library-search" | "library-results" | "library-console" => {
+            let mut games=emotional_core::library::demo_catalog();
+            for (i,g) in games.iter_mut().enumerate(){g.system=if i<2 {"snes"}else if i<4 {"gba"}else{"nes"}.into();}
+            let mut browser=library_browser::Browser::new(&games);
+            if case=="library-console" {browser.choose(4,&games);}
+            if case=="library-search" || case=="library-results" {
+                browser.choose(0,&games);browser.query="JARDIN".into();
+                if case=="library-results" {browser.search_action(emotional_core::controls::Action::Menu,&games);}
+            }
+            ui.set_ambient_label("".into());ui.set_library_open(true);
+            ui.set_library_heading(browser.title().into());ui.set_library_empty_text(browser.empty_text().into());
+            ui.set_library_titles(ModelRc::new(VecModel::from(browser.rows(&games).into_iter().take(6).map(SharedString::from).collect::<Vec<_>>())));
+            ui.set_library_offset(0);ui.set_library_index(browser.cursor as i32);
+            ui.set_library_search_open(browser.searching());ui.set_library_query(browser.query.clone().into());ui.set_library_key(browser.key as i32);
         }
         "settings" => {
             ui.set_menu_open(true);

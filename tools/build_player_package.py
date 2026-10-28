@@ -71,6 +71,8 @@ def build(binary, output):
         'Salir: Ajustes / Volver a la consola. No borres esta carpeta durante una partida.\n'
         'Atlas experimental: identidades y perfiles no equivalen a ROMs instaladas ni revision humana.\n'
         'Los juegos sin perfil siguen disponibles en Biblioteca.\n'
+        'Biblioteca: elige un sistema o Buscar juegos; X abre el buscador.\n'
+        'Teclado: cruceta y A, X borrar, Start buscar, B volver; tambien tactil.\n'
         'Emotional Drop: abre la capsula, elige Añadir juegos y escanea el QR en la misma red.\n'
         'La transferencia es temporal; los archivos existentes no se reemplazan.\n'
         'Requiere emuladores/cores ya instalados y compatibles; no incluye ROMs ni BIOS.\n'

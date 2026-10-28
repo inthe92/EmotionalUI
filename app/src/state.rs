@@ -59,6 +59,7 @@ pub(super) struct State {
     #[cfg(any(debug_assertions, feature = "simulator"))]
     pub(super) moment_index: Option<usize>,
     pub(super) games: Vec<Game>,
+    pub(super) library_browser: crate::library_browser::Browser,
     pub(super) order: Vec<usize>,
     pub(super) selected: usize,
     pub(super) library_index: usize,
@@ -350,48 +351,7 @@ impl State {
             self.layout == 4 && self.privacy.ambient_motion && !self.privacy.neutral,
         );
         ui.set_imported(self.imported);
-        let count = if self.history_panel {
-            self.history.sessions.len()
-        } else {
-            self.games.len()
-        };
-        let offset = self
-            .library_index
-            .saturating_sub(3)
-            .min(count.saturating_sub(6));
-        if ui.get_library_offset() != offset as i32 {
-            let titles: Vec<slint::SharedString> = if self.history_panel {
-                self.history
-                    .sessions
-                    .iter()
-                    .skip(offset)
-                    .take(6)
-                    .map(|s| {
-                        format!(
-                            "{} · {}",
-                            self.games
-                                .iter()
-                                .find(|g| g.id == s.game_id)
-                                .map(|g| g.title.as_str())
-                                .unwrap_or("Juego no disponible"),
-                            chrono::DateTime::from_timestamp(s.started_utc, 0)
-                                .map(|t| t.format("%d/%m/%Y %H:%M UTC").to_string())
-                                .unwrap_or_else(|| "Fecha desconocida".into())
-                        )
-                        .into()
-                    })
-                    .collect()
-            } else {
-                self.games
-                    .iter()
-                    .skip(offset)
-                    .take(6)
-                    .map(|g| g.title.as_str().into())
-                    .collect()
-            };
-            ui.set_library_titles(slint::ModelRc::new(slint::VecModel::from(titles)));
-            ui.set_library_offset(offset as i32);
-        }
+        self.paint_library(ui);
         let known = environmental
             .time
             .local
@@ -516,7 +476,6 @@ impl State {
         self.paint_system(ui);
         ui.set_sound_on(self.audio_preferences.interface_enabled);
         ui.set_sound_available(self.audio.status().error.is_none());
-        ui.set_library_index(self.library_index as i32);
         if self.order.is_empty() {
             ui.set_hero_title("Tu próxima aventura".into());
             ui.set_hero_detail("Cuando añadas juegos disponibles, aparecerán aquí.".into());
@@ -556,6 +515,16 @@ impl State {
         if self.modal_active() {
             return Ok(());
         }
+        let index = if self.library && self.grouped_library() && index >= 10 {
+            match self.library_browser.choose(index-10,&self.games) {
+                crate::library_browser::Choice::Game(game) => {self.library_index=game;10+game},
+                crate::library_browser::Choice::Changed => {
+                    self.dock_focus=None;self.system_focus=false;self.sync_library_game();
+                    ui.set_library_offset(-1);self.paint(ui);return Ok(());
+                }
+                crate::library_browser::Choice::None => return Ok(()),
+            }
+        } else {index};
         if self.layout==4 && !self.resume && !self.library && !self.menu && index==4 {
             if let Some(&i)=self.order.get(2) {self.launch_game(ui,i);}
             return Ok(());
@@ -791,6 +760,7 @@ impl State {
             self.status_action(ui, action);
             return Ok(());
         }
+        if self.library_search_action(ui, action) {return Ok(());}
         // Global shoulders operate independently of dock/status focus and of
         // visual transitions; each accepted press advances one logical section.
         if self.layout == 4 && matches!(action, Action::Previous | Action::Next) {
@@ -806,7 +776,7 @@ impl State {
         }
         let before = (
             self.selected,
-            self.library_index,
+            self.library_cursor(),
             self.menu_index,
             self.library,
             self.menu,
@@ -846,6 +816,9 @@ impl State {
                         _ => self.menu_index,
                     };
                 } else if self.library {
+                    if self.grouped_library() {
+                        self.library_browser.move_row(action);self.sync_library_game();
+                    } else {
                     let count = if self.history_panel {
                         self.history.sessions.len()
                     } else {
@@ -857,6 +830,7 @@ impl State {
                             Direction::Down => (self.library_index + 1).min(count - 1),
                             _ => self.library_index,
                         };
+                    }
                     }
                 } else {
                     self.selected = if self.layout == 4 {
@@ -961,7 +935,7 @@ impl State {
                     self.activate(
                         ui,
                         if self.library {
-                            10 + self.library_index
+                            10 + self.library_cursor()
                         } else {
                             self.selected
                         },
@@ -972,6 +946,9 @@ impl State {
             Action::Back if self.options_open && self.menu => {
                 let outcome = self.options_browser.back();
                 self.apply_settings_outcome(ui, outcome);
+            }
+            Action::Back if self.library && self.grouped_library() && self.library_browser.back(&self.games) => {
+                self.sync_library_game();ui.set_library_offset(-1);
             }
             Action::Back if self.layout == 4 && (self.menu || self.library) => {
                 let target = if self.menu && self.menu_from_library {
@@ -1119,7 +1096,7 @@ impl State {
         }
         let after = (
             self.selected,
-            self.library_index,
+            self.library_cursor(),
             self.menu_index,
             self.library,
             self.menu,

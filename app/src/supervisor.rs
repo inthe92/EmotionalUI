@@ -23,6 +23,8 @@ pub struct Request {
     pub library: bool,
     pub library_index: usize,
     #[serde(default)]
+    pub library_view: Option<crate::library_browser::Saved>,
+    #[serde(default)]
     pub system_option: Option<String>,
 }
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -191,6 +193,7 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
         if position.game_id.len() > 4096
             || position.selected > if position.system_option.is_some() { 4096 } else { 5 }
             || position.library_index > 1000000
+            || position.library_view.as_ref().is_some_and(|view|!view.valid())
         {
             return Err("Invalid launch request".into());
         }
