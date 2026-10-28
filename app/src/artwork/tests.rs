@@ -53,6 +53,61 @@ fn missing_art_is_optional() {
     assert!(decode(Path::new("/emotional-ui-missing.png")).is_none());
 }
 #[test]
+fn changing_one_cover_preserves_other_choices_and_never_changes_original_art() {
+    let f=Fixture::new();let art=f.image("original.png",600,900,Role::Selected);
+    let original=fs::read(&art.path).unwrap();let config=f.0.join("choices.json");
+    save_choice_at(&config,"game:a",Some(&art)).unwrap();
+    save_choice_at(&config,"game:b",Some(&art)).unwrap();
+    save_choice_at(&config,"game:a",None).unwrap();
+    let choices=read_choices(&config).unwrap();
+    assert_eq!(choices.games.len(),1);assert!(choices.games.contains_key("game:b"));
+    assert_eq!(fs::read(&art.path).unwrap(),original);
+    fs::write(&config,b"user content that cannot be parsed").unwrap();
+    assert!(save_choice_at(&config,"game:b",None).is_err());
+    assert_eq!(fs::read(&config).unwrap(),b"user content that cannot be parsed");
+}
+#[test]
+fn provider_download_is_normalized_once_and_corrupted_derivatives_are_not_applied() {
+    let f=Fixture::new();let art=f.image("download.png",600,900,Role::Selected);
+    let original=fs::read(&art.path).unwrap();
+    let (selected,prepared)=prepare_download(&art.path,&art.root).unwrap();
+    assert_eq!((prepared.width,prepared.height),(240,360));
+    assert!(prepare_download(&art.path,&art.root).is_some());
+    fs::write(&selected.path,b"corrupt cache").unwrap();
+    assert!(prepare_download(&art.path,&art.root).is_none());
+    assert_eq!(fs::read(&art.path).unwrap(),original);
+    let wide=f.image("wide.png",900,600,Role::Selected);
+    assert!(prepare_download(&wide.path,&wide.root).is_none());
+}
+#[test]
+fn portrait_catalog_spans_systems_and_is_bounded() {
+    let mut text = String::new();
+    for i in 0..10_000 {
+        text.push_str(&format!(
+            "[games.\"es:/roms2/system-{}/title-{}.fixture\"]\npath=\"/art/portraits/{}.png\"\nroot=\"/art\"\n",
+            i % 20, i, i
+        ));
+    }
+    assert!(text.len() > 256 * 1024);
+    assert_eq!(read_overrides(text.as_bytes()).unwrap().games.len(), 10_000);
+    assert!(read_overrides(vec![b' '; MAX_OVERRIDE_BYTES as usize + 1].as_slice()).is_none());
+    assert!(read_overrides(b"[games.g]\npath='a'\nroot='b'\nunknown=true".as_slice()).is_none());
+}
+#[test]
+fn provider_portrait_wins_both_presentations_and_missing_file_keeps_existing_art() {
+    let f = Fixture::new();
+    let portrait = f.image("provider.png", 240, 360, Role::Curated);
+    let original = f.image("original.png", 640, 360, Role::Hero);
+    let mut cache = f.cache();
+    let mut request = f.request(vec![portrait.clone(), original]);
+    for presentation in [Presentation::Hero, Presentation::Tile] {
+        request.presentation = presentation;
+        assert_eq!(cache.prepare(&request).unwrap().mode, Mode::Boxart);
+    }
+    fs::remove_file(portrait.path).unwrap();
+    assert_eq!(cache.prepare(&request).unwrap().mode, Mode::Landscape);
+}
+#[test]
 fn original_jpeg_thumbnail_is_decoded_without_new_framework() {
     let f = Fixture::new();
     let r = f.image("test.jpg", 320, 240, Role::Generic);

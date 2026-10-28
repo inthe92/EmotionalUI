@@ -1,5 +1,7 @@
 import { MotionDesign } from "motion.slint";
 import { SystemControls } from "system-controls.slint";
+import { LaunchTransition } from "launch-transition.slint";
+import { ArtworkPicker } from "artwork-picker.slint";
 import { FocusOutline } from "focus.slint";
 export { FocusDesign } from "focus.slint";
 export { GpuMaterialDesign } from "gpu-material.slint";
@@ -48,6 +50,34 @@ export component Home inherits Window {
     default-font-family:root.concept==4?AtmosphereDesign.family:"sans-serif";
     in property <int> concept:4;
     in property <bool> resume-view;
+    in property <bool> launch-open;
+    in property <bool> artwork-picker-open;
+    in property <bool> artwork-picker-keyboard;
+    in property <string> artwork-picker-query;
+    in property <int> artwork-picker-key;
+    in property <string> artwork-picker-title;
+    in property <string> artwork-picker-status;
+    in property <[string]> artwork-picker-rows;
+    in property <int> artwork-picker-offset;
+    in property <int> artwork-picker-index;
+    in property <image> artwork-picker-image;
+    in property <bool> artwork-picker-image-available;
+    in property <bool> artwork-picker-ready;
+    callback artwork-picker-command(int);
+    callback artwork-picker-choose(int);
+    callback artwork-picker-key-chosen(int);
+    in property <float> launch-progress;
+    in property <string> launch-title;
+    in property <image> launch-cover;
+    in property <bool> launch-cover-available;
+    in property <string> launch-result-message;
+    in property <bool> launch-frame-requested;
+    in-out property <bool> launch-frame-ready;
+    property <float> launch-fade-linear:min(1,max(0,root.launch-progress/0.36));
+    out property <float> launch-ui-opacity:root.launch-open?(1-root.launch-fade-linear)*(1-root.launch-fade-linear)*(1-root.launch-fade-linear):1;
+    property <float> launch-card-linear:min(1,max(0,(root.launch-progress - 0.4)/0.55));
+    out property <float> launch-card-progress:1-(1-root.launch-card-linear)*(1-root.launch-card-linear)*(1-root.launch-card-linear);
+    animate launch-ui-opacity {duration:root.launch-open||root.reduced?0ms:140ms;easing:ease-out;}
     in property <int> dock-cursor:-1;
     in property <bool> system-focused;
     in property <bool> system-open;
@@ -269,6 +299,7 @@ export component Home inherits Window {
     }
     if root.concept==4: Integrated {
         show-content:true;
+        content-opacity:root.launch-ui-opacity;
         heading:root.section-title;
         width:640px;height:480px;pan:root.pan-position*1px;resume:root.resume-view;resume-count:root.resume-count;resume-two:root.resume-two;resume-three:root.resume-three;has-recent:root.has-recent;recent-title:root.recent-title;recent-artwork:root.recent-artwork;statistics:root.statistics;demo-history:root.demo-history;
         resume-two-artwork:root.resume-two-artwork;resume-three-artwork:root.resume-three-artwork;resume-detail:root.resume-detail;editorial-reason:root.editorial-reason;category:root.hero-category;demo-art:!root.imported&&root.art-available;
@@ -276,6 +307,8 @@ export component Home inherits Window {
         title:root.hero-title;detail:root.hero-detail;artwork:root.artwork-index;alternative:root.alt-one;alternative-detail:root.alt-one-detail;third:root.alt-two;third-detail:root.alt-two-detail;third-cover:root.third-cover;third-art-available:root.third-art-available;clock:root.clock;date:root.date;play:root.play-label;count:root.recommendation-count;selected:root.selected;phase:root.scene-phase;background-index:root.scene-background;ambient-tint:root.scene-tint;ambient-lamp:root.scene-lamp;weather:root.scene-weather;season:root.scene-season;decoration:root.scene-decoration;
         reduced:root.reduced;ambient-motion:root.ambient-motion;blocked:root.library-open||root.menu-open||root.audio-open||root.game-options-open||root.dock-cursor>=0||root.system-focused||root.system-open;confirmed:root.confirmed;art-available:root.art-available || root.local-art-available;alternative-cover:root.alternative-cover;alternative-art-available:root.alternative-art-available;resume-two-cover:root.resume-two-cover;resume-two-art-available:root.resume-two-art-available;resume-three-cover:root.resume-three-cover;resume-three-art-available:root.resume-three-art-available;trial-mode:root.trial-mode;local-cover:root.local-cover;local-art-available:root.local-art-available;reveal:root.reveal;activated(i)=>{root.activate(i);}
     }
+    // Separate interface opacity from the persistent ambient plane.
+    Rectangle {width:640px;height:480px;background:transparent;opacity:root.launch-ui-opacity;
     if root.concept>0 && root.concept<4: Concepts {
         width:640px;height:480px;direction:root.concept;mood:root.mood;animate-palette:root.animate-palette;reduced:root.reduced;selected:root.selected;count:root.recommendation-count;
         title:root.hero-title;detail:root.hero-detail;alternative:root.alt-one;play:root.play-label;clock:root.clock;atmosphere:root.atmosphere;caption:root.editorial-caption;artwork:root.artwork-index;art-available:root.art-available;
@@ -366,25 +399,25 @@ export component Home inherits Window {
     }
 
     Rectangle {
-      visible:root.modal-kind==2&&root.modal-progress>0;opacity:root.modal-progress;
-      x:24px;y:152px+(1-root.modal-progress)*MotionDesign.modal-travel*1px;width:592px;height:288px;border-radius:AtmosphereDesign.radius-l;background:AtmosphereDesign.sheet;border-width:1px;border-color:AtmosphereDesign.glass-focus;
+      visible:root.modal-kind==2&&root.modal-progress>0&&!root.artwork-picker-open;opacity:root.modal-progress;
+      x:24px;y:148px+(1-root.modal-progress)*MotionDesign.modal-travel*1px;width:592px;height:300px;border-radius:AtmosphereDesign.radius-l;background:AtmosphereDesign.sheet;border-width:1px;border-color:AtmosphereDesign.glass-focus;
       TouchArea {enabled:root.game-options-open;}
-      Text {x:16px;y:8px;width:560px;height:40px;text:root.game-option-title;wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:18px;color:AtmosphereDesign.ink;}
+      Text {x:16px;y:8px;width:560px;height:32px;text:root.game-option-title;wrap:word-wrap;font-family:AtmosphereDesign.family;font-size:18px;color:AtmosphereDesign.ink;}
       for label[index] in root.game-option-labels: Rectangle {
-        x:12px;y:56px+index*28px;width:568px;height:28px;border-radius:AtmosphereDesign.radius-m;
+        x:12px;y:44px+index*28px;width:568px;height:28px;border-radius:AtmosphereDesign.radius-m;
         background:root.game-options-open&&root.game-option-index==index?AtmosphereDesign.mark.with-alpha(0.14):transparent;
         if root.game-options-open&&root.game-option-index==index: FocusOutline {width:parent.width;height:parent.height;radius:AtmosphereDesign.radius-m;}
         Text {x:12px;width:450px;height:parent.height;text:label;font-size:15px;color:AtmosphereDesign.ink;vertical-alignment:center;}
         TouchArea {enabled:root.game-options-open;clicked=>{root.game-option-select(index);}}
       }
-      Text {x:16px;y:232px;width:560px;height:40px;text:root.game-option-reason;wrap:word-wrap;font-size:12px;color:AtmosphereDesign.muted;}
+      Text {x:16px;y:244px;width:560px;height:24px;text:root.game-option-reason;wrap:word-wrap;font-size:11px;color:AtmosphereDesign.muted;}
       Text {x:16px;y:276px;text:"A elegir   ·   B volver";font-size:12px;color:AtmosphereDesign.muted;}
     }
 
-    if root.concept==4: SectionHeader {
+    if root.concept==4&&!root.artwork-picker-open: SectionHeader {
         x:0px;y:0px;width:640px;height:100px;
         title:root.audio-open?"Sonido":root.game-options-open?"Esta partida":root.menu-open?(root.options-open?root.settings-title:"Ajustes"):root.library-open?(root.history-panel?"Historial":root.library-search-open?"Buscar juegos":"Biblioteca"):root.section-title;
-        subtitle:root.ambient-label!=""?root.ambient-label:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?(root.message!=""?root.message:root.options-open?root.settings-hint:"A tu manera."):root.library-open?root.library-heading:root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
+        subtitle:root.launch-result-message!=""&&root.message==root.launch-result-message?root.message:root.ambient-label!=""?root.ambient-label:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?(root.message!=""?root.message:root.options-open?root.settings-hint:"A tu manera."):root.library-open?root.library-heading:root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
         clock:root.clock;date:root.date;
     }
     if root.concept==4: SectionDock {
@@ -401,7 +434,7 @@ export component Home inherits Window {
         font-family:AtmosphereDesign.family;font-size:10px;color:AtmosphereDesign.muted;
     }
 
-    if root.concept==4&&!root.library-search-open: ControlsFooter {x:24px;y:454px;width:592px;native:root.native-controls;modal:root.system-open||root.audio-open||root.game-options-open;option-count:root.game-options-open?max(0,root.game-option-labels.length - 1):0;}
+    if root.concept==4&&!root.library-search-open&&!root.artwork-picker-open: ControlsFooter {x:24px;y:454px;width:592px;native:root.native-controls;modal:root.system-open||root.audio-open||root.game-options-open;option-count:root.game-options-open?max(0,root.game-option-labels.length - 1):0;}
     if root.concept==4&&root.library-open&&!root.library-search-open: TouchArea {
         x:24px;y:448px;width:96px;height:32px;
         enabled:!root.system-open&&!root.audio-open&&!root.game-options-open;
@@ -422,6 +455,20 @@ export component Home inherits Window {
         settings=>{root.system-toggle();root.navigate(3);}
     }
 
+    }
+    if root.artwork-picker-open: ArtworkPicker {
+        width:640px;height:480px;title:root.artwork-picker-title;status:root.artwork-picker-status;
+        rows:root.artwork-picker-rows;offset:root.artwork-picker-offset;selected:root.artwork-picker-index;
+        preview:root.artwork-picker-image;available:root.artwork-picker-image-available;ready:root.artwork-picker-ready;
+        keyboard:root.artwork-picker-keyboard;query:root.artwork-picker-query;key:root.artwork-picker-key;
+        command(index)=>{root.artwork-picker-command(index);}chosen(index)=>{root.artwork-picker-choose(index);}key-chosen(index)=>{root.artwork-picker-key-chosen(index);}
+    }
+    if root.launch-open: LaunchTransition {
+        width:640px;height:480px;progress:root.launch-card-progress;
+        title:root.launch-title;cover:root.launch-cover;cover-available:root.launch-cover-available;
+        handing-off:root.launch-frame-requested;
+        cancelled=>{root.dismiss();}
+    }
 }
 export { AtmosphereDesign } from "integrated.slint";
 

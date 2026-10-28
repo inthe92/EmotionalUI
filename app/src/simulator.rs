@@ -14,7 +14,7 @@ use slint::{
 use std::{
     cell::RefCell,
     error::Error,
-    path::Path,
+    path::{Path, PathBuf},
     rc::Rc,
     sync::{mpsc, Mutex},
     time::{Duration, Instant},
@@ -69,6 +69,24 @@ struct FrameCapture {
 }
 thread_local! {
     static FRAME_CAPTURE: RefCell<Option<FrameCapture>> = const { RefCell::new(None) };
+    static MOVIE: RefCell<Option<Movie>> = const { RefCell::new(None) };
+}
+struct Movie { directory: PathBuf, ui: slint::Weak<Home>, frames: usize }
+impl Movie {
+    fn record(&mut self, rgb: &[u8]) -> std::io::Result<()> {
+        if self.frames >= 160 { return Ok(()); }
+        let Some(ui)=self.ui.upgrade() else { return Ok(()) };
+        let name=format!("{:04}",self.frames);
+        std::fs::write(self.directory.join(format!("{name}.rgb")),rgb)?;
+        let timestamp=std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis();
+        let metadata=serde_json::json!({"width":640,"height":480,"unix_ms":timestamp,
+            "launch_open":ui.get_launch_open(),"progress":ui.get_launch_progress(),
+            "interface_opacity":ui.get_launch_ui_opacity(),"card_progress":ui.get_launch_card_progress(),
+            "source":"actual Docker/software raster; no physical presentation"});
+        std::fs::write(self.directory.join(format!("{name}.json")),metadata.to_string())?;
+        self.frames+=1;
+        Ok(())
+    }
 }
 struct Proxy(mpsc::Sender<Message>);
 impl EventLoopProxy for Proxy {
@@ -160,6 +178,14 @@ impl Platform for Offscreen {
                 }
             }) {
                 frames += 1;
+                let recording=MOVIE.with(|movie|movie.borrow().is_some());
+                if recording {
+                    let rgb:Vec<u8>=if kms_target {
+                        kms_pixels.iter().flat_map(|p|[(p.0>>16) as u8,(p.0>>8) as u8,p.0 as u8]).collect()
+                    } else {pixels.iter().flat_map(|p|[p.r,p.g,p.b]).collect()};
+                    MOVIE.with(|movie|movie.borrow_mut().as_mut().unwrap().record(&rgb))
+                        .map_err(|e|slint::PlatformError::from(e.to_string()))?;
+                }
                 if let Some(request) = FRAME_CAPTURE.with(|capture| capture.borrow_mut().take()) {
                     // This is the buffer actually rasterized above, not a second
                     // take_snapshot render of a potentially different state.
@@ -299,11 +325,21 @@ struct Step {
     resume_count: Option<i32>,
     catalog_count: Option<usize>,
     local_art: Option<bool>,
+    artwork_refresh: Option<bool>,
     message_contains: Option<String>,
     game_options: Option<bool>,
     game_option_index: Option<usize>,
     game_reason_contains: Option<String>,
     launch_pending: Option<bool>,
+    launch_open: Option<bool>,
+    launch_progress_min: Option<f32>,
+    launch_progress_max: Option<f32>,
+    launch_title: Option<String>,
+    artwork_open: Option<bool>,
+    artwork_ready: Option<bool>,
+    artwork_choose: Option<i32>,
+    artwork_command: Option<i32>,
+    game_option_choose: Option<i32>,
     pan_min: Option<f32>,
     pan_max: Option<f32>,
     section_title: Option<String>,
@@ -370,6 +406,11 @@ pub fn replay(
     ui: &Home,
     state: Rc<RefCell<State>>,
 ) -> Result<ReplayRun, Box<dyn Error>> {
+    if let Some(directory)=std::env::var_os("EMOTIONAL_SIM_RECORD") {
+        let folder=PathBuf::from(directory).join(format!("process-{}",std::process::id()));
+        std::fs::create_dir_all(&folder)?;
+        MOVIE.with(|movie|*movie.borrow_mut()=Some(Movie {directory:folder,ui:ui.as_weak(),frames:0}));
+    }
     let scenario: Scenario = toml::from_str(&std::fs::read_to_string(path)?)?;
     scenario.validate()?;
     let mut controller = Controller::new(scenario.mapping)?;
@@ -391,6 +432,10 @@ pub fn replay(
             if let Some(index)=step.system_choose {
                 if ui.get_system_open() { ui.invoke_system_select(index); }
             }
+            if let Some(index)=step.game_option_choose {ui.invoke_game_option_select(index);}
+            if step.artwork_refresh == Some(true) { ui.set_artwork_generation(ui.get_artwork_generation().wrapping_add(1)); }
+            if let Some(index)=step.artwork_choose {ui.invoke_artwork_picker_choose(index);}
+            if let Some(index)=step.artwork_command {ui.invoke_artwork_picker_command(index);}
             if let Some(index)=step.library_choose { if ui.get_library_open() && index>=0 {ui.invoke_activate(10+index);} }
             if let Some(index)=step.library_key_choose {if ui.get_library_search_open(){ui.invoke_library_search_key(index);} }
             if step.library_back==Some(true) && ui.get_library_open() && !ui.get_library_search_open() && !ui.get_system_open() && !ui.get_audio_open() && !ui.get_game_options_open() {ui.invoke_dismiss();}
@@ -466,6 +511,12 @@ pub fn replay(
                 step.game_option_index.is_none_or(|v|state.game_option_index==v),
                 step.has_recent.is_none_or(|v|ui.get_has_recent()==v),
                 step.launch_pending.is_none_or(|v|state.launch.as_ref().is_some_and(|c|c.pending.is_some())==v),
+                step.launch_open.is_none_or(|v|ui.get_launch_open()==v),
+                step.launch_progress_min.is_none_or(|v|ui.get_launch_progress()>=v),
+                step.launch_progress_max.is_none_or(|v|ui.get_launch_progress()<=v),
+                step.launch_title.as_ref().is_none_or(|v|ui.get_launch_title().as_str()==v),
+                step.artwork_open.is_none_or(|v|ui.get_artwork_picker_open()==v),
+                step.artwork_ready.is_none_or(|v|ui.get_artwork_picker_ready()==v),
                 step.selected.is_none_or(|v| state.selected == v),
                 step.menu.is_none_or(|v| state.menu == v),
                 step.library.is_none_or(|v| state.library == v),

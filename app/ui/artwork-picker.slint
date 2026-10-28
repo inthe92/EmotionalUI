@@ -1,0 +1,58 @@
+import { AmbientPanel, AtmosphereDesign } from "integrated.slint";
+import { FocusOutline } from "focus.slint";
+export component ArtworkPicker inherits Rectangle {
+    in property <string> title;
+    in property <string> status;
+    in property <[string]> rows;
+    in property <int> offset;
+    in property <int> selected;
+    in property <image> preview;
+    in property <bool> available;
+    in property <bool> ready;
+    in property <bool> keyboard;
+    in property <string> query;
+    in property <int> key;
+    callback chosen(int);
+    callback command(int);
+    callback key-chosen(int);
+    background:#080f1c90;
+    TouchArea {}
+    AmbientPanel {x:24px;y:72px;width:592px;height:352px;frost-y:72px;
+        Text {x:16px;y:12px;width:560px;height:24px;text:"SteamGridDB · "+root.title;overflow:elide;font-family:AtmosphereDesign.family;font-size:17px;font-weight:600;color:AtmosphereDesign.ink;}
+        if !root.keyboard: Rectangle {x:16px;y:48px;width:560px;height:284px;background:transparent;
+            for label[index] in root.rows: Rectangle {
+                x:0px;y:index*42px;width:344px;height:38px;border-radius:8px;
+                background:root.selected==root.offset+index?AtmosphereDesign.mark.with-alpha(0.14):transparent;
+                if root.selected==root.offset+index: FocusOutline {width:parent.width;height:parent.height;radius:8px;}
+                Text {x:10px;width:parent.width - 20px;height:parent.height;text:label;wrap:word-wrap;overflow:elide;vertical-alignment:center;font-family:AtmosphereDesign.family;font-size:12px;color:AtmosphereDesign.ink;}
+                TouchArea {clicked=>{root.chosen(root.offset+index);}}
+            }
+            Rectangle {x:376px;y:0px;width:160px;height:240px;background:AtmosphereDesign.fallback;border-radius:8px;
+                if root.available: Image {width:parent.width;height:parent.height;source:root.preview;image-fit:contain;}
+                if !root.available: Text {x:12px;y:12px;width:parent.width - 24px;height:parent.height - 24px;text:"Elige un juego y una carátula";wrap:word-wrap;horizontal-alignment:center;vertical-alignment:center;font-size:14px;color:AtmosphereDesign.muted;}
+            }
+            Text {x:0px;y:220px;width:344px;height:42px;text:root.status;wrap:word-wrap;font-size:11px;color:AtmosphereDesign.muted;}
+            Rectangle {x:376px;y:248px;width:160px;height:32px;border-radius:8px;background:root.ready?AtmosphereDesign.mark.with-alpha(0.2):transparent;
+                Text {width:parent.width;height:parent.height;text:root.ready?"A Aplicar":"Vista previa";horizontal-alignment:center;vertical-alignment:center;font-size:13px;color:AtmosphereDesign.ink;}
+                TouchArea {enabled:root.ready;clicked=>{root.command(0);}}
+            }
+        }
+        if root.keyboard: Rectangle {x:16px;y:48px;width:560px;height:284px;background:transparent;
+            Rectangle {width:560px;height:38px;border-radius:8px;background:AtmosphereDesign.sheet;
+                Text {x:12px;width:536px;height:parent.height;text:root.query;overflow:elide;vertical-alignment:center;font-size:16px;color:AtmosphereDesign.ink;}
+            }
+            for label[index] in ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9","Espacio","Borrar","Buscar","Volver"]: Rectangle {
+                x:mod(index,10)*56px;y:52px+floor(index/10)*44px;width:52px;height:40px;border-radius:8px;background:root.key==index?AtmosphereDesign.mark.with-alpha(0.16):AtmosphereDesign.sheet;
+                if root.key==index: FocusOutline {width:parent.width;height:parent.height;radius:8px;}
+                Text {width:parent.width;height:parent.height;text:label;horizontal-alignment:center;vertical-alignment:center;font-size:index>=36?10px:16px;color:AtmosphereDesign.ink;}
+                TouchArea {clicked=>{root.key-chosen(index);}}
+            }
+            Text {x:0px;y:244px;width:560px;height:28px;text:"A escribir · Start buscar · B volver";font-size:12px;color:AtmosphereDesign.muted;}
+        }
+    }
+    for label[index] in ["X Buscar nombre","Y Restaurar original","B Volver"]: Rectangle {
+        x:24px+index*200px;y:432px;width:192px;height:36px;border-radius:8px;background:AtmosphereDesign.sheet;
+        Text {width:parent.width;height:parent.height;text:label;horizontal-alignment:center;vertical-alignment:center;font-size:12px;color:AtmosphereDesign.ink;}
+        TouchArea {clicked=>{root.command(index+1);}}
+    }
+}

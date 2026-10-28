@@ -35,6 +35,10 @@ pub struct Return {
 fn option(args: &[String], name: &str) -> Option<String> {
     args.windows(2).find(|v| v[0] == name).map(|v| v[1].clone())
 }
+pub fn frame_bridge_enabled() -> bool {
+    cfg!(all(target_os = "linux", feature = "gpu-material", not(feature = "simulator")))
+        && std::env::var_os("EMOTIONAL_LAUNCH_FRAMEBUFFER").as_deref() == Some(std::ffi::OsStr::new("1"))
+}
 fn read<T: serde::de::DeserializeOwned>(p: &Path) -> Result<T, Box<dyn Error>> {
     read_bounded(p, 65536)
 }
@@ -64,7 +68,7 @@ pub fn returned(dir: &Path) -> Option<Return> {
 struct OwnedDirectory(PathBuf);
 impl Drop for OwnedDirectory {
     fn drop(&mut self) {
-        for n in ["request.toml", "return.toml", "owner", "active-game"] {
+        for n in ["request.toml", "return.toml", "owner", "active-game", "launch.rgba"] {
             let _ = fs::remove_file(self.0.join(n));
         }
         let _ = fs::remove_dir(&self.0);
@@ -138,6 +142,7 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
     let executable = std::env::current_exe()?;
     let mut next: Option<Return> = None;
     loop {
+        let _ = fs::remove_file(ipc.0.join("launch.rgba"));
         let returning = next.is_some();
         if let Some(value) = next.take() {
             write(&ipc.0.join("return.toml"), &value)?;
@@ -255,6 +260,21 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
         let mut local_start = None;
         let mut spawned = false;
         let mut reaped = false;
+        #[cfg(target_os = "linux")]
+        let frame = if frame_bridge_enabled() {
+            use std::io::Read;
+            let path=ipc.0.join("launch.rgba");
+            let frame=(|| -> std::io::Result<emotional_services::launch_frame::Held> {
+                let metadata=fs::symlink_metadata(&path)?;
+                if !metadata.is_file() || metadata.len()!=emotional_services::launch_frame::FRAME_BYTES as u64 {
+                    return Err(std::io::Error::other("Invalid bounded launch frame"));
+                }
+                let mut bytes=Vec::new();
+                fs::File::open(path)?.take(emotional_services::launch_frame::FRAME_BYTES as u64+1).read_to_end(&mut bytes)?;
+                emotional_services::launch_frame::Held::show(&bytes)
+            })();
+            match frame {Ok(frame)=>Some(frame),Err(error)=>{eprintln!("LAUNCH_FRAME unavailable: {error}");None}}
+        } else {None};
         let result = (|| -> Result<(), Box<dyn Error>> {
             let rom = store
                 .launch_rom(&position.game_id)?
@@ -305,9 +325,13 @@ pub fn dispatch() -> Result<bool, Box<dyn Error>> {
             Ok(())
         })();
         if spawned && !reaped {
+            #[cfg(target_os = "linux")]
+            std::mem::forget(frame); // Never restore over an emulator of uncertain lifetime.
             std::mem::forget(lock); // Preserve recovery PID and refuse another supervisor.
             return Err("Cannot confirm game termination; frontend restart refused, independent recovery required".into());
         }
+        #[cfg(target_os = "linux")]
+        drop(frame);
         // Keep attempts, actual process duration and reliable dated sessions distinct.
         let storage = store.record_launch_context(&record,position.recommended,local_start);
         println!(

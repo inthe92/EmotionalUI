@@ -15,6 +15,7 @@ const ALGORITHM: &str = "editorial-v1";
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Role {
+    Selected,
     Curated,
     Hero,
     Boxart,
@@ -161,8 +162,8 @@ fn source(resource: &Resource) -> Option<(Vec<u8>, ImageFormat, u32, u32)> {
 }
 fn mode(role: Role, w: u32, h: u32) -> Option<Mode> {
     match role {
-        Role::Curated if h > w => Some(Mode::Boxart),
-        Role::Curated => Some(Mode::Landscape),
+        Role::Selected | Role::Curated if h > w => Some(Mode::Boxart),
+        Role::Selected | Role::Curated => Some(Mode::Landscape),
         Role::Hero if w >= h * 4 / 3 && w >= 160 && h >= 90 => Some(Mode::Landscape),
         Role::Boxart => Some(Mode::Boxart),
         Role::Screenshot | Role::Title => Some(Mode::Screenshot),
@@ -455,11 +456,7 @@ impl Cache {
                 let (w, h) = probe(resource)?;
                 let mode = mode(resource.role, w, h)?;
                 Some((
-                    if resource.role == Role::Curated {
-                        0
-                    } else {
-                        1 + priority(mode, r.presentation)
-                    },
+                    match resource.role {Role::Selected=>0,Role::Curated=>1,_=>2+priority(mode,r.presentation)},
                     std::cmp::Reverse(w.min(h)),
                     resource,
                     mode,
@@ -491,27 +488,84 @@ impl Cache {
         None
     }
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Default)]
 #[serde(deny_unknown_fields)]
 struct Overrides {
     games: std::collections::BTreeMap<String, Override>,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
 struct Override {
     path: PathBuf,
     root: PathBuf,
 }
+const MAX_OVERRIDE_BYTES: u64 = 4 * 1024 * 1024;
+fn choices_path() -> Option<PathBuf> {
+    std::env::var_os("EMOTIONAL_ARTWORK_CHOICES").map(PathBuf::from).or_else(||
+        std::env::var_os("HOME").map(|home|PathBuf::from(home).join(".local/share/emotional-ui-player/artwork-choices.json")))
+}
+fn read_choices(path: &Path) -> std::io::Result<Overrides> {
+    let file=fs::File::open(path)?;
+    let mut bytes=Vec::new();file.take(MAX_OVERRIDE_BYTES+1).read_to_end(&mut bytes)?;
+    if bytes.len() as u64>MAX_OVERRIDE_BYTES {return Err(std::io::Error::other("Artwork choices exceed limit"));}
+    serde_json::from_slice(&bytes).map_err(std::io::Error::other)
+}
+pub fn save_choice(id: &str, resource: Option<&Resource>) -> std::io::Result<()> {
+    let path=choices_path().ok_or_else(||std::io::Error::other("No private artwork directory"))?;
+    save_choice_at(&path,id,resource)
+}
+fn save_choice_at(path: &Path,id: &str,resource:Option<&Resource>) -> std::io::Result<()> {
+    use std::os::unix::fs::OpenOptionsExt;
+    let mut choices=match read_choices(&path) {Ok(v)=>v,Err(e) if e.kind()==std::io::ErrorKind::NotFound=>Overrides::default(),Err(e)=>return Err(e)};
+    if let Some(resource)=resource {
+        if probe(resource).is_none() {return Err(std::io::Error::other("Invalid selected artwork"));}
+        choices.games.insert(id.into(),Override {path:resource.path.clone(),root:resource.root.clone()});
+    } else {choices.games.remove(id);}
+    let bytes=serde_json::to_vec(&choices)?;
+    if bytes.len() as u64>MAX_OVERRIDE_BYTES {return Err(std::io::Error::other("Artwork choices exceed limit"));}
+    fs::create_dir_all(path.parent().ok_or_else(||std::io::Error::other("Invalid choice path"))?)?;
+    let temporary=path.with_extension(format!("tmp-{}",std::process::id()));
+    let result=(|| {let mut file=fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(&temporary)?;
+        file.write_all(&bytes)?;file.sync_all()?;fs::rename(&temporary,path)})();
+    if result.is_err() {let _=fs::remove_file(temporary);}
+    result
+}
+pub fn prepare_download(path: &Path, root: &Path) -> Option<(Resource, Prepared)> {
+    let resource=Resource {path:path.to_path_buf(),root:root.to_path_buf(),role:Role::Selected};
+    let (bytes,format,w,h)=source(&resource)?;
+    if (w,h)!=(600,900) {return None;}
+    let image=read_image(&bytes,format)?.resize_exact(240,360,imageops::FilterType::Lanczos3).to_rgba8();
+    let output=root.join(format!("portrait-{}.png",path.file_stem()?.to_str()?));
+    let mut encoded=Cursor::new(Vec::new());
+    DynamicImage::ImageRgba8(image.clone()).write_to(&mut encoded,ImageFormat::Png).ok()?;
+    let encoded=encoded.into_inner();
+    use std::os::unix::fs::OpenOptionsExt;
+    match fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(&output) {
+        Ok(mut file)=>file.write_all(&encoded).ok()?,
+        Err(error) if error.kind()==std::io::ErrorKind::AlreadyExists=>{
+            if output.is_symlink() || fs::read(&output).ok()?!=encoded {return None;}
+        }
+        Err(_)=>return None,
+    }
+    Some((Resource {path:output,root:root.to_path_buf(),role:Role::Selected},Prepared {
+        width:240,height:360,pixels:image.into_raw(),mode:Mode::Boxart,cache_hit:false}))
+}
+fn read_overrides(reader: impl Read) -> Option<Overrides> {
+    let mut text = String::new();
+    reader
+        .take(MAX_OVERRIDE_BYTES + 1)
+        .read_to_string(&mut text)
+        .ok()?;
+    if text.len() as u64 > MAX_OVERRIDE_BYTES {
+        return None;
+    }
+    toml::from_str(&text).ok()
+}
 fn overrides() -> std::collections::BTreeMap<String, Override> {
     let parsed = (|| -> Option<Overrides> {
         let path = std::env::var_os("EMOTIONAL_ARTWORK_OVERRIDES")?;
         let file = fs::File::open(path).ok()?;
-        let mut text = String::new();
-        file.take(256 * 1024 + 1).read_to_string(&mut text).ok()?;
-        if text.len() > 256 * 1024 {
-            return None;
-        }
-        toml::from_str(&text).ok()
+        read_overrides(file)
     })();
     parsed.map(|p| p.games).unwrap_or_default()
 }
@@ -522,9 +576,15 @@ impl Worker {
         std::thread::spawn(move || {
             let mut cache = Cache::configured();
             let overrides = overrides();
+            let mut choice_stamp=None;
+            let mut choices=Overrides::default();
             while let Ok(mut r) = rx.recv() {
                 while let Ok(new) = rx.try_recv() {
                     r = new;
+                }
+                if let Some(path)=choices_path() {
+                    let stamp=fs::metadata(&path).ok().map(|m|(m.modified().ok(),m.len()));
+                    if stamp!=choice_stamp {choices=read_choices(&path).unwrap_or_default();choice_stamp=stamp;}
                 }
                 if let Some(art) = overrides.get(&r.game_id) {
                     r.resources.insert(
@@ -535,6 +595,9 @@ impl Worker {
                             role: Role::Curated,
                         },
                     );
+                }
+                if let Some(art)=choices.games.get(&r.game_id) {
+                    r.resources.insert(0,Resource {path:art.path.clone(),root:art.root.clone(),role:Role::Selected});
                 }
                 #[cfg(feature = "simulator")]
                 if !r.resources.is_empty() {

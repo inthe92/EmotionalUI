@@ -62,6 +62,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ui.set_nav_position(page as f32);
     ui.set_motion_section(page);
     match case.as_str() {
+        "artwork" => {
+            ui.set_artwork_picker_open(true);
+            ui.set_artwork_picker_title(std::env::var("EMOTIONAL_PREVIEW_TITLE").unwrap_or_else(|_|"Un lugar al que volver · SNES".into()).into());
+            ui.set_artwork_picker_rows(strings(&["Carátula vertical · ilustración", "Carátula vertical · alternativa", "Carátula vertical · edición original"]));
+            ui.set_artwork_picker_index(0);
+            ui.set_artwork_picker_status("A aplicar esta carátula · B volver".into());
+            if let Some(path)=std::env::var_os("EMOTIONAL_PREVIEW_COVER") {
+                ui.set_artwork_picker_image(slint::Image::load_from_path(std::path::Path::new(&path))?);
+                ui.set_artwork_picker_image_available(true);ui.set_artwork_picker_ready(true);
+            }
+        }
+        "launch" => {
+            ui.set_launch_title(std::env::var("EMOTIONAL_PREVIEW_TITLE").unwrap_or_else(|_|"Un lugar al que volver".into()).into());
+            if let Some(path)=std::env::var_os("EMOTIONAL_PREVIEW_COVER") {
+                ui.set_launch_cover(slint::Image::load_from_path(std::path::Path::new(&path))?);
+                ui.set_launch_cover_available(true);
+            }
+            ui.set_launch_progress(std::env::var("EMOTIONAL_PREVIEW_LAUNCH_PROGRESS").ok().and_then(|v|v.parse::<f32>().ok()).unwrap_or(1.).clamp(0.,1.));
+            ui.set_launch_open(true);
+        }
         "card" => ui.set_selected(0),
         "secondary" => ui.set_selected(1),
         "dock" => ui.set_dock_cursor(2),

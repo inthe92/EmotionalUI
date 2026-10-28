@@ -317,6 +317,7 @@ export component Integrated inherits Rectangle {
     in property <image> resume-cover;
     in property <bool> resume-art-available;
     in property <bool> show-content:true;
+    in property <float> content-opacity:1;
     in property <string> heading;
     in property <bool> resume;
     in property <length> pan:0px;
@@ -380,7 +381,7 @@ export component Integrated inherits Rectangle {
     Image {width:640px;height:480px;source:AtmosphereDesign.scene-raster-ready?AtmosphereDesign.scene-rasters[8]:@image-url("../../assets/scenes/lofi-room-v2/reading-mask.svg");}
 
     // Only the content plane moves; the landscape and system anchors stay put.
-    Rectangle {x:0px;y:0px;width:MotionDesign.content-span*1px;height:480px;clip:true;background:transparent;
+    Rectangle {x:0px;y:0px;width:MotionDesign.content-span*1px;height:480px;clip:true;background:transparent;opacity:root.content-opacity;
     Rectangle {
         x:root.page-offsets[0]*(MotionDesign.content-span/MotionDesign.page-span)*1px;width:640px;height:480px;
         visible:root.show-content&&root.page-offsets[0]>-640&&root.page-offsets[0]<640;background:transparent;

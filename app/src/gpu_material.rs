@@ -5,6 +5,13 @@ use glow::HasContext;
 use slint::{ComponentHandle, GraphicsAPI, Image, RenderingState};
 use std::{path::PathBuf, rc::Rc};
 
+thread_local! {
+    static LAUNCH_FRAME: std::cell::RefCell<Option<Vec<u8>>> = const { std::cell::RefCell::new(None) };
+}
+pub fn take_launch_frame() -> Option<Vec<u8>> {
+    LAUNCH_FRAME.with(|frame| frame.borrow_mut().take())
+}
+
 type Result<T> = std::result::Result<T, String>;
 const VERT: &str = include_str!("../ui/gpu-quad.vert");
 const AMBIENT: &str = include_str!("../ui/gpu-ambient.frag");
@@ -163,6 +170,15 @@ pub fn install(ui: &Home) {
             }
             RenderingState::AfterRendering => {
                 frames += 1;
+                if ui.get_launch_frame_requested() && !ui.get_launch_frame_ready() {
+                    if let Some(renderer) = engine.as_ref() {
+                        match unsafe { renderer.frame() } {
+                            Ok(image) => LAUNCH_FRAME.with(|frame| *frame.borrow_mut() = Some(image.into_raw())),
+                            Err(error) => eprintln!("LAUNCH_FRAME capture unavailable: {error}"),
+                        }
+                    }
+                    ui.set_launch_frame_ready(true);
+                }
                 if matches!(frames, 16 | 46) {
                     if let (Some(renderer), Some(folder)) = (engine.as_ref(), focus_sequence.as_ref()) {
                         let mut viewport = [0; 4];
@@ -425,10 +441,10 @@ impl Engine {
         self.builds += 1;
         Ok((borrow(back.tex), borrow(material.tex)))
     }
-    unsafe fn capture(&self, path: &std::path::Path) -> Result<()> {
-        if path.exists() {
-            return Err("Refusing to overwrite capture".into());
-        }
+    unsafe fn frame(&self) -> Result<image::RgbaImage> {
+        let mut viewport = [0;4];
+        self.gl.get_parameter_i32_slice(glow::VIEWPORT,&mut viewport);
+        if viewport != [0,0,640,480] { return Err("Launch frame requires 640x480 pixels".into()); }
         let mut bytes = vec![0_u8; 640 * 480 * 4];
         self.gl.read_pixels(
             0,
@@ -439,9 +455,17 @@ impl Engine {
             glow::UNSIGNED_BYTE,
             glow::PixelPackData::Slice(Some(&mut bytes)),
         );
+        if self.gl.get_error() != glow::NO_ERROR { return Err("Framebuffer readback failed".into()); }
         let mut image =
             image::RgbaImage::from_raw(640, 480, bytes).ok_or("Invalid capture size")?;
         image::imageops::flip_vertical_in_place(&mut image);
+        Ok(image)
+    }
+    unsafe fn capture(&self, path: &std::path::Path) -> Result<()> {
+        if path.exists() {
+            return Err("Refusing to overwrite capture".into());
+        }
+        let image=self.frame()?;
         image.save(path).map_err(|e| e.to_string())
     }
 }

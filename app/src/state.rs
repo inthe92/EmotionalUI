@@ -43,6 +43,7 @@ pub(super) struct State {
     pub(super) continuity_preferences:
         std::collections::BTreeMap<String, emotional_core::continuity::Preference>,
     pub(super) game_options: Option<usize>,
+    pub(super) artwork_picker: Option<crate::artwork_picker::Picker>,
     pub(super) game_option_index: usize,
     pub(super) game_explained: bool,
     pub(super) atlas_observations: Vec<emotional_core::atlas::Observation>,
@@ -207,6 +208,7 @@ impl State {
                 .into(),
         );
         ui.set_game_options_open(self.game_options.is_some());
+        ui.set_artwork_picker_open(self.artwork_picker.is_some());
         ui.set_game_option_index(self.game_option_index as i32);
         if let Some(i) = self.game_options {
             let p = self
@@ -261,6 +263,7 @@ impl State {
                 } else {
                     "¿Por qué este juego?"
                 },
+                "SteamGridDB · Carátula",
                 "Volver",
             ];
             ui.set_game_option_labels(
@@ -738,6 +741,10 @@ impl State {
             return Ok(());
         }
         use emotional_services::feedback::Cue;
+        if self.artwork_picker.is_some() {
+            self.artwork_picker_action(ui,action);
+            return Ok(());
+        }
         // B belongs to the top modal only and closes it synchronously. No
         // transition timer or underlying section can consume the same input.
         if self.game_options.is_some() || self.audio_panel || self.system_open {

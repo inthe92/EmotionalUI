@@ -1,7 +1,7 @@
 //! UI half of launch: no process or filesystem access inside an input callback.
 use crate::{state::State, supervisor, Home};
 use emotional_services::ambient_audio::ReleaseTicket;
-use std::{path::PathBuf, time::Instant};
+use std::{path::PathBuf, time::{Duration, Instant}};
 pub struct Client {
     pub directory: PathBuf,
     pub pending: Option<Pending>,
@@ -11,9 +11,21 @@ pub struct Pending {
     pub request: supervisor::Request,
     pub ticket: ReleaseTicket,
     pub start: Instant,
+    pub frame_started: Option<Instant>,
+}
+fn entrance_duration(reduced: bool, system_option: bool) -> Duration {
+    Duration::from_millis(if system_option { 0 } else if reduced { 100 } else { 440 })
+}
+fn entrance_progress(elapsed: Duration, duration: Duration) -> f32 {
+    if duration.is_zero() { return 1.; }
+    let t = (elapsed.as_secs_f32() / duration.as_secs_f32()).clamp(0., 1.);
+    t
 }
 impl State {
     pub(super) fn launch_game(&mut self, ui: &Home, index: usize) {
+        if self.launch.as_ref().is_some_and(|c|c.pending.is_some() || c.committed.is_some()) {
+            return;
+        }
         if self.trial_mode {
             self.notify(ui,"Modo prueba · Puedes explorar. El lanzamiento físico aún necesita validación supervisada.");
             return;
@@ -31,7 +43,22 @@ impl State {
             library_view: self.library.then(||self.library_browser.saved()),
             system_option: None,
         };
+        let existing = if self.recent == Some(index) {
+            (ui.get_resume_cover(), ui.get_resume_art_available())
+        } else if self.continuity_order.get(1) == Some(&index) {
+            (ui.get_resume_two_cover(), ui.get_resume_two_art_available())
+        } else if self.continuity_order.get(2) == Some(&index) {
+            (ui.get_resume_three_cover(), ui.get_resume_three_art_available())
+        } else if self.order.first() == Some(&index) {
+            (ui.get_local_cover(), ui.get_local_art_available())
+        } else {
+            (slint::Image::default(), false)
+        };
         self.queue_launch(ui, request);
+        if ui.get_launch_open() && existing.1 {
+            ui.set_launch_cover(existing.0);
+            ui.set_launch_cover_available(true);
+        }
     }
     pub(super) fn queue_launch(&mut self, ui: &Home, request: supervisor::Request) {
         if self.trial_mode {
@@ -53,10 +80,20 @@ impl State {
         if client.pending.is_some() || client.committed.is_some() {
             return;
         }
+        ui.set_launch_open(request.system_option.is_none());
+        ui.set_launch_progress(if self.config.reduced_motion { 1. } else { 0. });
+        ui.set_launch_title(self.games.iter().find(|g|g.id==request.game_id).map(|g|g.title.clone()).unwrap_or_default().into());
+        ui.set_launch_cover(slint::Image::default());
+        ui.set_launch_cover_available(false);
+        ui.set_launch_frame_requested(false);
+        ui.set_launch_frame_ready(false);
+        #[cfg(feature = "gpu-material")]
+        let _ = crate::gpu_material::take_launch_frame();
         client.pending = Some(Pending {
             request,
             ticket: self.audio.suspend_for_game(),
             start: Instant::now(),
+            frame_started: None,
         });
         self.gate.release();
         self.keyboard.reset();
@@ -66,6 +103,9 @@ impl State {
         if let Some(client) = &mut self.launch {
             client.pending = None;
         }
+        ui.set_launch_open(false);
+        ui.set_launch_frame_requested(false);
+        ui.set_launch_frame_ready(false);
         let _ = self.audio.return_from_game(self.audio_preferences.clone());
         self.notify(ui, "Seguimos aquí.");
     }
@@ -73,10 +113,35 @@ impl State {
         let Some(p) = self.launch.as_ref().and_then(|c| c.pending.as_ref()) else {
             return;
         };
-        if self.audio.released(p.ticket) {
+        let elapsed = p.start.elapsed();
+        let duration = entrance_duration(self.config.reduced_motion, p.request.system_option.is_some());
+        ui.set_launch_progress(if self.config.reduced_motion { 1. } else { entrance_progress(elapsed, duration) });
+        let audio_ready = self.audio.released(p.ticket);
+        if !audio_ready && elapsed > Duration::from_secs(2) {
+            self.cancel_launch(ui);
+            self.notify(ui, "No pudimos preparar el sonido. Inténtalo de nuevo.");
+            return;
+        }
+        if audio_ready && elapsed >= duration {
+            // One optional final-frame readback; bounded wait, never a GPU owner
+            // surviving into the emulator. This bridge is off until device validation.
+            if p.request.system_option.is_none() && crate::supervisor::frame_bridge_enabled() {
+                let waited=p.frame_started.map(|start|start.elapsed()).unwrap_or(Duration::ZERO);
+                let first=p.frame_started.is_none();
+                ui.set_launch_frame_requested(true);
+                if first {
+                    if let Some(p)=self.launch.as_mut().and_then(|c|c.pending.as_mut()) {
+                        p.frame_started=Some(Instant::now());
+                    }
+                }
+                if !ui.get_launch_frame_ready() && waited < Duration::from_millis(200) {
+                    ui.window().request_redraw();
+                    return;
+                }
+            }
             println!(
-                "LAUNCH_UI audio_released_ms={:.3}",
-                p.start.elapsed().as_secs_f64() * 1000.0
+                "LAUNCH_UI audio_ready=true entrance_ready=true handoff_wait_ms={:.3}",
+                elapsed.as_secs_f64() * 1000.0
             );
             let Some(client) = &mut self.launch else {
                 return;
@@ -89,9 +154,6 @@ impl State {
                 client.committed = None;
                 self.cancel_launch(ui);
             }
-        } else if p.start.elapsed() > std::time::Duration::from_secs(2) {
-            self.cancel_launch(ui);
-            self.notify(ui, "No pudimos preparar el sonido. Inténtalo de nuevo.");
         }
     }
 }
@@ -118,6 +180,20 @@ pub(super) fn restore_position(
 }
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn entrance_is_bounded_monotonic_and_reduced_motion_does_not_move() {
+        use std::time::Duration;
+        let normal=super::entrance_duration(false,false);
+        let mut previous=0.;
+        for ms in 0..=600 {
+            let progress=super::entrance_progress(Duration::from_millis(ms),normal);
+            assert!(progress>=previous && (0. ..=1.).contains(&progress));
+            previous=progress;
+        }
+        assert_eq!(previous,1.);
+        assert_eq!(super::entrance_duration(true,false),Duration::from_millis(100));
+        assert_eq!(super::entrance_duration(false,true),Duration::ZERO);
+    }
     #[test]
     fn returning_secondary_game_follows_identity_after_reordering() {
         let games=emotional_core::library::demo_catalog();

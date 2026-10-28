@@ -1,5 +1,6 @@
 mod ambient_motion;
 mod artwork;
+mod artwork_picker;
 mod atlas;
 mod atlas_classic;
 mod audio_settings;
@@ -47,6 +48,21 @@ use slint::ComponentHandle;
 use state::State;
 use std::{cell::RefCell, error::Error, path::PathBuf, rc::Rc, time::Instant};
 slint::include_modules!();
+/// Publish a prepared cover in one event-loop turn; never clear it while decoding.
+fn present_artwork(ui: &Home, slot: usize, image: Option<slint::Image>, id: &str) {
+    let available = image.is_some();
+    let image = image.unwrap_or_default();
+    match slot {
+        0 => { ui.set_local_cover(image); ui.set_local_art_available(available); ui.set_local_art_id(id.into()); }
+        1 => { ui.set_alternative_cover(image); ui.set_alternative_art_available(available); }
+        2 => { ui.set_resume_two_cover(image); ui.set_resume_two_art_available(available); }
+        3 => { ui.set_resume_three_cover(image); ui.set_resume_three_art_available(available); }
+        4 => { ui.set_resume_cover(image); ui.set_resume_art_available(available); }
+        5 => { ui.set_third_cover(image); ui.set_third_art_available(available); }
+        6 => { ui.set_launch_cover(image); ui.set_launch_cover_available(available); }
+        _ => unreachable!("bounded artwork slot"),
+    }
+}
 #[derive(Deserialize)]
 #[serde(default, deny_unknown_fields)]
 struct Config {
@@ -838,6 +854,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         continuity_activity,
         continuity_preferences,
         game_options: None,
+        artwork_picker: None,
         game_option_index: 0,
         game_explained: false,
         history,
@@ -992,6 +1009,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     }
     if let Some(back) = &returned {
         if !library_unavailable {
+            ui.set_launch_result_message(back.message.clone().into());
             state.notify(&ui, &back.message);
         }
     }
@@ -1083,6 +1101,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     if let Some(mut updates) = trial_updates {
         let weak = ui.as_weak();
         let s = shared.clone();
+        let return_notice=returned.as_ref().map(|back|back.message.clone());
         trial_timer.start(
             slint::TimerMode::Repeated,
             std::time::Duration::from_millis(50),
@@ -1132,7 +1151,6 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             ui.set_library_offset(-1);
                             state.local_art = update.art;
                             ui.set_artwork_generation(ui.get_artwork_generation().wrapping_add(1));
-                            ui.set_local_art_id("".into());
                             state.discovery_reserve = None;
                             state.library_index = focused
                                 .and_then(|id| state.games.iter().position(|g| g.id == id))
@@ -1157,7 +1175,11 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             } else {
                                 &update.message
                             };
-                            state.notify(&ui, message);
+                            // Background catalog refresh must not immediately hide
+                            // the result of a failed launch or a completed session.
+                            if return_notice.as_ref().is_none_or(|notice|ui.get_message().as_str()!=notice) {
+                                state.notify(&ui, message);
+                            }
                             println!("TRIAL catalog_ready games={}", state.games.len());
                         }
                         Err(e) => {
@@ -1177,8 +1199,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     let weak = ui.as_weak();
     let s = shared.clone();
     let mut pending: Option<String> = None;
-    let mut shown: [Option<String>; 6] = Default::default();
-    let mut requested: [Option<String>; 6] = Default::default();
+    let mut shown: [Option<String>; 7] = Default::default();
+    let mut shown_games: [Option<String>; 7] = Default::default();
+    let mut requested: [Option<String>; 7] = Default::default();
     art_timer.start(
         slint::TimerMode::Repeated,
         std::time::Duration::from_millis(30),
@@ -1194,8 +1217,10 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                 state.continuity_order.get(2).copied(),
                 state.recent,
                 state.order.get(2).copied(),
+                state.launch.as_ref().and_then(|c|c.pending.as_ref()).filter(|p|p.request.system_option.is_none())
+                    .and_then(|p|state.games.iter().position(|g|g.id==p.request.game_id)),
             ];
-            let desired: [Option<String>; 6] = std::array::from_fn(|slot| {
+            let desired: [Option<String>; 7] = std::array::from_fn(|slot| {
                 indices[slot].and_then(|i| state.games.get(i)).map(|g| {
                     format!(
                         "{slot}:{}:{}:{}",
@@ -1205,32 +1230,15 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                     )
                 })
             });
-            for slot in 0..6 {
+            for slot in 0..7 {
                 if shown[slot] != desired[slot] {
-                    match slot {
-                        0 => {
-                            ui.set_local_cover(slint::Image::default());
-                            ui.set_local_art_available(false);
-                            ui.set_local_art_id("".into());
-                        }
-                        1 => {
-                            ui.set_alternative_cover(slint::Image::default());
-                            ui.set_alternative_art_available(false);
-                        }
-                        2 => {
-                            ui.set_resume_two_cover(slint::Image::default());
-                            ui.set_resume_two_art_available(false);
-                        }
-                        3 => {
-                            ui.set_resume_three_cover(slint::Image::default());
-                            ui.set_resume_three_art_available(false);
-                        }
-                        5 => {ui.set_third_cover(slint::Image::default());ui.set_third_art_available(false);}
-                        _ => {
-                            ui.set_resume_cover(slint::Image::default());
-                            ui.set_resume_art_available(false);
-                        }
+                    let game = indices[slot].and_then(|i| state.games.get(i)).map(|g| g.id.clone());
+                    // Keep a same-game cover on screen while its new revision is
+                    // decoded. A generation change is not a change of game.
+                    if shown_games[slot] != game {
+                        present_artwork(&ui, slot, None, "");
                     }
+                    shown_games[slot] = game;
                     shown[slot] = desired[slot].clone();
                     requested[slot] = None;
                 }
@@ -1246,30 +1254,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                 &p.pixels, p.width, p.height,
                             );
                         let image = slint::Image::from_rgba8(buffer);
-                        match slot {
-                            0 => {
-                                ui.set_local_cover(image);
-                                ui.set_local_art_available(true);
-                                ui.set_local_art_id(thumbnail.id.clone().into());
-                            }
-                            1 => {
-                                ui.set_alternative_cover(image);
-                                ui.set_alternative_art_available(true);
-                            }
-                            2 => {
-                                ui.set_resume_two_cover(image);
-                                ui.set_resume_two_art_available(true);
-                            }
-                            3 => {
-                                ui.set_resume_three_cover(image);
-                                ui.set_resume_three_art_available(true);
-                            }
-                            5 => {ui.set_third_cover(image);ui.set_third_art_available(true);}
-                            _ => {
-                                ui.set_resume_cover(image);
-                                ui.set_resume_art_available(true);
-                            }
-                        }
+                        present_artwork(&ui, slot, Some(image), &thumbnail.id);
                         smoke::emit(
                             "local_art_ready",
                             Some(p.width),
@@ -1279,13 +1264,19 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                 p.mode, p.cache_hit
                             )),
                         );
+                    } else {
+                        // Missing/invalid replacement must return to the real
+                        // fallback, rather than keeping a stale manual choice.
+                        present_artwork(&ui, slot, None, "");
                     }
                 }
                 pending = None;
             }
             if pending.is_none() {
                 // Only visible or immediately adjacent cards, never the entire catalog.
-                let slots: &[usize] = if state.resume {
+                let slots: &[usize] = if indices[6].is_some() {
+                    &[6,4,2,3,0,1,5]
+                } else if state.resume {
                     &[4, 2, 3, 0, 1, 5]
                 } else {
                     &[0, 1, 5, 4, 2, 3]
@@ -1298,7 +1289,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                         .as_ref()
                         .zip(indices[slot].and_then(|i| state.games.get(i)))
                     {
-                        let (width, height) = if slot == 0 || slot == 4 {
+                        let (width, height) = if slot == 6 {
+                            (160,240)
+                        } else if slot == 0 || slot == 4 {
                             (
                                 if slot == 4 {
                                     ui.get_prepared_resume_width()
@@ -1329,7 +1322,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                     .unwrap_or_default(),
                                 width,
                                 height,
-                                presentation: if slot == 0 || slot == 4 {
+                                presentation: if slot == 0 || slot == 4 || slot == 6 {
                                     artwork::Presentation::Hero
                                 } else {
                                     artwork::Presentation::Tile
@@ -1337,6 +1330,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             })
                             .is_ok()
                         {
+                            smoke::emit("local_art_request", Some(width), Some(height), Some(&format!("slot={slot}; resources={}",state.local_art.get(&game.id).map_or(0,Vec::len))));
                             pending = Some(id.clone());
                             requested[slot] = Some(id.clone());
                         }
@@ -1445,7 +1439,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     ui.on_game_option_select(move |index| {
         if let Some(ui) = weak.upgrade() {
             let mut state = s.borrow_mut();
-            if state.game_options.is_some() && (0..6).contains(&index) {
+            if state.game_options.is_some() && (0..7).contains(&index) {
                 state.game_option_index = index as usize;
                 if let Err(e) =
                     state.game_options_action(&ui, emotional_core::controls::Action::Confirm)
@@ -1557,6 +1551,21 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         None
     };
     let launch_timer = slint::Timer::default();
+    {
+        let weak=ui.as_weak();let state=shared.clone();
+        ui.on_artwork_picker_command(move |index| {if let Some(ui)=weak.upgrade() {
+            let action=match index {0=>emotional_core::controls::Action::Confirm,1=>emotional_core::controls::Action::Refresh,2=>emotional_core::controls::Action::Library,_=>emotional_core::controls::Action::Back};
+            state.borrow_mut().artwork_picker_action(&ui,action);
+        }});
+    }
+    {
+        let weak=ui.as_weak();let state=shared.clone();
+        ui.on_artwork_picker_choose(move |index| {if let Some(ui)=weak.upgrade() {state.borrow_mut().artwork_picker_choose(&ui,index);}});
+    }
+    {
+        let weak=ui.as_weak();let state=shared.clone();
+        ui.on_artwork_picker_key_chosen(move |key| {if let Some(ui)=weak.upgrade() {if key>=0 {state.borrow_mut().artwork_picker_key(&ui,key as usize);}}});
+    }
     let weak = ui.as_weak();
     let st = shared.clone();
     launch_timer.start(
@@ -1564,7 +1573,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         std::time::Duration::from_millis(20),
         move || {
             if let Some(ui) = weak.upgrade() {
-                st.borrow_mut().launch_tick(&ui);
+                let mut state=st.borrow_mut();state.launch_tick(&ui);state.artwork_picker_tick(&ui);
             }
         },
     );
@@ -1745,6 +1754,16 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         let state = shared.borrow();
         if let Some(client) = &state.launch {
             if let Some(request) = &client.committed {
+                #[cfg(feature = "gpu-material")]
+                if supervisor::frame_bridge_enabled() && request.system_option.is_none() {
+                    if let Some(frame) = gpu_material::take_launch_frame() {
+                        use std::io::Write;
+                        let result=std::fs::OpenOptions::new().write(true).create_new(true)
+                            .open(client.directory.join("launch.rgba"))
+                            .and_then(|mut file|file.write_all(&frame));
+                        if let Err(error)=result {eprintln!("LAUNCH_FRAME staging unavailable: {error}");}
+                    }
+                }
                 supervisor::write(&client.directory.join("request.toml"), request)?;
             }
         }

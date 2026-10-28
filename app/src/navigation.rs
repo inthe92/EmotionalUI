@@ -290,6 +290,7 @@ impl State {
             self.modal_return = Some(self.focus_snapshot());
         }
         self.game_options = None;
+        self.artwork_picker = None;
         self.audio_panel = modal == Modal::Audio;
         self.system_open = modal == Modal::System;
         self.system_focus = modal == Modal::System;
@@ -298,6 +299,7 @@ impl State {
 
     pub(super) fn close_modal(&mut self) {
         self.stop_drop();
+        self.artwork_picker=None;
         self.game_options = None;
         self.audio_panel = false;
         self.system_open = false;
