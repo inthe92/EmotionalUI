@@ -1,0 +1,896 @@
+{
+  "schema": 1,
+  "batch_id": "snes-evidence-20261024-02",
+  "version": "0.2.0-experimental.2",
+  "rubric": "experience-anchors-v1",
+  "sources": {
+    "review-000009": {
+      "url": "https://www.nintendolife.com/reviews/snes/pilotwings",
+      "title": "Pilotwings Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Jamie O'Neill",
+      "published": "2019-09-29",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000009",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES retrospective",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "flight lessons; precision landings; skydiving",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000011": {
+      "url": "https://www.nintendolife.com/reviews/snes/kirbys_dream_course",
+      "title": "Kirby's Dream Course Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Nintendo Life Staff",
+      "published": "2007-06-30",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000011",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "aimed golf-like shots; copied powers; course planning",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000012": {
+      "url": "https://www.nintendolife.com/reviews/snes/super_ghouls_n_ghosts",
+      "title": "Super Ghouls 'n Ghosts Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Nintendo Life Staff",
+      "published": "2007-03-06",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000012",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "double jump; enemy-pattern learning; two-loop ending requirement",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000013": {
+      "url": "https://www.nintendolife.com/reviews/wiiu-eshop/demons_crest_snes",
+      "title": "Demon's Crest Review (Wii U eShop / SNES)",
+      "medium": "Nintendo Life",
+      "author": "Corbie Dillard",
+      "published": "2014-10-31",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000013",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii U Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "hovering; transformation abilities; nonlinear stage selection",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000016": {
+      "url": "https://www.nintendolife.com/reviews/wiiu-eshop/breath_of_fire_snes",
+      "title": "Breath of Fire Review (Wii U eShop / SNES)",
+      "medium": "Nintendo Life",
+      "author": "Conor McMahon",
+      "published": "2015-01-27",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000016",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES via Wii U Virtual Console; no GBA/remake claims",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "turn-based party combat; overworld travel; character abilities",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000021": {
+      "url": "https://www.nintendolife.com/reviews/wiiu-eshop/kirby_super_star_snes",
+      "title": "Kirby Super Star Review (Wii U eShop / SNES)",
+      "medium": "Nintendo Life",
+      "author": "Stephen Kelly",
+      "published": "2013-05-27",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000021",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii U Virtual Console; not DS Ultra",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "copy abilities; multiple sub-games; cooperative helper",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000022": {
+      "url": "https://www.nintendolife.com/reviews/wiiu-eshop/breath_of_fire_ii_snes",
+      "title": "Breath of Fire II Review (Wii U eShop / SNES)",
+      "medium": "Nintendo Life",
+      "author": "Thomas Whitehead",
+      "published": "2013-09-23",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000022",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES via Wii U Virtual Console; exclude GBA retuning",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "turn-based party combat; world exploration; character abilities",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "rpgfan-bof2": {
+      "url": "https://www.rpgfan.com/feature/retro-encounter-final-thoughts-breath-of-fire-ii/",
+      "title": "Retro Encounter Final Thoughts: Breath of Fire II",
+      "medium": "RPGFan",
+      "author": "Zach Wilkerson, Matt Wardell and Mike Salbato",
+      "published": "2025-08-07",
+      "accessed": "2026-10-24",
+      "kind": "retrospective",
+      "language": "en",
+      "game_id": "atlas:snes:000022",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "SNES work; GBA comparison excluded",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "rpgfan-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "La retrospectiva aprecia ambición narrativa y critica encuentros y trayectos repetitivos; el recuerdo personal no es universal.",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    }
+  },
+  "claims": {
+    "snes-000009-mechanics": {
+      "game_id": "atlas:snes:000009",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: flight lessons, precision landings, skydiving.",
+      "sources": [
+        "review-000009"
+      ],
+      "supports": [
+        "mechanics",
+        "calm",
+        "mental_demand",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000009-experience": {
+      "game_id": "atlas:snes:000009",
+      "kind": "interpretation",
+      "summary": "La crítica encuentra serenidad en el vuelo y satisfacción al dominar los ejercicios.",
+      "sources": [
+        "review-000009"
+      ],
+      "supports": [
+        "calm",
+        "mental_demand",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000009-limits": {
+      "game_id": "atlas:snes:000009",
+      "kind": "interpretation",
+      "summary": "Los controles y las lecciones avanzadas pueden ser exigentes; también hay misiones de combate.",
+      "sources": [
+        "review-000009"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000011-mechanics": {
+      "game_id": "atlas:snes:000011",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: aimed golf-like shots, copied powers, course planning.",
+      "sources": [
+        "review-000011"
+      ],
+      "supports": [
+        "mechanics",
+        "mental_demand",
+        "pace",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000011-experience": {
+      "game_id": "atlas:snes:000011",
+      "kind": "interpretation",
+      "summary": "La crítica destaca la planificación de ángulo y fuerza, con poderes que cambian las soluciones.",
+      "sources": [
+        "review-000011"
+      ],
+      "supports": [
+        "mental_demand",
+        "pace",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000011-limits": {
+      "game_id": "atlas:snes:000011",
+      "kind": "interpretation",
+      "summary": "Conseguir medallas exige práctica; su aspecto simpático no elimina el reto.",
+      "sources": [
+        "review-000011"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000012-mechanics": {
+      "game_id": "atlas:snes:000012",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: double jump, enemy-pattern learning, two-loop ending requirement.",
+      "sources": [
+        "review-000012"
+      ],
+      "supports": [
+        "mechanics",
+        "intensity",
+        "tension",
+        "mental_demand"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000012-experience": {
+      "game_id": "atlas:snes:000012",
+      "kind": "interpretation",
+      "summary": "La crítica valora escenarios variados y aprender a anticipar peligros.",
+      "sources": [
+        "review-000012"
+      ],
+      "supports": [
+        "intensity",
+        "tension",
+        "mental_demand"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000012-limits": {
+      "game_id": "atlas:snes:000012",
+      "kind": "interpretation",
+      "summary": "La dificultad castiga errores y el final completo requiere repetir el recorrido.",
+      "sources": [
+        "review-000012"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000013-mechanics": {
+      "game_id": "atlas:snes:000013",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: hovering, transformation abilities, nonlinear stage selection.",
+      "sources": [
+        "review-000013"
+      ],
+      "supports": [
+        "mechanics",
+        "exploration",
+        "intensity",
+        "tension"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000013-experience": {
+      "game_id": "atlas:snes:000013",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia las transformaciones, el recorrido flexible y la presentación gótica.",
+      "sources": [
+        "review-000013"
+      ],
+      "supports": [
+        "exploration",
+        "intensity",
+        "tension"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000013-limits": {
+      "game_id": "atlas:snes:000013",
+      "kind": "interpretation",
+      "summary": "Advierte de una dificultad elevada; los savestates de Wii U no son una función de la ROM SNES.",
+      "sources": [
+        "review-000013"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000016-mechanics": {
+      "game_id": "atlas:snes:000016",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: turn-based party combat, overworld travel, character abilities.",
+      "sources": [
+        "review-000016"
+      ],
+      "supports": [
+        "mechanics",
+        "pace",
+        "mental_demand"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000016-experience": {
+      "game_id": "atlas:snes:000016",
+      "kind": "interpretation",
+      "summary": "La crítica reconoce atmósfera y personajes, pero encuentra combate poco estimulante.",
+      "sources": [
+        "review-000016"
+      ],
+      "supports": [
+        "pace",
+        "mental_demand"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000016-limits": {
+      "game_id": "atlas:snes:000016",
+      "kind": "interpretation",
+      "summary": "Menús y traducción de la edición reseñada entorpecen tareas; no se generaliza a traducciones de fans.",
+      "sources": [
+        "review-000016"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000021-mechanics": {
+      "game_id": "atlas:snes:000021",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: copy abilities, multiple sub-games, cooperative helper.",
+      "sources": [
+        "review-000021"
+      ],
+      "supports": [
+        "mechanics",
+        "short_sessions",
+        "exploration",
+        "intensity"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000021-experience": {
+      "game_id": "atlas:snes:000021",
+      "kind": "interpretation",
+      "summary": "La crítica disfruta la variedad entre minijuegos, búsqueda de tesoros y acción cronometrada.",
+      "sources": [
+        "review-000021"
+      ],
+      "supports": [
+        "short_sessions",
+        "exploration",
+        "intensity"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000021-limits": {
+      "game_id": "atlas:snes:000021",
+      "kind": "interpretation",
+      "summary": "El ritmo y duración varían mucho por sub-juego; algunas rutas de la caverna resultan confusas.",
+      "sources": [
+        "review-000021"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000022-mechanics": {
+      "game_id": "atlas:snes:000022",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: turn-based party combat, world exploration, character abilities.",
+      "sources": [
+        "review-000022"
+      ],
+      "supports": [
+        "mechanics",
+        "pace",
+        "mental_demand",
+        "resume_ease"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000022-experience": {
+      "game_id": "atlas:snes:000022",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia las ideas del grupo y la historia, con objeciones al equilibrio.",
+      "sources": [
+        "review-000022",
+        "rpgfan-bof2"
+      ],
+      "supports": [
+        "pace",
+        "mental_demand",
+        "resume_ease"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000022-limits": {
+      "game_id": "atlas:snes:000022",
+      "kind": "interpretation",
+      "summary": "Señalización opaca, encuentros duros y traducción de esta edición pueden frenar el avance.",
+      "sources": [
+        "review-000022"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    }
+  },
+  "profiles": [
+    {
+      "id": "atlas:snes:000009",
+      "mechanics": {
+        "value": [
+          "flight lessons",
+          "precision landings",
+          "skydiving"
+        ],
+        "confidence": 75,
+        "source": "review-000009",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000009-mechanics"
+        ]
+      },
+      "attributes": {
+        "calm": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000009",
+          "evidence": [
+            "snes-000009-mechanics",
+            "snes-000009-experience"
+          ],
+          "note": "El vuelo ofrece calma relativa, interrumpida por retos y combate."
+        },
+        "mental_demand": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000009",
+          "evidence": [
+            "snes-000009-mechanics",
+            "snes-000009-experience"
+          ],
+          "note": "Aterrizar y controlar altura demanda práctica y ajustes precisos."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000009",
+          "evidence": [
+            "snes-000009-mechanics",
+            "snes-000009-experience"
+          ],
+          "note": "Cada lección define una tarea acotada; no se asignan minutos."
+        }
+      },
+      "explanation": "Ensaya vuelos y aterrizajes: una calma de aprendizaje que se vuelve exigente al progresar.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000011",
+      "mechanics": {
+        "value": [
+          "aimed golf-like shots",
+          "copied powers",
+          "course planning"
+        ],
+        "confidence": 75,
+        "source": "review-000011",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000011-mechanics"
+        ]
+      },
+      "attributes": {
+        "mental_demand": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000011",
+          "evidence": [
+            "snes-000011-mechanics",
+            "snes-000011-experience"
+          ],
+          "note": "Ángulo, fuerza y obstáculos se combinan para planear el golpe."
+        },
+        "pace": {
+          "value": 20,
+          "confidence": 60,
+          "source": "review-000011",
+          "evidence": [
+            "snes-000011-mechanics",
+            "snes-000011-experience"
+          ],
+          "note": "La decisión se organiza alrededor de golpes planificados."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000011",
+          "evidence": [
+            "snes-000011-mechanics",
+            "snes-000011-experience"
+          ],
+          "note": "Los hoyos delimitan tareas; no se asume persistencia automática."
+        }
+      },
+      "explanation": "Piensa el siguiente golpe, combina poderes y busca una trayectoria mejor en cada hoyo.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000012",
+      "mechanics": {
+        "value": [
+          "double jump",
+          "enemy-pattern learning",
+          "two-loop ending requirement"
+        ],
+        "confidence": 75,
+        "source": "review-000012",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000012-mechanics"
+        ]
+      },
+      "attributes": {
+        "intensity": {
+          "value": 100,
+          "confidence": 65,
+          "source": "review-000012",
+          "evidence": [
+            "snes-000012-mechanics",
+            "snes-000012-experience"
+          ],
+          "note": "Los peligros constantes y la precisión dominan la acción."
+        },
+        "tension": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000012",
+          "evidence": [
+            "snes-000012-mechanics",
+            "snes-000012-experience"
+          ],
+          "note": "Los errores y jefes sostienen una amenaza elevada."
+        },
+        "mental_demand": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000012",
+          "evidence": [
+            "snes-000012-mechanics",
+            "snes-000012-experience"
+          ],
+          "note": "Recordar patrones y anticipar el salto requiere atención repetida."
+        }
+      },
+      "explanation": "Un reto severo de saltos y patrones: avanzar depende de aprender y anticipar peligros.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000013",
+      "mechanics": {
+        "value": [
+          "hovering",
+          "transformation abilities",
+          "nonlinear stage selection"
+        ],
+        "confidence": 75,
+        "source": "review-000013",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000013-mechanics"
+        ]
+      },
+      "attributes": {
+        "exploration": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000013",
+          "evidence": [
+            "snes-000013-mechanics",
+            "snes-000013-experience"
+          ],
+          "note": "Transformaciones y orden flexible amplían el recorrido."
+        },
+        "intensity": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000013",
+          "evidence": [
+            "snes-000013-mechanics",
+            "snes-000013-experience"
+          ],
+          "note": "Obstáculos y jefes exigen un jugador dispuesto a practicar."
+        },
+        "tension": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000013",
+          "evidence": [
+            "snes-000013-mechanics",
+            "snes-000013-experience"
+          ],
+          "note": "El peligro y la presentación oscura sugieren amenaza, sin medir una emoción universal."
+        }
+      },
+      "explanation": "Transformaciones y caminos flexibles en una aventura gótica que exige práctica.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000016",
+      "mechanics": {
+        "value": [
+          "turn-based party combat",
+          "overworld travel",
+          "character abilities"
+        ],
+        "confidence": 75,
+        "source": "review-000016",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000016-mechanics"
+        ]
+      },
+      "attributes": {
+        "pace": {
+          "value": 20,
+          "confidence": 65,
+          "source": "review-000016",
+          "evidence": [
+            "snes-000016-mechanics",
+            "snes-000016-experience"
+          ],
+          "note": "La crítica describe desplazamiento lento y combate rutinario."
+        },
+        "mental_demand": {
+          "value": 40,
+          "confidence": 60,
+          "source": "review-000016",
+          "evidence": [
+            "snes-000016-mechanics",
+            "snes-000016-experience"
+          ],
+          "note": "Gestionar equipo y habilidades exige decisiones, no necesariamente complejidad elevada."
+        }
+      },
+      "explanation": "Un viaje de grupo por turnos y ritmo pausado; la edición reseñada acusa menús poco cómodos.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000021",
+      "mechanics": {
+        "value": [
+          "copy abilities",
+          "multiple sub-games",
+          "cooperative helper"
+        ],
+        "confidence": 75,
+        "source": "review-000021",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000021-mechanics"
+        ]
+      },
+      "attributes": {
+        "short_sessions": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000021",
+          "evidence": [
+            "snes-000021-mechanics",
+            "snes-000021-experience"
+          ],
+          "note": "Hay minijuegos separables, pero también aventuras largas."
+        },
+        "exploration": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000021",
+          "evidence": [
+            "snes-000021-mechanics",
+            "snes-000021-experience"
+          ],
+          "note": "La caverna y los poderes ofrecen búsqueda opcional."
+        },
+        "intensity": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000021",
+          "evidence": [
+            "snes-000021-mechanics",
+            "snes-000021-experience"
+          ],
+          "note": "Combina retos ligeros con episodios de acción más urgente."
+        }
+      },
+      "explanation": "Elige entre pequeños retos y aventuras con poderes; cada sub-juego cambia el ritmo.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000022",
+      "mechanics": {
+        "value": [
+          "turn-based party combat",
+          "world exploration",
+          "character abilities"
+        ],
+        "confidence": 75,
+        "source": "review-000022",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000022-mechanics"
+        ]
+      },
+      "attributes": {
+        "pace": {
+          "value": 20,
+          "confidence": 70,
+          "source": "review-000022",
+          "evidence": [
+            "snes-000022-experience"
+          ],
+          "note": "Dos críticas describen encuentros y desplazamientos que interrumpen el progreso."
+        },
+        "mental_demand": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000022",
+          "evidence": [
+            "snes-000022-mechanics",
+            "snes-000022-experience"
+          ],
+          "note": "Componer el grupo y planear combates exige decisiones repetidas."
+        },
+        "resume_ease": {
+          "value": 20,
+          "confidence": 60,
+          "source": "review-000022",
+          "evidence": [
+            "snes-000022-mechanics",
+            "snes-000022-experience"
+          ],
+          "note": "Las pistas poco claras pueden exigir reconstruir el rumbo; traducción concreta no generalizable."
+        }
+      },
+      "explanation": "Un RPG de grupo con ideas ambiciosas, pero también encuentros y pistas que pueden frenar el viaje.",
+      "gaps": [
+        "Multiple independent editorial groups consulted; attribute coverage remains incomplete and review-era bias persists.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    }
+  ]
+}

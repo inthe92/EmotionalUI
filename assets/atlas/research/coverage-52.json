@@ -1,0 +1,974 @@
+{
+  "version": "0.2.0-experimental.2",
+  "human_review": null,
+  "games": [
+    {
+      "id": "atlas:snes:000001",
+      "title": "Super Mario World",
+      "enriched": true,
+      "sources": [
+        "nintendo-000001-20261024",
+        "review-000001"
+      ],
+      "independent_groups": 2,
+      "source_kinds": {
+        "publisher": 1,
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000002",
+      "title": "Super Mario World 2: Yoshi's Island",
+      "enriched": true,
+      "sources": [
+        "review-000002"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000003",
+      "title": "Super Mario Kart",
+      "enriched": true,
+      "sources": [
+        "review-000003"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000004",
+      "title": "The Legend of Zelda: A Link to the Past",
+      "enriched": true,
+      "sources": [
+        "review-000004"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000005",
+      "title": "Super Metroid",
+      "enriched": true,
+      "sources": [
+        "gamespot-metroid",
+        "nintendo-000005-20261024",
+        "player-metroid-walljump",
+        "review-000005"
+      ],
+      "independent_groups": 4,
+      "source_kinds": {
+        "review": 2,
+        "player-opinion": 1,
+        "publisher": 1
+      },
+      "independent_editorial_groups": 2,
+      "gaps": [
+        "Multiple independent editorial groups consulted; attribute coverage remains incomplete and review-era bias persists.",
+        "A single purposively selected player comment is preserved; broader and conflicting community samples pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000006",
+      "title": "Star Fox",
+      "enriched": true,
+      "sources": [
+        "review-000006"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000007",
+      "title": "F-ZERO",
+      "enriched": true,
+      "sources": [
+        "review-000007"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000008",
+      "title": "Stunt Race FX",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000009",
+      "title": "Pilotwings",
+      "enriched": true,
+      "sources": [
+        "review-000009"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000010",
+      "title": "Kirby's Dream Land 3",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000011",
+      "title": "Kirby's Dream Course",
+      "enriched": true,
+      "sources": [
+        "review-000011"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000012",
+      "title": "Super Ghouls'n Ghosts",
+      "enriched": true,
+      "sources": [
+        "review-000012"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000013",
+      "title": "Demon's Crest",
+      "enriched": true,
+      "sources": [
+        "review-000013"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000014",
+      "title": "Super Puyo Puyo 2",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000015",
+      "title": "Super Tennis",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000016",
+      "title": "Breath Of Fire",
+      "enriched": true,
+      "sources": [
+        "review-000016"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000017",
+      "title": "BRAWL BROTHERS",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000018",
+      "title": "SUPER E.D.F. EARTH DEFENSE FORCE",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000019",
+      "title": "Joe & Mac 2: Lost in the Tropics",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000020",
+      "title": "Super Punch-Out!!",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000021",
+      "title": "Kirby Super Star",
+      "enriched": true,
+      "sources": [
+        "review-000021"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000022",
+      "title": "Breath of Fire II",
+      "enriched": true,
+      "sources": [
+        "review-000022",
+        "rpgfan-bof2"
+      ],
+      "independent_groups": 2,
+      "source_kinds": {
+        "review": 1,
+        "retrospective": 1
+      },
+      "independent_editorial_groups": 2,
+      "gaps": [
+        "Multiple independent editorial groups consulted; attribute coverage remains incomplete and review-era bias persists.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000023",
+      "title": "Pop'n TwinBee",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000024",
+      "title": "Smash Tennis",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000025",
+      "title": "Operation Logic Bomb",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000026",
+      "title": "Panel de Pon",
+      "enriched": true,
+      "sources": [
+        "nintendo-000026-20261024",
+        "review-000026"
+      ],
+      "independent_groups": 2,
+      "source_kinds": {
+        "publisher": 1,
+        "retrospective": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Publisher and retrospective agree on mechanics; a second independent experiential review of the Japanese original is still needed.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000027",
+      "title": "Wild Guns",
+      "enriched": true,
+      "sources": [
+        "review-000027"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000028",
+      "title": "Donkey Kong Country",
+      "enriched": true,
+      "sources": [
+        "review-000028"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000029",
+      "title": "Natsume Championship Wrestling",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000030",
+      "title": "Super Mario All-Stars",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000031",
+      "title": "Donkey Kong Country 2: Diddy's Kong-Quest",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000032",
+      "title": "Mario's Super Picross",
+      "enriched": true,
+      "sources": [
+        "review-000032"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000033",
+      "title": "The Peace Keepers",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000034",
+      "title": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000035",
+      "title": "The Ignition Factor",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000036",
+      "title": "Super Valis IV",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000037",
+      "title": "Tuff E Nuff",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000038",
+      "title": "DOOMSDAY WARRIOR",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000039",
+      "title": "Prehistorik Man",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000040",
+      "title": "Psycho Dream",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000041",
+      "title": "Magical Drop II",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000042",
+      "title": "Spanky's Quest",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000043",
+      "title": "Claymates",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000044",
+      "title": "JellyBoy",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000045",
+      "title": "Bombuzal",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000046",
+      "title": "EarthBound",
+      "enriched": true,
+      "sources": [
+        "player-earthbound-opening",
+        "review-000046",
+        "rpgfan-earthbound"
+      ],
+      "independent_groups": 3,
+      "source_kinds": {
+        "review": 2,
+        "player-opinion": 1
+      },
+      "independent_editorial_groups": 2,
+      "gaps": [
+        "Multiple independent editorial groups consulted; attribute coverage remains incomplete and review-era bias persists.",
+        "A single purposively selected player comment is preserved; broader and conflicting community samples pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000047",
+      "title": "Harvest Moon",
+      "enriched": true,
+      "sources": [
+        "player-harvest-routine",
+        "review-000047"
+      ],
+      "independent_groups": 2,
+      "source_kinds": {
+        "review": 1,
+        "player-opinion": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "A single purposively selected player comment is preserved; broader and conflicting community samples pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000048",
+      "title": "Sutte Hakkun",
+      "enriched": true,
+      "sources": [
+        "review-000048"
+      ],
+      "independent_groups": 1,
+      "source_kinds": {
+        "review": 1
+      },
+      "independent_editorial_groups": 1,
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000049",
+      "title": "NOBUNAGA'S AMBITION",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000050",
+      "title": "Uncharted Waters: New Horizons",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000051",
+      "title": "Romance of the Three Kingdoms IV: Wall of Fire",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    },
+    {
+      "id": "atlas:snes:000052",
+      "title": "Mario Paint",
+      "enriched": false,
+      "sources": [],
+      "independent_groups": 0,
+      "source_kinds": {},
+      "independent_editorial_groups": 0,
+      "gaps": [
+        "Not investigated in this batch"
+      ],
+      "unknowns": [
+        "Experiential evidence unknown"
+      ]
+    }
+  ],
+  "total": 52,
+  "enriched": 21,
+  "with_two_independent_groups": 6,
+  "with_two_independent_editorial_groups": 3
+}

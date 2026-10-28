@@ -4,30 +4,44 @@ import argparse,copy,csv,hashlib,json,re,sqlite3
 from pathlib import Path
 from contextlib import closing
 SCHEMA=1
+ID_PATTERN=r'atlas:[a-z][a-z0-9_]{0,23}:[0-9]{6}'
+def platform_of(g):return g['objective']['platform']['value']
 ATTRS={'calm','intensity','nostalgia','exploration','mystery','mental_demand','tension','pace','resume_ease','short_sessions','session_minutes'}
 CONTEXTS=['spring','summer','autumn','winter','clear','cloud','rain','morning','afternoon','night','late']
-def load(p):return json.loads(Path(p).read_text())
+def load(p):
+ def unique(pairs):
+  result={}
+  for key,value in pairs:
+   if key in result:raise ValueError('Duplicate JSON key: '+key)
+   result[key]=value
+  return result
+ return json.loads(Path(p).read_text(),object_pairs_hook=unique)
 def save(p,data):
  with Path(p).open('x') as f:json.dump(data,f,ensure_ascii=False,indent=2);f.write('\n')
 def validate(d):
  if d.get('schema')!=SCHEMA or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[a-z0-9.-]+)?',d.get('version','')):raise ValueError('Unsupported schema/version')
- if d.get('platform')!='snes' or not isinstance(d.get('games'),list) or len(d['games'])>100000:raise ValueError('Expected bounded SNES catalog')
+ if not re.fullmatch(r'[a-z][a-z0-9_]{0,23}',d.get('platform','')) or not isinstance(d.get('games'),list) or len(d['games'])>100000:raise ValueError('Expected bounded platform catalog')
+ registry=d.get('identity_registry',{});works=registry.get('works',{})
+ if registry and registry.get('schema')!=1:raise ValueError('Unsupported identity registry')
  sources=d.get('sources',{});ids=set();aliases=set();identities=set()
  for g in d['games']:
   if set(g)-{'id','objective','editorial','aliases','identity'}:raise ValueError('Unknown entry field')
   if not {'title','platform','year','developer','publisher','genre','mechanics','duration'}<=g.get('objective',{}).keys():raise ValueError('Missing explicit objective field; use null for unknown')
   i=g['id']
-  if not re.fullmatch(r'atlas:snes:[0-9]{6}',i) or i in ids:raise ValueError('Invalid/duplicate stable ID')
+  if not re.fullmatch(ID_PATTERN,i) or i in ids:raise ValueError('Invalid/duplicate stable ID')
   ids.add(i);title=g['objective']['title']
   ident=g.get('identity',{})
-  if not re.fullmatch(r'atlas:snes:[0-9]{6}',ident.get('work_id','')) or not ident.get('region') or any(ident.get(k) is not None and not isinstance(ident[k],str) for k in ('revision','translation')):raise ValueError('Explicit edition identity required')
-  key=(title.get('value','').casefold(),ident.get('region'),ident.get('revision'),ident.get('translation'))
+  if not (re.fullmatch(ID_PATTERN,ident.get('work_id','')) or ident.get('work_id') in works) or not ident.get('region') or any(ident.get(k) is not None and not isinstance(ident[k],str) for k in ('revision','translation')):raise ValueError('Explicit edition identity required')
+  platform=platform_of(g)
+  if not isinstance(platform,str) or not re.fullmatch(r'[a-z][a-z0-9_]{0,23}',platform) or platform=='multi' or i.split(':')[1]!=platform or d['platform'] not in ('multi',platform):raise ValueError('Platform/identity contradiction')
+  if ident.get('implementation_id',i)!=i:raise ValueError('Implementation ID mismatch')
+  key=(title.get('value','').casefold(),platform,ident.get('work_id'),ident.get('region'),ident.get('revision'),ident.get('translation'))
   if key in identities:raise ValueError('Duplicate title/edition identity; resolve explicitly')
   identities.add(key)
   if not isinstance(title.get('value'),str) or not title['value'].strip():raise ValueError('Missing title')
   for k,a in list(g['objective'].items())+list(g.get('editorial',{}).items()):
    if a is None:continue
-   if set(a)-{'value','confidence','source','status','origin','reviewer','note'}:raise ValueError('Unknown assertion field')
+   if set(a)-{'value','confidence','source','status','origin','reviewer','note','evidence','rubric'}:raise ValueError('Unknown assertion field')
    if not a.get('origin') or a.get('source') not in sources or a.get('status') not in ('unknown','proposed','source_checked','approved','rejected'):raise ValueError('Missing provenance or invalid status')
    if type(a.get('confidence')) is not int or not 0<=a['confidence']<=100:raise ValueError('Invalid confidence')
    if a['value'] is None and a['status']!='unknown':raise ValueError('Unknown value must remain unknown')
@@ -35,8 +49,8 @@ def validate(d):
    if k in g['objective'] and a['value'] is not None:
     v=a['value']
     if k not in ('title','platform','year','developer','publisher','genre','mechanics','duration'):raise ValueError('Unknown objective field')
-    if k=='platform' and v!='snes':raise ValueError('Platform contradiction')
-    if k=='year' and (type(v) is not int or not 1980<=v<=2100):raise ValueError('Invalid release year')
+    if k=='platform' and v!=platform:raise ValueError('Platform contradiction')
+    if k=='year' and (type(v) is not int or not 1950<=v<=2100):raise ValueError('Invalid release year')
     if k in ('developer','publisher') and not isinstance(v,str):raise ValueError('Expected organization string')
     if k in ('genre','mechanics') and (not isinstance(v,list) or not all(isinstance(x,str) and x for x in v)):raise ValueError('Expected documented categories')
     if k=='duration' and (type(v) is not int or v<=0):raise ValueError('Duration requires a positive documented minute count')
@@ -63,16 +77,19 @@ def validate(d):
   if set(experiment)!={'channel','selected_ids','human_review','author','explanations'} or experiment['channel']!='experimental' or experiment['human_review'] is not None or not experiment['author']:raise ValueError('Experimental selection is not human approval')
   selected=experiment['selected_ids']
   if not isinstance(selected,list) or len(selected)!=len(set(selected)) or not set(selected)<=ids:raise ValueError('Invalid experimental IDs')
-  if set(experiment['explanations'])!=set(selected):raise ValueError('Explanation coverage mismatch')
+  selected_set=set(selected)
+  if set(experiment['explanations'])!=selected_set:raise ValueError('Explanation coverage mismatch')
   for g in d['games']:
-   if g['id'] not in selected:continue
+   if g['id'] not in selected_set:continue
    if not isinstance(experiment['explanations'][g['id']],str) or not 1<=len(experiment['explanations'][g['id']])<=180:raise ValueError('Bounded original explanation required')
    if not g['objective'].get('mechanics') or g['objective']['mechanics']['status']!='source_checked':raise ValueError('Research gameplay evidence before activation')
    for a in g['editorial'].values():
     src=sources[a['source']]
     if not src.get('url','').startswith('https://') or not src.get('facts') or not a.get('note'):raise ValueError('Experimental provenance and reasoning required')
  for g in d['games']:
-  if g['identity']['work_id'] not in ids:raise ValueError('Unresolved work identity')
+  if g['identity']['work_id'] not in ids and g['identity']['work_id'] not in works:raise ValueError('Unresolved work identity')
+ from atlas_research import validate_research
+ validate_research(d)
  return d
 def profile(g,experimental=False):
  values={k:a['value'] for k,a in g.get('editorial',{}).items() if a['value'] is not None and (a['status']=='approved' and a['confidence']>=70 or experimental and a['status']=='proposed' and a['confidence']>=60)};lines=['version=1'];tables={}
@@ -101,6 +118,13 @@ def build(d,path):
     db.execute('INSERT INTO profiles_experimental VALUES(?,?,?)',(g['id'],experimental_text,exp['explanations'][g['id']]))
    for context in CONTEXTS:db.execute('INSERT INTO candidates VALUES(?,?,?)',(context,g['id'],values.get('season.'+context,values.get('context.'+context,0))))
   for r in sorted(d.get('relations',[]),key=lambda r:(r['from'],r['to'],r['kind'])):db.execute('INSERT INTO relations VALUES(?,?,?)',(r['from'],r['to'],json.dumps(r,sort_keys=True)))
+  if 'research' in d:
+   # Additive provenance tables: existing read-only runtime/profile contract stays intact.
+   db.executescript('CREATE TABLE research_sources(id TEXT PRIMARY KEY,data TEXT NOT NULL);CREATE TABLE research_claims(id TEXT PRIMARY KEY,game_id TEXT NOT NULL,data TEXT NOT NULL);CREATE TABLE research_manifest(key TEXT PRIMARY KEY,data TEXT NOT NULL);')
+   for key in sorted(d['research']['source_ids']):db.execute('INSERT INTO research_sources VALUES(?,?)',(key,json.dumps(d['sources'][key],ensure_ascii=False,sort_keys=True)))
+   for key,c in sorted(d['research']['claims'].items()):db.execute('INSERT INTO research_claims VALUES(?,?,?)',(key,c['game_id'],json.dumps(c,ensure_ascii=False,sort_keys=True)))
+   for key,value in sorted(d['research'].items()):
+    if key not in ('source_ids','claims'):db.execute('INSERT INTO research_manifest VALUES(?,?)',(key,json.dumps(value,ensure_ascii=False,sort_keys=True)))
   db.commit();db.execute('VACUUM')
  p.chmod(0o444)
 def requests(d):

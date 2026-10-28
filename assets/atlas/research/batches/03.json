@@ -1,0 +1,1010 @@
+{
+  "schema": 1,
+  "batch_id": "snes-evidence-20261024-03",
+  "version": "0.2.0-experimental.2",
+  "rubric": "experience-anchors-v1",
+  "sources": {
+    "review-000026": {
+      "url": "https://www.timeextension.com/features/the-puzzling-legacy-of-panel-de-pon-and-puzzle-league",
+      "title": "The Puzzling Legacy of Panel de Pon And Puzzle League",
+      "medium": "Time Extension",
+      "author": "Ricky Berg",
+      "published": "2023-07-17",
+      "accessed": "2026-10-24",
+      "kind": "retrospective",
+      "language": "en",
+      "game_id": "atlas:snes:000026",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Japanese Super Famicom original discussed; not Tetris Attack/N64 sequels",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "horizontal panel swapping; active chains; versus garbage blocks",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000027": {
+      "url": "https://www.nintendolife.com/reviews/vc/wild_guns_snes",
+      "title": "Wild Guns Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Mat Allen",
+      "published": "2010-06-05",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000027",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console; not Reloaded",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "crosshair shooting; dodge rolling; cooperative stages",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000028": {
+      "url": "https://www.nintendolife.com/reviews/vc/donkey_kong_country_snes",
+      "title": "Donkey Kong Country Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Damien McFerran",
+      "published": "2006-12-09",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000028",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console; not GBA/GBC remakes",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "stage platforming; animal companions; hidden bonus areas",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000032": {
+      "url": "https://www.nintendolife.com/reviews/wiiu-eshop/marios_super_picross_snes",
+      "title": "Mario's Super Picross Review (Wii U eShop / SNES)",
+      "medium": "Nintendo Life",
+      "author": "Thomas Whitehead",
+      "published": "2013-05-06",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000032",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European Wii U release of Japanese SNES game; not 3DS Picross",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "number-clue grid deduction; timed Mario puzzles; untimed Wario puzzles",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000046": {
+      "url": "https://www.nintendolife.com/reviews/snes/earthbound",
+      "title": "EarthBound Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Dave Frear",
+      "published": "2022-02-11",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000046",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES retrospective; republished from 2016, exact original date unknown",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "turn-based combat; visible overworld enemies; rolling health counter",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000047": {
+      "url": "https://www.nintendolife.com/reviews/vc/harvest_moon_snes",
+      "title": "Harvest Moon Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Marcel van Duyn",
+      "published": "2008-01-05",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000047",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console; not GBC or later games",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "crop cultivation; seasonal routines; relationships",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000048": {
+      "url": "https://www.nintendolife.com/reviews/snes/sutte-hakkun",
+      "title": "Sutte Hakkun Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Corbie Dillard",
+      "published": "2025-01-24",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000048",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Page labels North American; Japanese SFC/NSO game; exact revision unknown",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "moving absorbable blocks; colored nectar movement rules; puzzle platforming",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "nintendo-000026-20261024": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/panel.html",
+      "title": "パネルでポン",
+      "medium": "Nintendo",
+      "author": null,
+      "published": null,
+      "accessed": "2026-10-24",
+      "kind": "publisher",
+      "language": "ja",
+      "game_id": "atlas:snes:000026",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Japanese Super Famicom work presented for Nintendo Classic Mini",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "nintendo-publisher",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "Nintendo describe intercambiar paneles vecinos y manipularlos durante cadenas activas.",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "rpgfan-earthbound": {
+      "url": "https://www.rpgfan.com/review/earthbound/",
+      "title": "EarthBound",
+      "medium": "RPGFan",
+      "author": "Andrew DeMario",
+      "published": "2009-08-09",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000046",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "SNES work; GBA comparison excluded",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "rpgfan-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "La crítica aprecia humor surrealista y combates por turnos, con respuesta al contador de salud.",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "player-earthbound-opening": {
+      "url": "https://www.nintendolife.com/reviews/snes/earthbound",
+      "title": "EarthBound — public player comment",
+      "medium": "Nintendo Life",
+      "author": "Funneefox",
+      "published": "2022-02-11",
+      "accessed": "2026-10-24",
+      "kind": "player-opinion",
+      "language": "en",
+      "game_id": "atlas:snes:000046",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Public player account of SNES game; exact edition, controller and prior experience unknown",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "player:Funneefox",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "One individual experience, not representative.",
+      "locator": "comment 4, Funneefox, 11 February 2022",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission.",
+      "sample_limit": "Purposive single public comment; not representative, verified play time or consensus. No user identity enrichment."
+    },
+    "player-harvest-routine": {
+      "url": "https://www.nintendolife.com/reviews/vc/harvest_moon_snes",
+      "title": "Harvest Moon — public player comment",
+      "medium": "Nintendo Life",
+      "author": "Ferret75",
+      "published": "2009-02-24",
+      "accessed": "2026-10-24",
+      "kind": "player-opinion",
+      "language": "en",
+      "game_id": "atlas:snes:000047",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Public player account of SNES game; exact edition, controller and prior experience unknown",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "player:Ferret75",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "One individual experience, not representative.",
+      "locator": "comment 4, Ferret75, 24 February 2009",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission.",
+      "sample_limit": "Purposive single public comment; not representative, verified play time or consensus. No user identity enrichment."
+    }
+  },
+  "claims": {
+    "snes-000026-mechanics": {
+      "game_id": "atlas:snes:000026",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: horizontal panel swapping, active chains, versus garbage blocks.",
+      "sources": [
+        "review-000026",
+        "nintendo-000026-20261024"
+      ],
+      "supports": [
+        "mechanics",
+        "mental_demand",
+        "pace"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000026-experience": {
+      "game_id": "atlas:snes:000026",
+      "kind": "interpretation",
+      "summary": "La retrospectiva distingue la claridad visual de la profundidad de encadenar paneles.",
+      "sources": [
+        "review-000026"
+      ],
+      "supports": [
+        "mental_demand",
+        "pace"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000026-limits": {
+      "game_id": "atlas:snes:000026",
+      "kind": "interpretation",
+      "summary": "La historia de la serie incluye reskins; no se importan modos de entregas posteriores.",
+      "sources": [
+        "review-000026"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000027-mechanics": {
+      "game_id": "atlas:snes:000027",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: crosshair shooting, dodge rolling, cooperative stages.",
+      "sources": [
+        "review-000027"
+      ],
+      "supports": [
+        "mechanics",
+        "intensity",
+        "pace",
+        "tension"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000027-experience": {
+      "game_id": "atlas:snes:000027",
+      "kind": "interpretation",
+      "summary": "La crítica destaca la acción intensa y alternar movimiento con apuntado.",
+      "sources": [
+        "review-000027"
+      ],
+      "supports": [
+        "intensity",
+        "pace",
+        "tension"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000027-limits": {
+      "game_id": "atlas:snes:000027",
+      "kind": "interpretation",
+      "summary": "Sobrevivir es exigente; que haya pocos niveles no demuestra una partida corta para todo jugador.",
+      "sources": [
+        "review-000027"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000028-mechanics": {
+      "game_id": "atlas:snes:000028",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: stage platforming, animal companions, hidden bonus areas.",
+      "sources": [
+        "review-000028"
+      ],
+      "supports": [
+        "mechanics",
+        "exploration",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000028-experience": {
+      "game_id": "atlas:snes:000028",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia variedad de situaciones y secretos entre plataformas y vehículos.",
+      "sources": [
+        "review-000028"
+      ],
+      "supports": [
+        "exploration",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000028-limits": {
+      "game_id": "atlas:snes:000028",
+      "kind": "interpretation",
+      "summary": "Las variantes de nivel requieren habilidades distintas; no se certifica duración ni facilidad universal.",
+      "sources": [
+        "review-000028"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000032-mechanics": {
+      "game_id": "atlas:snes:000032",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: number-clue grid deduction, timed Mario puzzles, untimed Wario puzzles.",
+      "sources": [
+        "review-000032"
+      ],
+      "supports": [
+        "mechanics",
+        "mental_demand",
+        "pace",
+        "calm",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000032-experience": {
+      "game_id": "atlas:snes:000032",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia la deducción y diferencia los modos con y sin límite de tiempo.",
+      "sources": [
+        "review-000032"
+      ],
+      "supports": [
+        "mental_demand",
+        "pace",
+        "calm",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000032-limits": {
+      "game_id": "atlas:snes:000032",
+      "kind": "interpretation",
+      "summary": "El japonés puede dificultar menús; calma y presión varían entre Mario y Wario.",
+      "sources": [
+        "review-000032"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000046-mechanics": {
+      "game_id": "atlas:snes:000046",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: turn-based combat, visible overworld enemies, rolling health counter.",
+      "sources": [
+        "review-000046",
+        "rpgfan-earthbound"
+      ],
+      "supports": [
+        "mechanics",
+        "pace",
+        "mystery",
+        "mental_demand"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000046-experience": {
+      "game_id": "atlas:snes:000046",
+      "kind": "interpretation",
+      "summary": "La crítica elogia humor, ambientación cotidiana y audio; reconoce irregularidad de ritmo.",
+      "sources": [
+        "review-000046",
+        "rpgfan-earthbound"
+      ],
+      "supports": [
+        "pace",
+        "mystery",
+        "mental_demand"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000046-limits": {
+      "game_id": "atlas:snes:000046",
+      "kind": "interpretation",
+      "summary": "La apertura y el inventario pueden resultar incómodos a algunos jugadores; no equivale a rechazo general.",
+      "sources": [
+        "review-000046"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification.",
+      "contrasts": [
+        "player-earthbound-opening"
+      ]
+    },
+    "snes-000047-mechanics": {
+      "game_id": "atlas:snes:000047",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: crop cultivation, seasonal routines, relationships.",
+      "sources": [
+        "review-000047"
+      ],
+      "supports": [
+        "mechanics",
+        "calm",
+        "pace",
+        "resume_ease"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000047-experience": {
+      "game_id": "atlas:snes:000047",
+      "kind": "interpretation",
+      "summary": "La crítica encuentra relajante la rutina de cultivo y la progresión por estaciones.",
+      "sources": [
+        "review-000047"
+      ],
+      "supports": [
+        "calm",
+        "pace",
+        "resume_ease"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ.",
+      "contrasts": [
+        "player-harvest-routine"
+      ]
+    },
+    "snes-000047-limits": {
+      "game_id": "atlas:snes:000047",
+      "kind": "interpretation",
+      "summary": "Comentarios de jugadores describen aburrimiento con esa misma rutina; no hay consenso representativo.",
+      "sources": [
+        "review-000047"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000048-mechanics": {
+      "game_id": "atlas:snes:000048",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: moving absorbable blocks, colored nectar movement rules, puzzle platforming.",
+      "sources": [
+        "review-000048"
+      ],
+      "supports": [
+        "mechanics",
+        "mental_demand",
+        "pace",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000048-experience": {
+      "game_id": "atlas:snes:000048",
+      "kind": "interpretation",
+      "summary": "La crítica destaca controles sencillos y combinaciones espaciales cada vez más difíciles.",
+      "sources": [
+        "review-000048"
+      ],
+      "supports": [
+        "mental_demand",
+        "pace",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000048-limits": {
+      "game_id": "atlas:snes:000048",
+      "kind": "interpretation",
+      "summary": "La versión comentada conserva menús japoneses; el texto de 2009 fue actualizado en 2025.",
+      "sources": [
+        "review-000048"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "player-earthbound-opening": {
+      "game_id": "atlas:snes:000046",
+      "kind": "player-opinion",
+      "summary": "Un jugador señala combates iniciales y espacio de inventario como obstáculos para continuar.",
+      "sources": [
+        "player-earthbound-opening"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One self-selected account with unknown play conditions. Not used alone to score attributes.",
+      "contrasts": [
+        "snes-000046-limits"
+      ]
+    },
+    "player-harvest-routine": {
+      "game_id": "atlas:snes:000047",
+      "kind": "player-opinion",
+      "summary": "Un jugador encuentra aburrida la rutina después de varios días del juego.",
+      "sources": [
+        "player-harvest-routine"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One self-selected account with unknown play conditions. Not used alone to score attributes.",
+      "contrasts": [
+        "snes-000047-experience"
+      ]
+    }
+  },
+  "profiles": [
+    {
+      "id": "atlas:snes:000026",
+      "mechanics": {
+        "value": [
+          "horizontal panel swapping",
+          "active chains",
+          "versus garbage blocks"
+        ],
+        "confidence": 85,
+        "source": "review-000026",
+        "note": "Descripción explícita corroborada por fuentes independientes; sin aprobación humana ni identificación de ROM.",
+        "evidence": [
+          "snes-000026-mechanics"
+        ]
+      },
+      "attributes": {
+        "mental_demand": {
+          "value": 80,
+          "confidence": 70,
+          "source": "review-000026",
+          "evidence": [
+            "snes-000026-mechanics"
+          ],
+          "note": "Nintendo y la retrospectiva describen manipular paneles durante cadenas activas."
+        },
+        "pace": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000026",
+          "evidence": [
+            "snes-000026-mechanics",
+            "snes-000026-experience"
+          ],
+          "note": "Encadenar mientras desaparecen paneles sugiere atención rápida en los modos activos."
+        }
+      },
+      "explanation": "Intercambia paneles y prepara cadenas activas: decisiones rápidas bajo una apariencia sencilla.",
+      "gaps": [
+        "Publisher and retrospective agree on mechanics; a second independent experiential review of the Japanese original is still needed.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000027",
+      "mechanics": {
+        "value": [
+          "crosshair shooting",
+          "dodge rolling",
+          "cooperative stages"
+        ],
+        "confidence": 75,
+        "source": "review-000027",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000027-mechanics"
+        ]
+      },
+      "attributes": {
+        "intensity": {
+          "value": 100,
+          "confidence": 65,
+          "source": "review-000027",
+          "evidence": [
+            "snes-000027-mechanics",
+            "snes-000027-experience"
+          ],
+          "note": "La reseña describe acción casi incesante."
+        },
+        "pace": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000027",
+          "evidence": [
+            "snes-000027-mechanics",
+            "snes-000027-experience"
+          ],
+          "note": "Disparos y evasión obligan a responder rápidamente."
+        },
+        "tension": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000027",
+          "evidence": [
+            "snes-000027-mechanics",
+            "snes-000027-experience"
+          ],
+          "note": "Los ataques y jefes ponen continuamente en riesgo el intento."
+        }
+      },
+      "explanation": "Apunta, esquiva y sobrevive a una acción intensa; las fases cortas también pueden exigir muchos intentos.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000028",
+      "mechanics": {
+        "value": [
+          "stage platforming",
+          "animal companions",
+          "hidden bonus areas"
+        ],
+        "confidence": 75,
+        "source": "review-000028",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000028-mechanics"
+        ]
+      },
+      "attributes": {
+        "exploration": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000028",
+          "evidence": [
+            "snes-000028-mechanics",
+            "snes-000028-experience"
+          ],
+          "note": "Los pasadizos y salas de bonus invitan a buscar secretos."
+        },
+        "intensity": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000028",
+          "evidence": [
+            "snes-000028-mechanics",
+            "snes-000028-experience"
+          ],
+          "note": "Saltos prolongados y peligros requieren acción sostenida."
+        },
+        "short_sessions": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000028",
+          "evidence": [
+            "snes-000028-mechanics",
+            "snes-000028-experience"
+          ],
+          "note": "Las fases separan objetivos; se desconoce aquí la facilidad real de guardar."
+        }
+      },
+      "explanation": "Plataformas con animales, vehículos y pasadizos secretos que cambian la forma de avanzar.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000032",
+      "mechanics": {
+        "value": [
+          "number-clue grid deduction",
+          "timed Mario puzzles",
+          "untimed Wario puzzles"
+        ],
+        "confidence": 75,
+        "source": "review-000032",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000032-mechanics"
+        ]
+      },
+      "attributes": {
+        "mental_demand": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000032",
+          "evidence": [
+            "snes-000032-mechanics",
+            "snes-000032-experience"
+          ],
+          "note": "Resolver filas y columnas exige encadenar deducciones."
+        },
+        "pace": {
+          "value": 20,
+          "confidence": 65,
+          "source": "review-000032",
+          "evidence": [
+            "snes-000032-mechanics",
+            "snes-000032-experience"
+          ],
+          "note": "El avance depende de pensar antes de marcar casillas."
+        },
+        "calm": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000032",
+          "evidence": [
+            "snes-000032-mechanics",
+            "snes-000032-experience"
+          ],
+          "note": "Wario permite pensar sin reloj; Mario penaliza fallos con tiempo."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000032",
+          "evidence": [
+            "snes-000032-mechanics",
+            "snes-000032-experience"
+          ],
+          "note": "Cada cuadrícula es una tarea separable; no equivale a un número fijo de minutos."
+        }
+      },
+      "explanation": "Deduce una imagen con pistas numéricas; Wario evita el reloj, Mario añade presión al equivocarte.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000046",
+      "mechanics": {
+        "value": [
+          "turn-based combat",
+          "visible overworld enemies",
+          "rolling health counter"
+        ],
+        "confidence": 85,
+        "source": "review-000046",
+        "note": "Descripción explícita corroborada por fuentes independientes; sin aprobación humana ni identificación de ROM.",
+        "evidence": [
+          "snes-000046-mechanics"
+        ]
+      },
+      "attributes": {
+        "pace": {
+          "value": 40,
+          "confidence": 65,
+          "source": "review-000046",
+          "evidence": [
+            "snes-000046-experience"
+          ],
+          "note": "Una crítica señala ritmo irregular; el combate por turnos aporta pausas."
+        },
+        "mystery": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000046",
+          "evidence": [
+            "snes-000046-mechanics",
+            "snes-000046-experience"
+          ],
+          "note": "El viaje cotidiano se vuelve extraño mediante personajes y situaciones surrealistas."
+        },
+        "mental_demand": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000046",
+          "evidence": [
+            "snes-000046-mechanics",
+            "snes-000046-experience"
+          ],
+          "note": "Gestionar recursos y responder al contador de salud requiere decisiones."
+        }
+      },
+      "explanation": "Humor y extrañeza en un viaje por turnos; conviene aceptar una apertura y un ritmo poco uniformes.",
+      "gaps": [
+        "Multiple independent editorial groups consulted; attribute coverage remains incomplete and review-era bias persists.",
+        "A single purposively selected player comment is preserved; broader and conflicting community samples pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000047",
+      "mechanics": {
+        "value": [
+          "crop cultivation",
+          "seasonal routines",
+          "relationships"
+        ],
+        "confidence": 75,
+        "source": "review-000047",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000047-mechanics"
+        ]
+      },
+      "attributes": {
+        "calm": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000047",
+          "evidence": [
+            "snes-000047-mechanics",
+            "snes-000047-experience"
+          ],
+          "note": "La reseña percibe calma, sin convertirla en emoción universal."
+        },
+        "pace": {
+          "value": 40,
+          "confidence": 60,
+          "source": "review-000047",
+          "evidence": [
+            "snes-000047-mechanics",
+            "snes-000047-experience"
+          ],
+          "note": "La rutina combina tareas diarias y progreso a más largo plazo."
+        },
+        "resume_ease": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000047",
+          "evidence": [
+            "snes-000047-mechanics",
+            "snes-000047-experience"
+          ],
+          "note": "La siguiente tarea agrícola suele ser reconocible; los planes y fechas requieren contexto."
+        }
+      },
+      "explanation": "Cuida una granja día a día: la rutina puede resultar acogedora o repetitiva según lo que busques.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "A single purposively selected player comment is preserved; broader and conflicting community samples pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000048",
+      "mechanics": {
+        "value": [
+          "moving absorbable blocks",
+          "colored nectar movement rules",
+          "puzzle platforming"
+        ],
+        "confidence": 75,
+        "source": "review-000048",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000048-mechanics"
+        ]
+      },
+      "attributes": {
+        "mental_demand": {
+          "value": 100,
+          "confidence": 65,
+          "source": "review-000048",
+          "evidence": [
+            "snes-000048-mechanics",
+            "snes-000048-experience"
+          ],
+          "note": "Las reglas de color y posición se combinan en problemas crecientes."
+        },
+        "pace": {
+          "value": 20,
+          "confidence": 60,
+          "source": "review-000048",
+          "evidence": [
+            "snes-000048-mechanics",
+            "snes-000048-experience"
+          ],
+          "note": "Planear posiciones importa más que avanzar deprisa."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000048",
+          "evidence": [
+            "snes-000048-mechanics",
+            "snes-000048-experience"
+          ],
+          "note": "Cada problema ofrece una unidad clara; su tiempo de solución es desconocido."
+        }
+      },
+      "explanation": "Mueve bloques y combina sus reglas de color para resolver retos espaciales cada vez más exigentes.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    }
+  ]
+}

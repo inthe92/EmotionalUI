@@ -1,0 +1,1015 @@
+{
+  "schema": 1,
+  "batch_id": "snes-evidence-20261024-01",
+  "version": "0.2.0-experimental.2",
+  "rubric": "experience-anchors-v1",
+  "sources": {
+    "review-000001": {
+      "url": "https://www.nintendolife.com/reviews/snes/super_mario_world",
+      "title": "Super Mario World Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Jamie O'Neill",
+      "published": "2019-09-21",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000001",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES retrospective",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "stage platforming; cape flight; secret exits",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000002": {
+      "url": "https://www.nintendolife.com/reviews/2009/07/super_mario_world_2_yoshis_island_retro",
+      "title": "Super Mario World 2: Yoshi's Island Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Kaes Delgrego",
+      "published": "2009-07-23",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000002",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES retrospective",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "egg aiming; item collecting; baby recovery countdown",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000003": {
+      "url": "https://www.nintendolife.com/reviews/snes/super_mario_kart",
+      "title": "Super Mario Kart Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Nintendo Life Staff",
+      "published": "2009-11-24",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000003",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "kart racing; item combat; time trials",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000004": {
+      "url": "https://www.nintendolife.com/reviews/snes/the_legend_of_zelda_a_link_to_the_past",
+      "title": "The Legend of Zelda: A Link to the Past Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Damien McFerran",
+      "published": "2013-12-16",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000004",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES via Wii U Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "overworld exploration; item-gated dungeons; light and dark world puzzles",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000005": {
+      "url": "https://www.nintendolife.com/reviews/vc/super_metroid_snes",
+      "title": "Super Metroid Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Marcel van Duyn",
+      "published": "2007-08-20",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000005",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "North American SNES via Wii Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "interconnected exploration; ability-gated routes; boss combat",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000006": {
+      "url": "https://www.nintendolife.com/reviews/2009/09/star_fox_retro",
+      "title": "Star Fox Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Jamie O'Neill",
+      "published": "2009-09-20",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000006",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES retrospective (Starwing)",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "rail shooting; route difficulty selection; dodging and braking",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "review-000007": {
+      "url": "https://www.nintendolife.com/reviews/snes/f-zero",
+      "title": "F-ZERO Review (SNES)",
+      "medium": "Nintendo Life",
+      "author": "Jamie O'Neill",
+      "published": "2019-09-13",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000007",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "European SNES retrospective",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "hookshot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "hovercar racing; grand prix; practice mode",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "nintendo-000001-20261024": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/mario_world.html",
+      "title": "スーパーマリオワールド",
+      "medium": "Nintendo",
+      "author": null,
+      "published": null,
+      "accessed": "2026-10-24",
+      "kind": "publisher",
+      "language": "ja",
+      "game_id": "atlas:snes:000001",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Japanese Super Famicom work presented for Nintendo Classic Mini",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "nintendo-publisher",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "Nintendo describe fases variadas, vuelo con capa y a Yoshi.",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "nintendo-000005-20261024": {
+      "url": "https://www.nintendo.co.jp/clvs/soft/s_metroid.html",
+      "title": "スーパーメトロイド",
+      "medium": "Nintendo",
+      "author": null,
+      "published": null,
+      "accessed": "2026-10-24",
+      "kind": "publisher",
+      "language": "ja",
+      "game_id": "atlas:snes:000005",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Japanese Super Famicom work presented for Nintendo Classic Mini",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "nintendo-publisher",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "Nintendo describe mejoras que amplían el movimiento y las rutas por Zebes.",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "gamespot-metroid": {
+      "url": "https://www.gamespot.com/reviews/super-metroid-review/1900-6177708/",
+      "title": "Super Metroid Review",
+      "medium": "GameSpot",
+      "author": "Frank Provo",
+      "published": "2007-08-27",
+      "accessed": "2026-10-24",
+      "kind": "review",
+      "language": "en",
+      "game_id": "atlas:snes:000005",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "SNES work; Wii Virtual Console",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "gamespot-editorial",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "La crítica destaca descubrimiento por mejoras, atmósfera sombría y ritmo equilibrado.",
+      "locator": "editorial body",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission."
+    },
+    "player-metroid-walljump": {
+      "url": "https://www.nintendolife.com/games/snes/super_metroid",
+      "title": "Super Metroid — public player comment",
+      "medium": "Nintendo Life",
+      "author": "FinalFantisiac",
+      "published": "2010-07-21",
+      "accessed": "2026-10-24",
+      "kind": "player-opinion",
+      "language": "en",
+      "game_id": "atlas:snes:000005",
+      "platform": "snes",
+      "edition": {
+        "reviewed": "Public player account of SNES game; exact edition, controller and prior experience unknown",
+        "scope": "Work-level gameplay only; no ROM revision/translation matching or emulator features inferred."
+      },
+      "independence_key": "player:FinalFantisiac",
+      "license": "Copyright remains with source authors. No redistribution permission assumed. Only original short paraphrases and references stored; no article text, art or scores.",
+      "facts": "One individual experience, not representative.",
+      "locator": "comment 234, FinalFantisiac, 21 July 2010",
+      "access_policy": "Manually read public page with web reader; no scraping, authentication bypass or bulk download. robots.txt retrieval unavailable for Nintendo Life/RPGFan; do not treat that as unrestricted permission.",
+      "sample_limit": "Purposive single public comment; not representative, verified play time or consensus. No user identity enrichment."
+    }
+  },
+  "claims": {
+    "snes-000001-mechanics": {
+      "game_id": "atlas:snes:000001",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: stage platforming, cape flight, secret exits.",
+      "sources": [
+        "review-000001",
+        "nintendo-000001-20261024"
+      ],
+      "supports": [
+        "mechanics",
+        "exploration",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000001-experience": {
+      "game_id": "atlas:snes:000001",
+      "kind": "interpretation",
+      "summary": "La crítica destaca rutas secretas, controles precisos y diseño variado de niveles.",
+      "sources": [
+        "review-000001"
+      ],
+      "supports": [
+        "exploration",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000001-limits": {
+      "game_id": "atlas:snes:000001",
+      "kind": "interpretation",
+      "summary": "El guardado original descrito depende de castillos y casas fantasma; una fase no garantiza persistencia.",
+      "sources": [
+        "review-000001"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000002-mechanics": {
+      "game_id": "atlas:snes:000002",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: egg aiming, item collecting, baby recovery countdown.",
+      "sources": [
+        "review-000002"
+      ],
+      "supports": [
+        "mechanics",
+        "exploration",
+        "mental_demand",
+        "tension"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000002-experience": {
+      "game_id": "atlas:snes:000002",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia la presentación dibujada, los coleccionables y los pequeños problemas de cada fase.",
+      "sources": [
+        "review-000002"
+      ],
+      "supports": [
+        "exploration",
+        "mental_demand",
+        "tension"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000002-limits": {
+      "game_id": "atlas:snes:000002",
+      "kind": "interpretation",
+      "summary": "Perder a Mario introduce urgencia; la estética amable no demuestra una experiencia siempre relajada.",
+      "sources": [
+        "review-000002"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000003-mechanics": {
+      "game_id": "atlas:snes:000003",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: kart racing, item combat, time trials.",
+      "sources": [
+        "review-000003"
+      ],
+      "supports": [
+        "mechanics",
+        "pace",
+        "intensity",
+        "short_sessions",
+        "resume_ease"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000003-experience": {
+      "game_id": "atlas:snes:000003",
+      "kind": "interpretation",
+      "summary": "La crítica elogia circuitos y competición; las cilindradas cambian velocidad y exigencia.",
+      "sources": [
+        "review-000003"
+      ],
+      "supports": [
+        "pace",
+        "intensity",
+        "short_sessions",
+        "resume_ease"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000003-limits": {
+      "game_id": "atlas:snes:000003",
+      "kind": "interpretation",
+      "summary": "El modo individual puede resultar repetitivo; la valoración multijugador no se traslada a jugar solo.",
+      "sources": [
+        "review-000003"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000004-mechanics": {
+      "game_id": "atlas:snes:000004",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: overworld exploration, item-gated dungeons, light and dark world puzzles.",
+      "sources": [
+        "review-000004"
+      ],
+      "supports": [
+        "mechanics",
+        "exploration",
+        "mental_demand",
+        "resume_ease"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000004-experience": {
+      "game_id": "atlas:snes:000004",
+      "kind": "interpretation",
+      "summary": "La crítica celebra los secretos y cómo nuevos objetos abren zonas y soluciones.",
+      "sources": [
+        "review-000004"
+      ],
+      "supports": [
+        "exploration",
+        "mental_demand",
+        "resume_ease"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000004-limits": {
+      "game_id": "atlas:snes:000004",
+      "kind": "interpretation",
+      "summary": "A veces la siguiente dirección no queda clara; retomar exige recordar el objetivo.",
+      "sources": [
+        "review-000004"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000005-mechanics": {
+      "game_id": "atlas:snes:000005",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: interconnected exploration, ability-gated routes, boss combat.",
+      "sources": [
+        "review-000005",
+        "nintendo-000005-20261024"
+      ],
+      "supports": [
+        "mechanics",
+        "exploration",
+        "tension",
+        "mystery",
+        "resume_ease"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000005-experience": {
+      "game_id": "atlas:snes:000005",
+      "kind": "interpretation",
+      "summary": "La crítica destaca el mundo conectado, las mejoras de movimiento y la música inquietante.",
+      "sources": [
+        "review-000005",
+        "gamespot-metroid"
+      ],
+      "supports": [
+        "exploration",
+        "tension",
+        "mystery",
+        "resume_ease"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000005-limits": {
+      "game_id": "atlas:snes:000005",
+      "kind": "interpretation",
+      "summary": "La facilidad global que percibe la reseña no excluye dificultades concretas con los controles.",
+      "sources": [
+        "review-000005"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification.",
+      "contrasts": [
+        "player-metroid-walljump"
+      ]
+    },
+    "snes-000006-mechanics": {
+      "game_id": "atlas:snes:000006",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: rail shooting, route difficulty selection, dodging and braking.",
+      "sources": [
+        "review-000006"
+      ],
+      "supports": [
+        "mechanics",
+        "pace",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000006-experience": {
+      "game_id": "atlas:snes:000006",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia las rutas de distinta dificultad y el espectáculo de las misiones.",
+      "sources": [
+        "review-000006"
+      ],
+      "supports": [
+        "pace",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000006-limits": {
+      "game_id": "atlas:snes:000006",
+      "kind": "interpretation",
+      "summary": "Una ruta difícil no permite cambiar después a otra más fácil; dominar maniobras importa.",
+      "sources": [
+        "review-000006"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "snes-000007-mechanics": {
+      "game_id": "atlas:snes:000007",
+      "kind": "fact",
+      "summary": "Mecánicas descritas: hovercar racing, grand prix, practice mode.",
+      "sources": [
+        "review-000007"
+      ],
+      "supports": [
+        "mechanics",
+        "pace",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "source_checked",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000007-experience": {
+      "game_id": "atlas:snes:000007",
+      "kind": "interpretation",
+      "summary": "La crítica aprecia conducción y trazados; los niveles altos aumentan mucho la exigencia.",
+      "sources": [
+        "review-000007"
+      ],
+      "supports": [
+        "pace",
+        "intensity",
+        "short_sessions"
+      ],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One retrospective voice; human review and direct play not performed. Edition-specific experience may differ."
+    },
+    "snes-000007-limits": {
+      "game_id": "atlas:snes:000007",
+      "kind": "interpretation",
+      "summary": "Se critica la agresividad de rivales en dificultades altas; no hay multijugador.",
+      "sources": [
+        "review-000007"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "Reported limitation/context, not a universal verdict or measured difficulty; no ROM/translation identification."
+    },
+    "player-metroid-walljump": {
+      "game_id": "atlas:snes:000005",
+      "kind": "player-opinion",
+      "summary": "Un jugador encuentra frustrante dominar el salto de pared hacia una zona secreta.",
+      "sources": [
+        "player-metroid-walljump"
+      ],
+      "supports": [],
+      "status": "proposed",
+      "rationale": "Original paraphrase of the identified passage; experience scores are a separate editorial inference.",
+      "uncertainty": "One self-selected account with unknown play conditions. Not used alone to score attributes.",
+      "contrasts": [
+        "snes-000005-limits"
+      ]
+    }
+  },
+  "profiles": [
+    {
+      "id": "atlas:snes:000001",
+      "mechanics": {
+        "value": [
+          "stage platforming",
+          "cape flight",
+          "secret exits"
+        ],
+        "confidence": 85,
+        "source": "review-000001",
+        "note": "Descripción explícita corroborada por fuentes independientes; sin aprobación humana ni identificación de ROM.",
+        "evidence": [
+          "snes-000001-mechanics"
+        ]
+      },
+      "attributes": {
+        "exploration": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000001",
+          "evidence": [
+            "snes-000001-mechanics",
+            "snes-000001-experience"
+          ],
+          "note": "Las salidas ocultas motivan búsquedas opcionales."
+        },
+        "intensity": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000001",
+          "evidence": [
+            "snes-000001-mechanics",
+            "snes-000001-experience"
+          ],
+          "note": "Los saltos y obstáculos requieren acción sostenida."
+        },
+        "short_sessions": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000001",
+          "evidence": [
+            "snes-000001-mechanics",
+            "snes-000001-experience"
+          ],
+          "note": "Las fases separan objetivos; no implica poder guardar tras cada una."
+        }
+      },
+      "explanation": "Plataformas con rutas secretas: puedes avanzar o dedicarte a buscar otra salida.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000002",
+      "mechanics": {
+        "value": [
+          "egg aiming",
+          "item collecting",
+          "baby recovery countdown"
+        ],
+        "confidence": 75,
+        "source": "review-000002",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000002-mechanics"
+        ]
+      },
+      "attributes": {
+        "exploration": {
+          "value": 60,
+          "confidence": 65,
+          "source": "review-000002",
+          "evidence": [
+            "snes-000002-mechanics",
+            "snes-000002-experience"
+          ],
+          "note": "Los objetos ocultos fomentan revisar las fases."
+        },
+        "mental_demand": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000002",
+          "evidence": [
+            "snes-000002-mechanics",
+            "snes-000002-experience"
+          ],
+          "note": "Apuntar huevos y resolver obstáculos exige planificación local."
+        },
+        "tension": {
+          "value": 40,
+          "confidence": 60,
+          "source": "review-000002",
+          "evidence": [
+            "snes-000002-mechanics",
+            "snes-000002-experience"
+          ],
+          "note": "Recuperar al bebé activa una cuenta atrás puntual."
+        }
+      },
+      "explanation": "Explora fases dibujadas y sus secretos, con pequeños momentos de urgencia al proteger a Mario.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000003",
+      "mechanics": {
+        "value": [
+          "kart racing",
+          "item combat",
+          "time trials"
+        ],
+        "confidence": 75,
+        "source": "review-000003",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000003-mechanics"
+        ]
+      },
+      "attributes": {
+        "pace": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000003",
+          "evidence": [
+            "snes-000003-mechanics",
+            "snes-000003-experience"
+          ],
+          "note": "Las carreras y el uso de objetos mantienen un ritmo rápido."
+        },
+        "intensity": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000003",
+          "evidence": [
+            "snes-000003-mechanics",
+            "snes-000003-experience"
+          ],
+          "note": "Las clases altas exigen reaccionar y conducir con precisión."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000003",
+          "evidence": [
+            "snes-000003-mechanics",
+            "snes-000003-experience"
+          ],
+          "note": "Carreras y contrarrelojes son unidades identificables; una copa las encadena."
+        },
+        "resume_ease": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000003",
+          "evidence": [
+            "snes-000003-mechanics",
+            "snes-000003-experience"
+          ],
+          "note": "El objetivo de una carrera aislada se entiende al volver."
+        }
+      },
+      "explanation": "Carreras con objetos y contrarrelojes; la exigencia sube bastante al cambiar de cilindrada.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000004",
+      "mechanics": {
+        "value": [
+          "overworld exploration",
+          "item-gated dungeons",
+          "light and dark world puzzles"
+        ],
+        "confidence": 75,
+        "source": "review-000004",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000004-mechanics"
+        ]
+      },
+      "attributes": {
+        "exploration": {
+          "value": 100,
+          "confidence": 65,
+          "source": "review-000004",
+          "evidence": [
+            "snes-000004-mechanics",
+            "snes-000004-experience"
+          ],
+          "note": "Descubrir zonas y obtener objetos guía la progresión."
+        },
+        "mental_demand": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000004",
+          "evidence": [
+            "snes-000004-mechanics",
+            "snes-000004-experience"
+          ],
+          "note": "Combinar objetos y ambos mundos sostiene problemas de varios pasos."
+        },
+        "resume_ease": {
+          "value": 40,
+          "confidence": 60,
+          "source": "review-000004",
+          "evidence": [
+            "snes-000004-mechanics",
+            "snes-000004-experience"
+          ],
+          "note": "La orientación incompleta puede exigir reconstruir el próximo paso."
+        }
+      },
+      "explanation": "Descubre caminos con nuevos objetos y resuelve conexiones entre dos versiones de Hyrule.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000005",
+      "mechanics": {
+        "value": [
+          "interconnected exploration",
+          "ability-gated routes",
+          "boss combat"
+        ],
+        "confidence": 85,
+        "source": "review-000005",
+        "note": "Descripción explícita corroborada por fuentes independientes; sin aprobación humana ni identificación de ROM.",
+        "evidence": [
+          "snes-000005-mechanics"
+        ]
+      },
+      "attributes": {
+        "exploration": {
+          "value": 100,
+          "confidence": 70,
+          "source": "review-000005",
+          "evidence": [
+            "snes-000005-mechanics"
+          ],
+          "note": "Nintendo y la reseña describen mejoras que amplían rutas y acciones."
+        },
+        "tension": {
+          "value": 60,
+          "confidence": 70,
+          "source": "review-000005",
+          "evidence": [
+            "snes-000005-experience"
+          ],
+          "note": "Dos críticas describen amenaza y atmósfera inquietante, alternadas con exploración."
+        },
+        "mystery": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000005",
+          "evidence": [
+            "snes-000005-mechanics",
+            "snes-000005-experience"
+          ],
+          "note": "La ambientación silenciosa y la búsqueda mantienen incógnitas."
+        },
+        "resume_ease": {
+          "value": 40,
+          "confidence": 60,
+          "source": "review-000005",
+          "evidence": [
+            "snes-000005-mechanics",
+            "snes-000005-experience"
+          ],
+          "note": "La navegación conectada requiere recordar qué rutas quedan pendientes."
+        }
+      },
+      "explanation": "Explora un mundo conectado y extraño: cada habilidad abre rutas, con amenaza entre descubrimientos.",
+      "gaps": [
+        "Multiple independent editorial groups consulted; attribute coverage remains incomplete and review-era bias persists.",
+        "A single purposively selected player comment is preserved; broader and conflicting community samples pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000006",
+      "mechanics": {
+        "value": [
+          "rail shooting",
+          "route difficulty selection",
+          "dodging and braking"
+        ],
+        "confidence": 75,
+        "source": "review-000006",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000006-mechanics"
+        ]
+      },
+      "attributes": {
+        "pace": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000006",
+          "evidence": [
+            "snes-000006-mechanics",
+            "snes-000006-experience"
+          ],
+          "note": "Disparar y esquivar sostienen el avance rápido."
+        },
+        "intensity": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000006",
+          "evidence": [
+            "snes-000006-mechanics",
+            "snes-000006-experience"
+          ],
+          "note": "Frenar, acelerar y girar deben coordinarse frente a ataques."
+        },
+        "short_sessions": {
+          "value": 60,
+          "confidence": 60,
+          "source": "review-000006",
+          "evidence": [
+            "snes-000006-mechanics",
+            "snes-000006-experience"
+          ],
+          "note": "Las misiones ofrecen unidades claras dentro de una ruta completa."
+        }
+      },
+      "explanation": "Una ruta de disparos y maniobras precisas; elige su dificultad antes de despegar.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    },
+    {
+      "id": "atlas:snes:000007",
+      "mechanics": {
+        "value": [
+          "hovercar racing",
+          "grand prix",
+          "practice mode"
+        ],
+        "confidence": 75,
+        "source": "review-000007",
+        "note": "Mecánicas explícitas de una fuente consultada; contraste adicional y aprobación humana pendientes.",
+        "evidence": [
+          "snes-000007-mechanics"
+        ]
+      },
+      "attributes": {
+        "pace": {
+          "value": 100,
+          "confidence": 65,
+          "source": "review-000007",
+          "evidence": [
+            "snes-000007-mechanics",
+            "snes-000007-experience"
+          ],
+          "note": "La velocidad es central a la experiencia descrita."
+        },
+        "intensity": {
+          "value": 80,
+          "confidence": 65,
+          "source": "review-000007",
+          "evidence": [
+            "snes-000007-mechanics",
+            "snes-000007-experience"
+          ],
+          "note": "Rivales y circuitos avanzados exigen precisión continua."
+        },
+        "short_sessions": {
+          "value": 80,
+          "confidence": 60,
+          "source": "review-000007",
+          "evidence": [
+            "snes-000007-mechanics",
+            "snes-000007-experience"
+          ],
+          "note": "Practicar circuitos proporciona objetivos separables de los campeonatos."
+        }
+      },
+      "explanation": "Conducción rápida y precisa; practica circuitos o afronta rivales más duros en las copas.",
+      "gaps": [
+        "Second independent experiential account needed; publisher/history notes alone do not corroborate all emotional attributes.",
+        "Contemporary original-release review/manual and representative community coverage pending."
+      ],
+      "unknowns": [
+        "Personal nostalgia and preference",
+        "Measured play/session duration",
+        "Exact ROM region, revision and translation",
+        "Human editorial approval"
+      ]
+    }
+  ]
+}

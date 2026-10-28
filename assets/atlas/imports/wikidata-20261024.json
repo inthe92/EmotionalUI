@@ -1,0 +1,1367 @@
+{
+  "schema": 1,
+  "kind": "real",
+  "provider": "wikidata",
+  "input_version": "entity-normalizer-1",
+  "policy": {
+    "acquire": true,
+    "store": true,
+    "extract": true,
+    "redistribute": true,
+    "basis": "Wikidata structured entity data CC0; not article text, images, third-party linked sites or emotional evidence. https://www.wikidata.org/wiki/Wikidata:Licensing"
+  },
+  "records": [
+    {
+      "external_id": "Q1194825",
+      "title": "Super Metroid",
+      "revision": "2546403424",
+      "platforms": [
+        "snes"
+      ],
+      "url": "https://www.wikidata.org/wiki/Q1194825",
+      "labels": {
+        "pt": {
+          "language": "pt",
+          "value": "Super Metroid"
+        },
+        "ja": {
+          "language": "ja",
+          "value": "スーパーメトロイド"
+        },
+        "fr": {
+          "language": "fr",
+          "value": "Super Metroid"
+        },
+        "ko": {
+          "language": "ko",
+          "value": "슈퍼 메트로이드"
+        },
+        "en": {
+          "language": "en",
+          "value": "Super Metroid"
+        },
+        "es": {
+          "language": "es",
+          "value": "Super Metroid"
+        },
+        "fi": {
+          "language": "fi",
+          "value": "Super Metroid"
+        },
+        "da": {
+          "language": "da",
+          "value": "Super Metroid"
+        },
+        "it": {
+          "language": "it",
+          "value": "Super Metroid"
+        },
+        "nl": {
+          "language": "nl",
+          "value": "Super Metroid"
+        },
+        "sv": {
+          "language": "sv",
+          "value": "Super Metroid"
+        },
+        "ru": {
+          "language": "ru",
+          "value": "Super Metroid"
+        },
+        "de": {
+          "language": "de",
+          "value": "Super Metroid"
+        },
+        "zh": {
+          "language": "zh",
+          "value": "超级银河战士"
+        },
+        "sk": {
+          "language": "sk",
+          "value": "Super Metroid"
+        },
+        "lt": {
+          "language": "lt",
+          "value": "Super Metroid"
+        },
+        "fit": {
+          "language": "fit",
+          "value": "Super Metroid"
+        },
+        "pl": {
+          "language": "pl",
+          "value": "Super Metroid"
+        },
+        "wuu": {
+          "language": "wuu",
+          "value": "超级银河战士"
+        },
+        "ast": {
+          "language": "ast",
+          "value": "Super Metroid"
+        },
+        "nn": {
+          "language": "nn",
+          "value": "Super Metroid"
+        },
+        "en-gb": {
+          "language": "en-gb",
+          "value": "Super Metroid"
+        },
+        "is": {
+          "language": "is",
+          "value": "Super Metroid"
+        },
+        "lv": {
+          "language": "lv",
+          "value": "Super Metroid"
+        },
+        "arz": {
+          "language": "arz",
+          "value": "سوپير ميترويد"
+        },
+        "ca": {
+          "language": "ca",
+          "value": "Super Metroid"
+        },
+        "ar": {
+          "language": "ar",
+          "value": "سوبر مترويد"
+        },
+        "la": {
+          "language": "la",
+          "value": "Super Metroid"
+        },
+        "hu": {
+          "language": "hu",
+          "value": "Super Metroid"
+        },
+        "nb": {
+          "language": "nb",
+          "value": "Super Metroid"
+        },
+        "lld": {
+          "language": "lld",
+          "value": "Super Metroid"
+        },
+        "id": {
+          "language": "id",
+          "value": "Super Metroid"
+        },
+        "ig": {
+          "language": "ig",
+          "value": "Super Metroid"
+        },
+        "ro": {
+          "language": "ro",
+          "value": "Super Metroid"
+        },
+        "mul": {
+          "language": "mul",
+          "value": "Super Metroid"
+        }
+      },
+      "aliases": {
+        "es": [
+          {
+            "language": "es",
+            "value": "Metroid III"
+          }
+        ],
+        "fi": [
+          {
+            "language": "fi",
+            "value": "Metroid III"
+          }
+        ],
+        "sv": [
+          {
+            "language": "sv",
+            "value": "Metroid III"
+          }
+        ],
+        "en": [
+          {
+            "language": "en",
+            "value": "Metroid III"
+          }
+        ],
+        "fit": [
+          {
+            "language": "fit",
+            "value": "Metroid III"
+          }
+        ],
+        "de": [
+          {
+            "language": "de",
+            "value": "Metroid SNES"
+          }
+        ],
+        "ja": [
+          {
+            "language": "ja",
+            "value": "メトロイド3"
+          },
+          {
+            "language": "ja",
+            "value": "メトロイドIII"
+          }
+        ],
+        "mul": [
+          {
+            "language": "mul",
+            "value": "Metroid 3"
+          }
+        ],
+        "fr": [
+          {
+            "language": "fr",
+            "value": "Metroid 3"
+          }
+        ]
+      },
+      "external_ids": [
+        {
+          "property": "P11688",
+          "value": "6627",
+          "qualifiers": {},
+          "statement": "Q1194825$cd234462-a393-4ccd-923e-dfa55abfeb68"
+        },
+        {
+          "property": "P5794",
+          "value": "super-metroid",
+          "qualifiers": {
+            "P9043": [
+              {
+                "snaktype": "value",
+                "property": "P9043",
+                "hash": "2cdd7674a22f976870fad0127c9e5511afdea480",
+                "datavalue": {
+                  "value": "1103",
+                  "type": "string"
+                },
+                "datatype": "external-id"
+              }
+            ]
+          },
+          "statement": "Q1194825$A3D16957-F2BC-43EA-9E79-BD768372D7C9"
+        }
+      ],
+      "observations": {
+        "P31": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P31",
+              "hash": "03d2d8ec4a899b29435a104a9ce7c189a31ae380",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 7889,
+                  "id": "Q7889"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "q1194825$3AB2BD95-93FD-4A61-A9F5-E3AE4A0317AF",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "288ab581e7d2d02995a26dfa8b091d96e78457fc",
+                "snaks": {
+                  "P143": [
+                    {
+                      "snaktype": "value",
+                      "property": "P143",
+                      "hash": "6a164248fc96bfa583bbb495cb63ae6401ec203c",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 206855,
+                          "id": "Q206855"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P143"
+                ]
+              }
+            ]
+          }
+        ],
+        "P400": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P400",
+              "hash": "abeb239479a081a0cc571b3a75b09662c72d0b01",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 183259,
+                  "id": "Q183259"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "Q1194825$BE703FDA-FA35-41E2-B27F-6F433805D222",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+                "snaks": {
+                  "P143": [
+                    {
+                      "snaktype": "value",
+                      "property": "P143",
+                      "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 328,
+                          "id": "Q328"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P143"
+                ]
+              }
+            ]
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P400",
+              "hash": "88feb42f1a24780ad0dd82c422f5c548c55aba37",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 17679679,
+                  "id": "Q17679679"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P2361": [
+                {
+                  "snaktype": "value",
+                  "property": "P2361",
+                  "hash": "6597cc84b06547ffc507b0c6bc5e38e1057ccdf0",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 821067,
+                      "id": "Q821067"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P2361"
+            ],
+            "id": "Q1194825$5e7fa2c9-489c-31a2-0e73-5b6ff7a86dce",
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P400",
+              "hash": "6990b2db676960f9ea74b5a50daaaea57b7af16a",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 56942,
+                  "id": "Q56942"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P2361": [
+                {
+                  "snaktype": "value",
+                  "property": "P2361",
+                  "hash": "6597cc84b06547ffc507b0c6bc5e38e1057ccdf0",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 821067,
+                      "id": "Q821067"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P2361"
+            ],
+            "id": "Q1194825$e12af385-4666-9611-d4fd-53e5ff06466f",
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P400",
+              "hash": "c960f2b9cef2c7313b480675ce8099f5970dfdb7",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 8079,
+                  "id": "Q8079"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P2361": [
+                {
+                  "snaktype": "value",
+                  "property": "P2361",
+                  "hash": "6597cc84b06547ffc507b0c6bc5e38e1057ccdf0",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 821067,
+                      "id": "Q821067"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P2361"
+            ],
+            "id": "Q1194825$7c45b406-4aa2-4ff4-ce4e-d311fa0a8b69",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P577",
+              "hash": "0761f4a5866596f31b7916be28e3b975ec1e4990",
+              "datavalue": {
+                "value": {
+                  "time": "+1994-03-19T00:00:00Z",
+                  "timezone": 0,
+                  "before": 0,
+                  "after": 0,
+                  "precision": 11,
+                  "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                },
+                "type": "time"
+              },
+              "datatype": "time"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P291": [
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "bb32394d31503e16b2eca63379d79b080de13059",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 17,
+                      "id": "Q17"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ],
+              "P400": [
+                {
+                  "snaktype": "value",
+                  "property": "P400",
+                  "hash": "abeb239479a081a0cc571b3a75b09662c72d0b01",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 183259,
+                      "id": "Q183259"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P291",
+              "P400"
+            ],
+            "id": "Q1194825$43B1C654-7EEC-4186-84F2-FE3E23AD2CB0",
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P577",
+              "hash": "63e5c56baa41bda0f94af311bc05b025d462442d",
+              "datavalue": {
+                "value": {
+                  "time": "+1994-04-18T00:00:00Z",
+                  "timezone": 0,
+                  "before": 0,
+                  "after": 0,
+                  "precision": 11,
+                  "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                },
+                "type": "time"
+              },
+              "datatype": "time"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P291": [
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "93c986254392ae2e30c520c9a333479f563f11f7",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 49,
+                      "id": "Q49"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ],
+              "P400": [
+                {
+                  "snaktype": "value",
+                  "property": "P400",
+                  "hash": "abeb239479a081a0cc571b3a75b09662c72d0b01",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 183259,
+                      "id": "Q183259"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P291",
+              "P400"
+            ],
+            "id": "Q1194825$572160cb-40d2-b706-a1f9-7ccdfe777fd1",
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P577",
+              "hash": "96b80545cbb375a58be02dd34c962afee0b7fd0d",
+              "datavalue": {
+                "value": {
+                  "time": "+1994-07-28T00:00:00Z",
+                  "timezone": 0,
+                  "before": 0,
+                  "after": 0,
+                  "precision": 11,
+                  "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                },
+                "type": "time"
+              },
+              "datatype": "time"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P291": [
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "1b4816db1cb015555e912bfee318515678a6c27a",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 2729044,
+                      "id": "Q2729044"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                },
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "548e20e9f59d661d6b409bea2e0126141a2cbc34",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 46,
+                      "id": "Q46"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ],
+              "P400": [
+                {
+                  "snaktype": "value",
+                  "property": "P400",
+                  "hash": "abeb239479a081a0cc571b3a75b09662c72d0b01",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 183259,
+                      "id": "Q183259"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P291",
+              "P400"
+            ],
+            "id": "Q1194825$da0c7c6e-40df-dc3a-2835-050c0ff1c96b",
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P577",
+              "hash": "76a57a75295e631334a7baa4105897cea0a4476a",
+              "datavalue": {
+                "value": {
+                  "time": "+2007-08-20T00:00:00Z",
+                  "timezone": 0,
+                  "before": 0,
+                  "after": 0,
+                  "precision": 11,
+                  "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                },
+                "type": "time"
+              },
+              "datatype": "time"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P291": [
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "93c986254392ae2e30c520c9a333479f563f11f7",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 49,
+                      "id": "Q49"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ],
+              "P400": [
+                {
+                  "snaktype": "value",
+                  "property": "P400",
+                  "hash": "c960f2b9cef2c7313b480675ce8099f5970dfdb7",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 8079,
+                      "id": "Q8079"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P291",
+              "P400"
+            ],
+            "id": "Q1194825$9675F259-EB04-4B67-8645-113110341ABB",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "d6843d3b397f13a860f2120d8b8fbd117eed24cc",
+                "snaks": {
+                  "P854": [
+                    {
+                      "snaktype": "value",
+                      "property": "P854",
+                      "hash": "1db0ffd217ad16682d363c4307bdf474c6595af1",
+                      "datavalue": {
+                        "value": "https://gamefaqs.gamespot.com/snes/588741-super-metroid/data",
+                        "type": "string"
+                      },
+                      "datatype": "url"
+                    }
+                  ],
+                  "P813": [
+                    {
+                      "snaktype": "value",
+                      "property": "P813",
+                      "hash": "fe80e358b32f14f6a0300bc93dba676595dd241e",
+                      "datavalue": {
+                        "value": {
+                          "time": "+2026-05-03T00:00:00Z",
+                          "timezone": 0,
+                          "before": 0,
+                          "after": 0,
+                          "precision": 11,
+                          "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                        },
+                        "type": "time"
+                      },
+                      "datatype": "time"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P854",
+                  "P813"
+                ]
+              }
+            ]
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P577",
+              "hash": "0949ee96cee274011094e8d50173c191ced0b314",
+              "datavalue": {
+                "value": {
+                  "time": "+2007-09-20T00:00:00Z",
+                  "timezone": 0,
+                  "before": 0,
+                  "after": 0,
+                  "precision": 11,
+                  "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                },
+                "type": "time"
+              },
+              "datatype": "time"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P291": [
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "bb32394d31503e16b2eca63379d79b080de13059",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 17,
+                      "id": "Q17"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ],
+              "P400": [
+                {
+                  "snaktype": "value",
+                  "property": "P400",
+                  "hash": "c960f2b9cef2c7313b480675ce8099f5970dfdb7",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 8079,
+                      "id": "Q8079"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P291",
+              "P400"
+            ],
+            "id": "Q1194825$46805690-1B70-47F3-98F7-1F876FE62ECE",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "d6843d3b397f13a860f2120d8b8fbd117eed24cc",
+                "snaks": {
+                  "P854": [
+                    {
+                      "snaktype": "value",
+                      "property": "P854",
+                      "hash": "1db0ffd217ad16682d363c4307bdf474c6595af1",
+                      "datavalue": {
+                        "value": "https://gamefaqs.gamespot.com/snes/588741-super-metroid/data",
+                        "type": "string"
+                      },
+                      "datatype": "url"
+                    }
+                  ],
+                  "P813": [
+                    {
+                      "snaktype": "value",
+                      "property": "P813",
+                      "hash": "fe80e358b32f14f6a0300bc93dba676595dd241e",
+                      "datavalue": {
+                        "value": {
+                          "time": "+2026-05-03T00:00:00Z",
+                          "timezone": 0,
+                          "before": 0,
+                          "after": 0,
+                          "precision": 11,
+                          "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                        },
+                        "type": "time"
+                      },
+                      "datatype": "time"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P854",
+                  "P813"
+                ]
+              }
+            ]
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P577",
+              "hash": "de694855f499f7172d58cd0deac615c49beb0eac",
+              "datavalue": {
+                "value": {
+                  "time": "+2007-10-12T00:00:00Z",
+                  "timezone": 0,
+                  "before": 0,
+                  "after": 0,
+                  "precision": 11,
+                  "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                },
+                "type": "time"
+              },
+              "datatype": "time"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P291": [
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "548e20e9f59d661d6b409bea2e0126141a2cbc34",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 46,
+                      "id": "Q46"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                },
+                {
+                  "snaktype": "value",
+                  "property": "P291",
+                  "hash": "080ac48e01e1496aef1a1016d6d870ce07032c0f",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 408,
+                      "id": "Q408"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ],
+              "P400": [
+                {
+                  "snaktype": "value",
+                  "property": "P400",
+                  "hash": "c960f2b9cef2c7313b480675ce8099f5970dfdb7",
+                  "datavalue": {
+                    "value": {
+                      "entity-type": "item",
+                      "numeric-id": 8079,
+                      "id": "Q8079"
+                    },
+                    "type": "wikibase-entityid"
+                  },
+                  "datatype": "wikibase-item"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P291",
+              "P400"
+            ],
+            "id": "Q1194825$A58005C9-3F82-4377-9D5F-DB98079BFF68",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "d6843d3b397f13a860f2120d8b8fbd117eed24cc",
+                "snaks": {
+                  "P854": [
+                    {
+                      "snaktype": "value",
+                      "property": "P854",
+                      "hash": "1db0ffd217ad16682d363c4307bdf474c6595af1",
+                      "datavalue": {
+                        "value": "https://gamefaqs.gamespot.com/snes/588741-super-metroid/data",
+                        "type": "string"
+                      },
+                      "datatype": "url"
+                    }
+                  ],
+                  "P813": [
+                    {
+                      "snaktype": "value",
+                      "property": "P813",
+                      "hash": "fe80e358b32f14f6a0300bc93dba676595dd241e",
+                      "datavalue": {
+                        "value": {
+                          "time": "+2026-05-03T00:00:00Z",
+                          "timezone": 0,
+                          "before": 0,
+                          "after": 0,
+                          "precision": 11,
+                          "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                        },
+                        "type": "time"
+                      },
+                      "datatype": "time"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P854",
+                  "P813"
+                ]
+              }
+            ]
+          }
+        ],
+        "P178": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P178",
+              "hash": "0ed1f51dbe82c4944078512c47661456cc5fdec0",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 2633052,
+                  "id": "Q2633052"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "Q1194825$FAFD6B6E-498A-4CC6-BC9D-934870C9E812",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+                "snaks": {
+                  "P143": [
+                    {
+                      "snaktype": "value",
+                      "property": "P143",
+                      "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 328,
+                          "id": "Q328"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P143"
+                ]
+              }
+            ]
+          }
+        ],
+        "P123": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P123",
+              "hash": "1666484cce79757c707cf1f888bdeb98c9321c66",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 8093,
+                  "id": "Q8093"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "Q1194825$A7E5801B-5327-4704-93C1-C6DA64EECF92",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+                "snaks": {
+                  "P143": [
+                    {
+                      "snaktype": "value",
+                      "property": "P143",
+                      "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 328,
+                          "id": "Q328"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P143"
+                ]
+              }
+            ]
+          }
+        ],
+        "P136": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P136",
+              "hash": "a6a1e61672fd23e4730dce727c9fc7128e2db387",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 19643088,
+                  "id": "Q19643088"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "q1194825$1ae3b3ac-4ec0-e57b-855d-409f937766c1",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "bf33846cb328d6e597e0c3d6e8154a66ed74bf5e",
+                "snaks": {
+                  "P854": [
+                    {
+                      "snaktype": "value",
+                      "property": "P854",
+                      "hash": "7f37d6021c55ec3cca5fd52a5360d4d6068edb5e",
+                      "datavalue": {
+                        "value": "https://www.vg247.com/the-10-greatest-metroidvania-games",
+                        "type": "string"
+                      },
+                      "datatype": "url"
+                    }
+                  ],
+                  "P1476": [
+                    {
+                      "snaktype": "value",
+                      "property": "P1476",
+                      "hash": "ceb6d57d71f6ba7831a562309a1f8654fb8e3af7",
+                      "datavalue": {
+                        "value": {
+                          "text": "The 10 Greatest Metroidvania Games",
+                          "language": "en"
+                        },
+                        "type": "monolingualtext"
+                      },
+                      "datatype": "monolingualtext"
+                    }
+                  ],
+                  "P577": [
+                    {
+                      "snaktype": "value",
+                      "property": "P577",
+                      "hash": "64dbe672f953032d76c3aa20938bec615d6ebf67",
+                      "datavalue": {
+                        "value": {
+                          "time": "+2014-03-28T00:00:00Z",
+                          "timezone": 0,
+                          "before": 0,
+                          "after": 0,
+                          "precision": 11,
+                          "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                        },
+                        "type": "time"
+                      },
+                      "datatype": "time"
+                    }
+                  ],
+                  "P407": [
+                    {
+                      "snaktype": "value",
+                      "property": "P407",
+                      "hash": "daf1c4fcb58181b02dff9cc89deb084004ddae4b",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 1860,
+                          "id": "Q1860"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ],
+                  "P813": [
+                    {
+                      "snaktype": "value",
+                      "property": "P813",
+                      "hash": "9df39be9aee1b9a757ad756c71aad0075b6e40e6",
+                      "datavalue": {
+                        "value": {
+                          "time": "+2025-11-25T00:00:00Z",
+                          "timezone": 0,
+                          "before": 0,
+                          "after": 0,
+                          "precision": 11,
+                          "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                        },
+                        "type": "time"
+                      },
+                      "datatype": "time"
+                    }
+                  ],
+                  "P2093": [
+                    {
+                      "snaktype": "value",
+                      "property": "P2093",
+                      "hash": "3ebc53babc8d511bc024f8ae81e107863a88bcfd",
+                      "datavalue": {
+                        "value": "USgamer Team",
+                        "type": "string"
+                      },
+                      "datatype": "string"
+                    }
+                  ],
+                  "P123": [
+                    {
+                      "snaktype": "value",
+                      "property": "P123",
+                      "hash": "cf614bf923ee7f8add6b0041ab920bb7e955572a",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 73939073,
+                          "id": "Q73939073"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P854",
+                  "P1476",
+                  "P577",
+                  "P407",
+                  "P813",
+                  "P2093",
+                  "P123"
+                ]
+              }
+            ]
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P136",
+              "hash": "4015404640c4df409d538dbeba12a8a117049300",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 4282636,
+                  "id": "Q4282636"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "q1194825$e4bd7861-4f94-1925-6cce-eda8372d5342",
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P136",
+              "hash": "4d4c1f8f5cf70a924cc0f0e34d108880207e5019",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 343568,
+                  "id": "Q343568"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            },
+            "type": "statement",
+            "id": "q1194825$3902698f-48bd-d407-1267-1f5829fcf91f",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+                "snaks": {
+                  "P143": [
+                    {
+                      "snaktype": "value",
+                      "property": "P143",
+                      "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 328,
+                          "id": "Q328"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P143"
+                ]
+              }
+            ]
+          }
+        ],
+        "P11688": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P11688",
+              "hash": "52481b591284e6512d9d31d11ef150ff25c34aeb",
+              "datavalue": {
+                "value": "6627",
+                "type": "string"
+              },
+              "datatype": "external-id"
+            },
+            "type": "statement",
+            "id": "Q1194825$cd234462-a393-4ccd-923e-dfa55abfeb68",
+            "rank": "normal",
+            "references": [
+              {
+                "hash": "732ec1c90a6f0694c7db9a71bf09fe7f2b674172",
+                "snaks": {
+                  "P143": [
+                    {
+                      "snaktype": "value",
+                      "property": "P143",
+                      "hash": "9123b0de1cc9c3954366ba797d598e4e1ea4146f",
+                      "datavalue": {
+                        "value": {
+                          "entity-type": "item",
+                          "numeric-id": 10000,
+                          "id": "Q10000"
+                        },
+                        "type": "wikibase-entityid"
+                      },
+                      "datatype": "wikibase-item"
+                    }
+                  ]
+                },
+                "snaks-order": [
+                  "P143"
+                ]
+              }
+            ]
+          }
+        ],
+        "P5794": [
+          {
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P5794",
+              "hash": "fc027452c398752bdba0c5b7594793748c07ca06",
+              "datavalue": {
+                "value": "super-metroid",
+                "type": "string"
+              },
+              "datatype": "external-id"
+            },
+            "type": "statement",
+            "qualifiers": {
+              "P9043": [
+                {
+                  "snaktype": "value",
+                  "property": "P9043",
+                  "hash": "2cdd7674a22f976870fad0127c9e5511afdea480",
+                  "datavalue": {
+                    "value": "1103",
+                    "type": "string"
+                  },
+                  "datatype": "external-id"
+                }
+              ]
+            },
+            "qualifiers-order": [
+              "P9043"
+            ],
+            "id": "Q1194825$A3D16957-F2BC-43EA-9E79-BD768372D7C9",
+            "rank": "normal"
+          }
+        ]
+      },
+      "identity_scope": "Provider work assertion with separate platform implementations. Edition/revision/translation unknown; P144/P629 relations need review, never title merging."
+    }
+  ]
+}
