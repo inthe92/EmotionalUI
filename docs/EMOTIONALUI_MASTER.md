@@ -1,3 +1,29 @@
+# Estado vigente · integración funcional · 28-10-2026
+
+Esta sección es la fuente vigente. El resto de este documento conserva la especificación y las pruebas históricas; sus tareas, cifras, fondos y órdenes de publicación anteriores no dirigen la integración actual. El producto aprobado conserva la composición azul y dorada, modos claro/oscuro y cuatro secciones superiores. No se incorpora otro motor, OOBE, clima visual ni frontend predeterminado.
+
+La rama parte de `256ff6c` (beta.6). Incluye los cambios locales de transición, SteamGridDB y estabilidad de carátulas, más la investigación Atlas recuperada sin ejecutar una nueva campaña. Los PR #3 y #4 están en su ascendencia; #2 contiene otra implementación de biblioteca y no se ha fusionado automáticamente. #1 afecta a las instrucciones de GitHub y permanece separado.
+
+| Componente | Evidencia y alcance |
+|---|---|
+| Biblioteca y lanzamiento | 134 tests Rust de aplicación; recorrido sintético de búsqueda, dos lanzamientos, retorno, historial y foco. No certifica todos los emuladores. |
+| Atlas | SQLite íntegra: 1.841 identidades, 1.841 filas base y 274 perfiles experimentales. Enlace explícito, recomendación y lanzamiento del mismo ID comprobados con proceso sintético; atributos experimentales sin aprobación humana. |
+| Ajustes y Drop | Descubrimiento/cancelación de herramientas en simulación. Siete pruebas de Drop con localhost y datos sintéticos; HTTP local sin cifrar, sesión temporal y sin servicio permanente. Escritura real pendiente de supervisión. |
+| Visual y GPU | ARM64/FemtoVG compilado; software disponible. El usuario confirmó en RG353V carátulas estables con el ELF `da2f29084dbc`; eso no certifica todos los recorridos ni FPS. |
+| SteamGridDB | Selector local previo conservado; el usuario confirmó aplicar una carátula en el ELF anterior `474cdc2bf5a7`. La clave queda fuera del repositorio y el paquete. |
+
+Paquete privado de revisión: ELF SHA-256 `da2f29084dbc3a0ca07e3ac8406576de6468360af9bce588204538aceac4dadf`; ZIP SHA-256 `e4dbdc9fda560d9858864ff70a39c4740eaab1e0be58ce6da5743b55e47abdf3`. Manifiesto y 22 archivos verificados; no es una release ni cambia el arranque. La prueba sintética no sustituye la prueba física integral.
+
+Limitaciones: la batería Python amplia contiene pruebas históricas de materiales/escenas que no coinciden con los recursos actuales y una escena privada ausente; el sandbox impide localhost, comprobado aparte con siete pruebas autorizadas. No se excluyen ni se presentan como aprobadas. Faltan una prueba física integral del paquete, mediciones de rendimiento comparables y la validación supervisada de Drop con destino de prueba. No modificar ROM, BIOS, guardados, configuración global, EmulationStation ni servicios permanentes.
+
+Compilación y prueba reproducibles: `cargo build --locked -p emotional-ui --no-default-features --features simulator`; `python3 tools/verify_player_flow.py --binary target/debug/emotional-ui --output dist/player-flow`; `python3 tools/verify_atlas_launch.py --binary target/debug/emotional-ui --atlas assets/atlas/emotional-atlas.db --output dist/atlas-flow`; para ARM64 configurar Zig y el SDK descritos en `ARM64_BUILD.md`, ejecutar `EMOTIONAL_KMS_FEATURE=linuxkms-gpu-material tools/arm64/build.sh`, y `python3 tools/build_player_package.py --binary target/aarch64-unknown-linux-gnu/release/emotional-ui --output dist/private-review --private`.
+
+---
+
+# Archivo histórico: especificación y evidencias anteriores
+
+Las afirmaciones de estado y los pasos siguientes del texto conservado a continuación son históricos.
+
 # EmotionalUI — especificación maestra
 
 Versión 1 · 19-10-2026 · **Propuesta consolidada, pendiente de aceptación del propietario.**
