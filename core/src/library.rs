@@ -14,6 +14,8 @@ pub struct Emotions {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Game {
     pub id: String,
+    #[serde(default)]
+    pub system: String,
     pub title: String,
     pub subtitle: String,
     pub genre: String,
@@ -91,6 +93,7 @@ pub fn demo_catalog() -> Vec<Game> {
     .map(
         |(i, (title, subtitle, genre, started, minutes, calm, intensity))| Game {
             id: format!("demo-{i}"),
+            system: String::new(),
             title: title.into(),
             subtitle: subtitle.into(),
             genre: genre.into(),

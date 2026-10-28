@@ -1,0 +1,33 @@
+import { AtmosphereDesign, AmbientPanel } from "integrated.slint";
+
+export component LaunchTransition inherits Rectangle {
+    in property <float> progress;
+    in property <string> title;
+    in property <image> cover;
+    in property <bool> cover-available;
+    in property <bool> handing-off;
+    callback cancelled();
+    background:transparent;
+    Rectangle {width:parent.width;height:parent.height;background:#080f1c;opacity:root.progress*0.10;}
+    // This overlay owns pointer input while pending; B uses the same cancellation.
+    TouchArea {}
+    AmbientPanel {
+        x:112px;y:112px+(1-root.progress)*20px;width:416px;height:256px;
+        opacity:root.progress;radius:16px;frost-x:112px;frost-y:112px;
+        Rectangle {
+            x:20px;y:20px;width:144px;height:216px;border-radius:8px;
+            background:AtmosphereDesign.fallback;
+            if root.cover-available: Image {width:parent.width;height:parent.height;source:root.cover;image-fit:contain;}
+            if !root.cover-available: Text {
+                x:12px;y:12px;width:parent.width - 24px;height:parent.height - 24px;
+                text:root.title;wrap:word-wrap;horizontal-alignment:center;vertical-alignment:center;
+                font-family:AtmosphereDesign.family;font-size:15px;font-weight:600;color:AtmosphereDesign.ink;
+            }
+        }
+        Text {x:184px;y:36px;width:212px;height:20px;text:"TU PRÓXIMA PARTIDA";font-size:10px;font-weight:600;color:AtmosphereDesign.muted;}
+        Text {x:184px;y:64px;width:212px;height:96px;text:root.title;wrap:word-wrap;overflow:elide;font-family:AtmosphereDesign.family;font-size:23px;font-weight:700;color:AtmosphereDesign.ink;}
+        Text {x:184px;y:174px;width:212px;height:24px;text:"Abriendo tu juego…";font-family:AtmosphereDesign.family;font-size:14px;color:AtmosphereDesign.ink;}
+        Text {x:184px;y:210px;width:212px;height:24px;text:root.handing-off?"Preparando la consola…":"B  Cancelar";font-family:AtmosphereDesign.family;font-size:11px;color:AtmosphereDesign.muted;}
+        TouchArea {x:172px;y:200px;width:232px;height:44px;enabled:!root.handing-off;clicked=>{root.cancelled();}}
+    }
+}

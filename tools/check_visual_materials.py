@@ -22,6 +22,13 @@ def audit():
     report = {}
     rows=catalog()
     all_text={r["id"]+k:[c/255 for c in rgba(r["colors"][k])[:3]] for r in rows for k in ("primary_text","secondary_text","focus_accent")}
+    response=json.loads((FOLDER/"responses.json").read_text())
+    glass_text=[]
+    for r in rows:
+        ink=[c/255 for c in rgba(r["colors"]["primary_text"])[:3]]
+        muted=[c/255 for c in rgba(r["colors"]["secondary_text"])[:3]]
+        ink=[x*.82+.18 for x in ink]
+        glass_text.extend((ink,[x*.15+y*.85 for x,y in zip(muted,ink)]))
     for row in rows:
         colors = {k: [c/255 for c in rgba(row['colors'][k])[:3]]
                   for k in ('primary_text', 'secondary_text', 'focus_accent')}
@@ -37,18 +44,25 @@ def audit():
                     assert image.mode == 'RGBA' and image.size == (width, height)
                     assert image.getpixel((0, 0))[3] == 0, ('Square corner', path)
                     samples = {image.getpixel((x, y)) for y in range(height) for x in range(width)
-                               if interior.getpixel((x, y)) == 255 and image.getpixel((x, y))[3] >= 225}
+                               if interior.getpixel((x, y)) == 255 and image.getpixel((x, y))[3] > 0}
                 assert samples
                 minimum = 100
                 for r, g, b, a in samples:
-                    for scene in (0., 1.):
+                    # Glass panels cover underlying UI with an opaque, offline
+                    # blurred painting. Its bounded brightness must be included
+                    # when checking alpha composition, not discarded by an
+                    # opacity threshold that would skip all translucent pixels.
+                    glass = name in ('room-material','room-tile')
+                    maximum = response['glass_profile']['brightness'] if glass else 1.0
+                    foregrounds = glass_text if glass else all_text.values()
+                    for scene in (0., maximum):
                         bg = [x/255*a/255+scene*(1-a/255) for x in (r, g, b)]
-                        for strength in (0., .14):
+                        for strength in (0., .14*(response["glass_profile"].get("context_wash_scale",1) if glass else 1)):
                             lit = [x*(1-strength)+y*strength for x, y in zip(bg, colors['focus_accent'])]
-                            minimum = min(minimum, *(contrast(color, lit) for color in all_text.values()))
+                            minimum = min(minimum, *(contrast(color, lit) for color in foregrounds))
                 assert minimum >= 4.5, (path, minimum)
                 report[row['id']+'/'+path.name] = dict(size=[width, height], minimum_text_contrast=round(minimum, 3))
-    return dict(passed=True, palettes=8, scope='All endpoint text colors over every material palette and white/black including active tint; no LCD certification', materials=report)
+    return dict(passed=True, palettes=8, scope='Actual glass primary/secondary text endpoints and bounded frost with scaled tint; other materials retain all original text/accent endpoints; no LCD certification', materials=report)
 
 
 if __name__ == '__main__':

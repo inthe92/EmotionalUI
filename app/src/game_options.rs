@@ -42,7 +42,7 @@ impl State {
     }
     pub(super) fn open_game_options(&mut self, ui: &Home) {
         let index = if self.library || self.menu && self.menu_from_library {
-            Some(self.library_index)
+            self.library_game()
         } else if self.resume {
             match self.selected {
                 0 => self.recent,
@@ -73,12 +73,13 @@ impl State {
         };
         match action {
             Action::Up => self.game_option_index = self.game_option_index.saturating_sub(1),
-            Action::Down => self.game_option_index = (self.game_option_index + 1).min(5),
+            Action::Down => self.game_option_index = (self.game_option_index + 1).min(6),
             Action::Back | Action::Menu => self.close_modal(),
             Action::Confirm if self.game_option_index == 4 => {
                 self.game_explained = !self.game_explained
             }
-            Action::Confirm if self.game_option_index == 5 => self.close_modal(),
+            Action::Confirm if self.game_option_index == 5 => self.open_artwork_picker(ui,i),
+            Action::Confirm if self.game_option_index == 6 => self.close_modal(),
             Action::Confirm if self.game_option_index < 4 => {
                 let id = self.games[i].id.clone();
                 let mut p = self

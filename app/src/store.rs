@@ -2,6 +2,8 @@
 mod atlas;
 #[path = "store/continuity.rs"]
 mod continuity;
+#[path = "store/atlas_history.rs"]
+mod atlas_history;
 use emotional_core::library::Game;
 use rusqlite::{params, Connection};
 use std::path::Path;
@@ -46,6 +48,15 @@ impl Store {
         &mut self,
         r: &emotional_services::launcher::configured::LaunchRecord,
     ) -> Result<(), Box<dyn std::error::Error>> {
+        self.record_launch_context(r, false, None)
+    }
+    pub fn record_launch_context(
+        &mut self,
+        r: &emotional_services::launcher::configured::LaunchRecord,
+        recommended: bool,
+        local_start: Option<chrono::NaiveDateTime>,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        if !self.privacy()?.record_history { return Ok(()); }
         let tx = self.0.transaction()?;
         tx.execute(
             "INSERT INTO launch_log VALUES(?1,?2,?3,?4)",
@@ -56,6 +67,13 @@ impl Store {
                 .started_utc
                 .ok_or("Cannot date a session with unknown clock")?;
             tx.execute("INSERT INTO activity VALUES(?1,?2,?3) ON CONFLICT(game_id,started_utc) DO UPDATE SET duration_seconds=excluded.duration_seconds",params![r.game_id,utc,r.elapsed_ms/1000])?;
+        }
+        if r.session_registered && r.outcome == "exited-success" && r.elapsed_ms >= 2000 {
+            if let (Some(utc),Some(local)) = (r.started_utc,local_start) {
+                use chrono::{Datelike,Timelike};
+                tx.execute("INSERT OR REPLACE INTO atlas_activity VALUES(?1,?2,?3,?4,?5,?6,?7)",params![r.id,r.game_id,utc,local.hour(),local.weekday().number_from_monday()>=6,(r.elapsed_ms/1000).min(u64::from(u32::MAX)),recommended])?;
+                tx.execute("DELETE FROM atlas_activity WHERE attempt_id NOT IN (SELECT attempt_id FROM atlas_activity ORDER BY started_utc DESC LIMIT 256)",[])?;
+            }
         }
         tx.commit()?;
         Ok(())
@@ -90,6 +108,7 @@ impl Store {
         &self,
         session: &emotional_core::product::Session,
     ) -> rusqlite::Result<()> {
+        if !self.privacy().map_err(|_|rusqlite::Error::InvalidQuery)?.record_history {return Ok(());}
         self.0.execute("INSERT INTO activity VALUES(?1,?2,?3) ON CONFLICT(game_id,started_utc) DO UPDATE SET duration_seconds=excluded.duration_seconds",params![session.game_id,session.started_utc,session.duration_seconds])?;
         Ok(())
     }
@@ -149,7 +168,7 @@ impl Store {
         self.clear_history()
     }
     fn clear_history(&self) -> rusqlite::Result<()> {
-        self.0.execute_batch("BEGIN IMMEDIATE;DELETE FROM activity;DELETE FROM launch_log;DELETE FROM preferences;DELETE FROM habits;DELETE FROM session;DELETE FROM session_items;DELETE FROM settings WHERE key='discovery_reserve';COMMIT;")
+        self.0.execute_batch("BEGIN IMMEDIATE;DELETE FROM activity;DELETE FROM launch_log;DELETE FROM atlas_activity;DELETE FROM preferences;DELETE FROM habits;DELETE FROM session;DELETE FROM session_items;DELETE FROM settings WHERE key='discovery_reserve';COMMIT;")
     }
     pub fn import_editorial(
         &mut self,
@@ -166,7 +185,7 @@ impl Store {
     pub fn open(path: &Path) -> rusqlite::Result<Self> {
         let db = Connection::open(path)?;
         let version: i64 = db.pragma_query_value(None, "user_version", |r| r.get(0))?;
-        if version > 4 {
+        if version > 5 {
             return Err(rusqlite::Error::InvalidQuery);
         }
         db.busy_timeout(std::time::Duration::from_secs(5))?;
@@ -176,12 +195,13 @@ CREATE TABLE IF NOT EXISTS habits(id TEXT NOT NULL,mood INTEGER NOT NULL,choices
 CREATE TABLE IF NOT EXISTS imported_games(id TEXT PRIMARY KEY,rom_path TEXT NOT NULL,source_xml TEXT NOT NULL,metadata TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS editorial(game_id TEXT PRIMARY KEY,metadata TEXT NOT NULL);CREATE TABLE IF NOT EXISTS activity(game_id TEXT NOT NULL,started_utc INTEGER NOT NULL,duration_seconds INTEGER,PRIMARY KEY(game_id,started_utc));
 CREATE INDEX IF NOT EXISTS activity_recent ON activity(started_utc DESC);
+CREATE TABLE IF NOT EXISTS atlas_activity(attempt_id TEXT PRIMARY KEY,game_id TEXT NOT NULL,started_utc INTEGER NOT NULL,local_hour INTEGER NOT NULL,weekend INTEGER NOT NULL,seconds INTEGER NOT NULL,recommended INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS launch_log(attempt_id TEXT PRIMARY KEY,game_id TEXT NOT NULL,outcome TEXT NOT NULL,data TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS progress(game_id TEXT PRIMARY KEY,completed INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS atlas_links(game_id TEXT PRIMARY KEY,atlas_id TEXT NOT NULL,provenance TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS continuity_preferences(game_id TEXT PRIMARY KEY,data TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT NOT NULL);
-PRAGMA user_version=4;COMMIT;")?;
+PRAGMA user_version=5;COMMIT;")?;
         Ok(Self(db))
     }
     pub fn load(&self, games: &mut [Game]) -> rusqlite::Result<()> {
@@ -250,6 +270,7 @@ PRAGMA user_version=4;COMMIT;")?;
         games: &[Preference],
         session: Option<(&str, &[String])>,
     ) -> rusqlite::Result<()> {
+        if !self.privacy().map_err(|_|rusqlite::Error::InvalidQuery)?.record_history {return Ok(());}
         let tx = self.0.transaction()?;
         {
             // Compile these statements once per snapshot, not five times per game.
@@ -321,8 +342,10 @@ PRAGMA user_version=4;COMMIT;")?;
                     .take(512)
                     .collect::<String>()
             };
+            let system = emotional_core::atlas::system_key(&field("system", imported.source.parent().and_then(|p|p.file_name()).and_then(|p|p.to_str()).unwrap_or("")));
             games.push(Game {
                 id,
+                system,
                 title: field("name", "Sin título"),
                 subtitle: field("desc", "Un camino de tu colección."),
                 genre: field("genre", "Sin clasificar"),
@@ -459,6 +482,7 @@ PRAGMA user_version=4;COMMIT;")?;
         Ok(())
     }
     pub fn save_session(&mut self, slot: &str, ids: &[String]) -> rusqlite::Result<()> {
+        if !self.privacy().map_err(|_|rusqlite::Error::InvalidQuery)?.record_history {return Ok(());}
         let tx = self.0.transaction()?;
         Self::write_session(&tx, slot, ids)?;
         tx.commit()
@@ -467,6 +491,15 @@ PRAGMA user_version=4;COMMIT;")?;
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn appearance_is_persisted_and_old_preferences_default_to_dark() {
+        let old: emotional_core::product::Privacy = toml::from_str("statistics = false\nneutral = true").unwrap();
+        assert!(old.dark_mode);
+        let light = emotional_core::product::Privacy { dark_mode: false, ..old };
+        let store = Store::open(Path::new(":memory:")).unwrap();
+        store.save_privacy(&light).unwrap();
+        assert_eq!(store.privacy().unwrap(), light);
+    }
     #[test]
     fn persistence_roundtrip() {
         let mut s = Store::open(Path::new(":memory:")).unwrap();

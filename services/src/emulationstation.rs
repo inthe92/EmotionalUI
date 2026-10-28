@@ -32,6 +32,39 @@ pub struct ImportReport {
     pub games: Vec<ImportedGame>,
     pub skipped: usize,
 }
+/// Add real files without scraped metadata. Same canonical identity as XML;
+/// extensions come from installed system profiles, never a global executable scan.
+pub fn discover_files(root: &Path, extensions: &[String], known: &HashSet<PathBuf>) -> Result<Vec<ImportedGame>, Box<dyn Error>> {
+    let root = root.canonicalize()?;
+    let mut pending = vec![(root.clone(), 0)];
+    let mut result = Vec::new();
+    let mut count = 0;
+    while let Some((directory, depth)) = pending.pop() {
+        for entry in std::fs::read_dir(directory)? {
+            count += 1;
+            if count > 100000 { return Err("System file inventory exceeds 100000 entries".into()); }
+            let entry = entry?;
+            let kind = entry.file_type()?;
+            if kind.is_symlink() { continue; }
+            let path = entry.path();
+            if kind.is_dir() && depth < 8 {
+                let name = entry.file_name().to_string_lossy().to_lowercase();
+                if !name.starts_with('.') && !["images", "videos", "media", "manuals", "screenshots"].contains(&name.as_str()) {
+                    pending.push((path, depth+1));
+                }
+            } else if kind.is_file() && path.extension().and_then(|s| s.to_str()).is_some_and(|suffix| extensions.iter().any(|e| e.strip_prefix('.').is_some_and(|e| e.eq_ignore_ascii_case(suffix)))) {
+                let rom = path.canonicalize()?;
+                if !rom.starts_with(&root) || known.contains(&rom) { continue; }
+                let mut metadata = BTreeMap::new();
+                metadata.insert("name".into(), path.file_stem().unwrap_or_default().to_string_lossy().to_string());
+                metadata.insert("system".into(), root.file_name().unwrap_or_default().to_string_lossy().to_string());
+                result.push(ImportedGame { id: format!("es:{}", rom.to_string_lossy()), rom, source: root.join("gamelist.xml"), metadata });
+            }
+        }
+    }
+    result.sort_by(|a,b| a.rom.cmp(&b.rom));
+    Ok(result)
+}
 pub fn import(gamelist: &Path, root: &Path) -> Result<ImportReport, Box<dyn Error>> {
     let root = root.canonicalize()?;
     if !root.is_dir() {
@@ -106,6 +139,19 @@ pub fn import(gamelist: &Path, root: &Path) -> Result<ImportReport, Box<dyn Erro
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn files_without_xml_keep_stable_identity_and_skip_art_scripts_and_known_games() {
+        let root = std::env::temp_dir().join(format!("eui-file-library-{}", std::process::id()));
+        std::fs::create_dir_all(root.join("nested")).unwrap();
+        std::fs::create_dir_all(root.join("images")).unwrap();
+        for file in ["known.sfc", "nested/new.SFC", "images/art.sfc", "not-a-game.sh"] { std::fs::write(root.join(file), b"fixture").unwrap(); }
+        let known = HashSet::from([root.join("known.sfc").canonicalize().unwrap()]);
+        let games = discover_files(&root, &[".sfc".into()], &known).unwrap();
+        assert_eq!(games.len(), 1);
+        assert_eq!(games[0].metadata["name"], "new");
+        assert_eq!(games[0].id, format!("es:{}", root.join("nested/new.SFC").canonicalize().unwrap().display()));
+        std::fs::remove_dir_all(root).unwrap();
+    }
     struct Fixture(PathBuf);
     impl Fixture {
         fn new() -> Self {

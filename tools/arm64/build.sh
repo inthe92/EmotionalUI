@@ -11,7 +11,7 @@ fi
 : "${EMOTIONAL_GLIBC_FLOOR:=2.36}"
 : "${EMOTIONAL_KMS_FEATURE:=linuxkms}"
 case "$EMOTIONAL_KMS_FEATURE" in
-    linuxkms|linuxkms-direct|linuxkms-gpu|simulator) ;;
+    linuxkms|linuxkms-direct|linuxkms-gpu|linuxkms-gpu-material|simulator) ;;
     *) echo 'Unsupported KMS feature' >&2; exit 1 ;;
 esac
 export EMOTIONAL_GLIBC_FLOOR

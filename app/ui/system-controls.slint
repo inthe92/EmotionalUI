@@ -1,39 +1,128 @@
 import { DaycycleAssets } from "../../assets/scenes/daycycle/assets.slint";
 import { AtmosphereDesign, AmbientPanel } from "integrated.slint";
+import { FocusOutline } from "focus.slint";
 export component SystemControls inherits Rectangle {
     in property <bool> focused;
     in property <bool> expanded;
     in property <float> progress;
     in property <bool> reduced;
     in property <bool> blocked;
+    in property <[string]> values;
+    in property <[bool]> known;
+    in property <[bool]> active;
+    in property <int> battery-percent:-1;
+    in property <bool> battery-charging;
+    in property <int> selected;
+    in property <string> help;
+    in property <bool> changes-allowed;
+    in property <bool> drop-open;
+    in property <image> drop-image;
+    in property <string> drop-message;
+    callback chosen(int);
+    callback adjusted(int, bool);
+    in property <[int]> levels;
+    callback level-changed(int, int);
     callback toggled();
     callback settings();
     width:640px;height:480px;background:transparent;
     if root.progress>0: Rectangle {width:640px;height:480px;background:#080a0870;opacity:root.progress;TouchArea {enabled:root.expanded;clicked=>{root.toggled();}}}
     AmbientPanel {
-        x:440px;y:16px;width:176px;height:28px;radius:self.height/2;
-        focused:root.focused;surface:AtmosphereDesign.status-material;focused-surface:AtmosphereDesign.status-material-focus;next-surface:DaycycleAssets.status-next;next-focused-surface:DaycycleAssets.status-focus-next;
-        for icon[index] in [@image-url("../../assets/icons/wifi.svg"),@image-url("../../assets/icons/battery.svg"),@image-url("../../assets/icons/bluetooth.svg"),@image-url("../../assets/icons/sound.svg"),@image-url("../../assets/icons/brightness.svg")]: Image {
-            x:16px+index*32px;y:6px;width:16px;height:16px;source:icon;colorize:AtmosphereDesign.muted;
-            // Unknown is not off: the expanded panel explicitly says unverified.
+        frost-x:440px;frost-y:16px;x:440px;y:16px;width:176px;height:28px;radius:self.height/2;
+        focused:root.focused&&!root.expanded&&!root.blocked;surface:AtmosphereDesign.status-material;focused-surface:AtmosphereDesign.status-material-focus;next-surface:DaycycleAssets.status-next;next-focused-surface:DaycycleAssets.status-focus-next;
+        for icon[index] in [@image-url("../../assets/icons/wifi.svg"),@image-url("../../assets/icons/battery.svg"),@image-url("../../assets/icons/bluetooth.svg"),@image-url("../../assets/icons/sound.svg"),@image-url("../../assets/icons/brightness.svg")]: Rectangle {
+            x:16px+index*32px;y:6px;width:16px;height:16px;background:transparent;
+            Image {width:16px;height:16px;source:icon;colorize:root.known[index]&&root.active[index]?AtmosphereDesign.ink:AtmosphereDesign.muted;}
+            if index==1&&root.battery-percent>=0: Rectangle {
+                x:2.5px;y:5px;width:10px*root.battery-percent/100;height:6px;
+                background:root.battery-percent<=15?AtmosphereDesign.mark:AtmosphereDesign.ink;
+                opacity:root.battery-charging?1:0.85;
+            }
+            if index==1&&root.battery-charging: Text {x:5px;y:0px;width:10px;height:16px;text:"ϟ";font-size:13px;color:AtmosphereDesign.mark;vertical-alignment:center;}
+            if index!=1&&root.known[index]&&!root.active[index]: Image {
+                width:16px;height:16px;source:@image-url("../../assets/icons/status-disabled.svg");colorize:AtmosphereDesign.muted;
+            }
+            if !root.known[index]: Text {x:10px;y:6px;width:7px;height:10px;text:"?";font-size:9px;color:AtmosphereDesign.muted;}
+
         }
         TouchArea {enabled:!root.blocked;clicked=>{root.toggled();}}
     }
     AmbientPanel {
         property <float> show:root.progress;
-        x:344px;y:44px+(1-self.show)*4px;width:272px;height:268px;
+        frost-x:344px;frost-y:44px;x:344px;y:44px+(1-self.show)*4px;width:272px;height:322px;
         visible:self.show>0;opacity:self.show;radius:AtmosphereDesign.radius-l;
         TouchArea {enabled:root.expanded;}
-        Text {x:16px;y:12px;width:240px;height:20px;text:"Controles del sistema";font-size:15px;font-weight:600;color:AtmosphereDesign.ink;}
-        for label[index] in ["Wi-Fi","Bluetooth","Volumen","Brillo","Batería"]: Rectangle {
-            x:16px;y:40px+index*28px;width:240px;height:28px;background:transparent;
-            Text {x:0px;width:112px;height:parent.height;text:label;font-size:13px;color:AtmosphereDesign.muted;vertical-alignment:center;}
-            Text {x:112px;width:128px;height:parent.height;text:"Sin verificar";font-size:11px;color:AtmosphereDesign.muted;horizontal-alignment:right;vertical-alignment:center;}
+        if !root.drop-open: Rectangle {
+        width:parent.width;height:parent.height;background:transparent;
+        Text {x:16px;y:12px;width:240px;height:20px;text:"Controles del sistema";font-size:15px;font-weight:600;color:AtmosphereDesign.glass-ink;}
+        for label[index] in ["Wi-Fi","Bluetooth"]: Rectangle {
+            x:16px+index*124px;y:42px;width:116px;height:40px;border-radius:10px;
+            background:root.selected==index?AtmosphereDesign.active:transparent;
+            border-width:0.5px;border-color:AtmosphereDesign.glass-edge;
+            if root.expanded&&!root.blocked&&root.selected==index: FocusOutline {width:parent.width;height:parent.height;radius:10px;}
+            Image {x:10px;y:12px;width:16px;height:16px;source:index==0?@image-url("../../assets/icons/wifi.svg"):@image-url("../../assets/icons/bluetooth.svg");colorize:root.values[index]=="On"?AtmosphereDesign.ink:AtmosphereDesign.muted;}
+            Text {x:32px;y:3px;width:76px;height:17px;text:label;font-size:12px;color:AtmosphereDesign.glass-ink;}
+            Text {x:32px;y:20px;width:76px;height:16px;text:root.values[index];font-size:11px;color:AtmosphereDesign.glass-muted;}
+            TouchArea {enabled:root.expanded;clicked=>{root.chosen(index);}}
         }
-        Text {x:16px;y:184px;width:240px;height:32px;text:"Indicadores sin conexión al sistema.\nNo se cambia ninguna configuración.";font-size:11px;color:AtmosphereDesign.muted;wrap:word-wrap;}
-        Rectangle {x:16px;y:220px;width:240px;height:32px;border-radius:self.height/2;background:AtmosphereDesign.active;border-width:2px;border-color:AtmosphereDesign.mark;
-            Text {width:parent.width;height:parent.height;text:"A  ·  Ajustes completos";font-size:13px;font-weight:600;color:AtmosphereDesign.ink;horizontal-alignment:center;vertical-alignment:center;}
+        for label[index] in ["Volumen","Brillo"]: Rectangle {
+            property <bool> dragging:false;
+            property <int> draft:0;
+            property <int> shown:self.dragging?self.draft:root.levels[index];
+            x:16px;y:92px+index*50px;width:240px;height:44px;border-radius:10px;
+            background:root.selected==index+2?AtmosphereDesign.active:transparent;
+            if root.expanded&&!root.blocked&&root.selected==index+2: FocusOutline {width:parent.width;height:parent.height;radius:10px;}
+            Image {x:9px;y:15px;width:16px;height:16px;source:index==0?@image-url("../../assets/icons/sound.svg"):@image-url("../../assets/icons/brightness.svg");colorize:AtmosphereDesign.ink;}
+            Text {x:34px;y:2px;width:130px;height:17px;text:label;font-size:12px;color:AtmosphereDesign.glass-ink;}
+            Text {x:165px;y:2px;width:66px;height:17px;text:parent.dragging?parent.draft+" %":root.values[index+2];font-size:11px;color:AtmosphereDesign.glass-muted;horizontal-alignment:right;}
+            Rectangle {x:34px;y:25px;width:196px;height:9px;border-radius:4.5px;background:AtmosphereDesign.muted;opacity:0.25;}
+            Rectangle {x:34px;y:25px;width:196px*max(0,min(100,parent.shown))/100;height:9px;border-radius:4.5px;background:AtmosphereDesign.mark;}
+            TouchArea {x:34px;y:18px;width:196px;height:24px;enabled:root.expanded&&root.changes-allowed&&root.levels[index]>=0;
+                pointer-event(event)=>{
+                    if event.kind==PointerEventKind.down {
+                        parent.dragging=true;
+                        parent.draft=max(0,min(100,round(self.mouse-x/self.width*100)));
+                    }
+                    if event.kind==PointerEventKind.up&&parent.dragging {
+                        parent.draft=max(0,min(100,round(self.mouse-x/self.width*100)));
+                        root.level-changed(index+2,parent.draft);
+                        parent.dragging=false;
+                    }
+                    if event.kind==PointerEventKind.cancel {parent.dragging=false;}
+                }
+                moved=>{if self.pressed&&parent.dragging {parent.draft=max(0,min(100,round(self.mouse-x/self.width*100)));}}
+            }
+        }
+        Rectangle {x:16px;y:195px;width:240px;height:22px;border-radius:6px;background:root.selected==4?AtmosphereDesign.active:transparent;
+            if root.expanded&&!root.blocked&&root.selected==4: FocusOutline {width:parent.width;height:parent.height;radius:6px;}
+            Image {x:7px;y:3px;width:16px;height:16px;source:@image-url("../../assets/icons/battery.svg");colorize:AtmosphereDesign.ink;}
+            Text {x:32px;width:200px;height:22px;text:"Batería · "+root.values[4];font-size:11px;color:AtmosphereDesign.glass-muted;vertical-alignment:center;}
+            TouchArea {enabled:root.expanded;clicked=>{root.chosen(4);}}
+        }
+        Rectangle {x:16px;y:221px;width:240px;height:27px;border-radius:8px;background:root.selected==5?AtmosphereDesign.active:transparent;
+            if root.expanded&&!root.blocked&&root.selected==5: FocusOutline {width:parent.width;height:parent.height;radius:8px;}
+            Text {x:8px;width:224px;height:27px;text:"Emotional Drop · Añadir juegos";font-size:12px;font-weight:600;color:AtmosphereDesign.glass-ink;vertical-alignment:center;}
+            TouchArea {enabled:root.expanded;clicked=>{root.chosen(5);}}
+        }
+        Text {x:16px;y:250px;width:240px;height:25px;text:root.help;font-size:10px;color:AtmosphereDesign.glass-muted;wrap:word-wrap;}
+        Rectangle {x:16px;y:280px;width:240px;height:28px;border-radius:self.height/2;background:AtmosphereDesign.active;
+            if root.expanded&&!root.blocked&&root.selected==6: FocusOutline {width:parent.width;height:parent.height;radius:parent.height/2;}
+            Text {width:parent.width;height:parent.height;text:"A  ·  Ajustes completos";font-size:13px;font-weight:600;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
             TouchArea {enabled:root.expanded;clicked=>{root.settings();}}
+        }
+        }
+        if root.drop-open: Rectangle {
+            // Reuse the parent panel's existing material; hide the controls
+            // underneath so there is only one layer of glass and no ghosting.
+            width:272px;height:322px;background:transparent;
+            TouchArea {enabled:root.expanded;}
+            Text {x:16px;y:10px;width:240px;height:22px;text:"Emotional Drop";font-size:15px;font-weight:600;color:AtmosphereDesign.glass-ink;}
+            Image {x:40px;y:36px;width:192px;height:192px;source:root.drop-image;image-fit:contain;}
+            Text {x:16px;y:233px;width:240px;height:40px;text:root.drop-message;font-size:11px;color:AtmosphereDesign.glass-ink;wrap:word-wrap;horizontal-alignment:center;}
+            Rectangle {x:16px;y:280px;width:240px;height:28px;border-radius:14px;background:AtmosphereDesign.active;
+                if root.expanded&&!root.blocked: FocusOutline {width:parent.width;height:parent.height;radius:14px;}
+                Text {width:parent.width;height:parent.height;text:"A / B  ·  Cerrar conexión";font-size:12px;font-weight:600;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
+                TouchArea {enabled:root.expanded;clicked=>{root.chosen(5);}}
+            }
         }
     }
 }

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "order": [
+    "winter",
+    "spring",
+    "summer",
+    "autumn",
+    "unknown"
+  ],
+  "vegetation_tints": [
+    "#a4bfd58c",
+    "#83b18b80",
+    "#69895770",
+    "#d0a16c90",
+    "#00000000"
+  ],
+  "note": "Meteorological seasonal color only, not observed weather. No snow layer.",
+  "daylight_strength": [
+    0.12,
+    0.45,
+    0.8,
+    1.0,
+    0.65,
+    0.32,
+    0.12,
+    0.0
+  ],
+  "daylight_tints": [
+    "#8aa5bf20",
+    "#9ab99b14",
+    "#d3bd8d18",
+    "#bc936a1c",
+    "#00000000"
+  ],
+  "light_mix": 0.65
+}

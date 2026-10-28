@@ -97,6 +97,8 @@ fn content_index(resume: bool, index: usize, recommendations: usize, continuing:
         }
     } else if recommendations == 0 {
         2
+    } else if index==4 && recommendations>2 {
+        4
     } else if index == 1 && recommendations > 1 {
         1
     } else {
@@ -118,7 +120,9 @@ fn card_focus(
         (true, 5, Action::Left) => 4,
         (true, 4 | 5, Action::Up) => 0,
         (false, 0, Action::Down) if recommendations > 1 => 1,
-        (false, 1, Action::Up) => 0,
+        (false, 1, Action::Right) if recommendations>2 => 4,
+        (false, 4, Action::Left) => 1,
+        (false, 1 | 4, Action::Up) => 0,
         _ => current,
     }
 }
@@ -149,13 +153,13 @@ impl State {
             ),
             Section::Moment => (
                 self.selected,
-                (self.selected <= 1)
-                    .then(|| self.order.get(self.selected).copied())
+                (self.selected <= 1 || self.selected==4)
+                    .then(|| self.order.get(if self.selected==4 {2} else {self.selected}).copied())
                     .flatten(),
             ),
             Section::Library => (
-                self.library_index,
-                (!self.history_panel).then_some(self.library_index),
+                self.library_cursor(),
+                self.library_game(),
             ),
             Section::Settings => (self.menu_index, None),
         };
@@ -190,12 +194,12 @@ impl State {
                 } else {
                     &self.order
                 };
-                let previous = if self.resume && focus.index >= 4 {
+                let previous = if !self.resume && focus.index==4 {2} else if self.resume && focus.index >= 4 {
                     focus.index - 3
                 } else {
                     focus.index.min(1)
                 };
-                let visible = order.len().min(if self.resume { 3 } else { 2 });
+                let visible = order.len().min(3);
                 let position = retained_index(
                     previous,
                     focus.game_id.as_deref(),
@@ -207,11 +211,7 @@ impl State {
                     visible,
                 );
                 let index = if focus.game_id.is_some() {
-                    if self.resume && position > 0 {
-                        position + 3
-                    } else {
-                        position
-                    }
+                    if !self.resume && position==2 {4} else if self.resume && position > 0 {position+3} else {position}
                 } else {
                     focus.index
                 };
@@ -229,6 +229,11 @@ impl State {
                 self.dock_return = self.selected;
             }
             Section::Library => {
+                if self.grouped_library() {
+                    let index=if self.library_browser.system_page(){self.library_browser.cursor}else{focus.index};
+                    self.library_browser.restore(index,focus.game_id.as_deref());
+                    self.sync_library_game();
+                } else {
                 self.library_index = if self.history_panel {
                     focus
                         .index
@@ -241,9 +246,10 @@ impl State {
                         self.games.len(),
                     )
                 };
+                }
             }
             Section::Settings => {
-                self.menu_index = focus.index.min(if self.layout == 4 { 9 } else { 2 })
+                self.menu_index = focus.index.min(self.settings_count().saturating_sub(1))
             }
         }
         self.system_focus = focus.target == FocusTarget::Status;
@@ -284,6 +290,7 @@ impl State {
             self.modal_return = Some(self.focus_snapshot());
         }
         self.game_options = None;
+        self.artwork_picker = None;
         self.audio_panel = modal == Modal::Audio;
         self.system_open = modal == Modal::System;
         self.system_focus = modal == Modal::System;
@@ -291,6 +298,8 @@ impl State {
     }
 
     pub(super) fn close_modal(&mut self) {
+        self.stop_drop();
+        self.artwork_picker=None;
         self.game_options = None;
         self.audio_panel = false;
         self.system_open = false;
@@ -307,6 +316,8 @@ impl State {
         {
             return;
         }
+        self.system_index = 0;
+        self.system_note = None;
         self.begin_modal(Modal::System);
     }
 
@@ -365,7 +376,7 @@ impl State {
                 index: match section {
                     Section::Continue => self.resume_focus,
                     Section::Moment => self.emotional_focus,
-                    Section::Library => self.library_index,
+                    Section::Library => self.library_cursor(),
                     Section::Settings => self.menu_index,
                 },
                 game_id: None,
@@ -380,6 +391,7 @@ impl State {
             self.system_focus = false;
         }
         ui.set_library_offset(-1);
+        ui.set_message("".into());
         self.paint(ui);
     }
 
@@ -394,11 +406,7 @@ impl State {
 
     pub(super) fn status_action(&mut self, ui: &Home, action: Action) -> bool {
         if self.system_open {
-            if action == Action::Confirm {
-                self.close_modal();
-                self.navigate(ui, 3);
-            }
-            self.paint(ui);
+            self.system_action(ui, action);
             return true;
         }
         if self.system_focus {
@@ -436,7 +444,7 @@ impl State {
                     self.system_focus = true;
                 }
                 Action::Down | Action::Back => {
-                    let empty = self.library && self.games.is_empty()
+                    let empty = self.library && self.games.is_empty() && !self.grouped_library()
                         || !self.library
                             && !self.menu
                             && (self.resume && self.recent.is_none()
@@ -456,7 +464,7 @@ impl State {
         let first = if self.menu {
             self.menu_index == 0
         } else if self.library {
-            self.library_index == 0
+            self.library_cursor() == 0
         } else {
             self.selected == 0
         };
@@ -586,7 +594,7 @@ mod tests {
                     } else if resume {
                         selected == 0 || selected == 4 && count > 1 || selected == 5 && count > 2
                     } else {
-                        selected == 0 || selected == 1 && count > 1
+                        selected == 0 || selected == 1 && count > 1 || selected == 4 && count > 2
                     });
                 }
             }

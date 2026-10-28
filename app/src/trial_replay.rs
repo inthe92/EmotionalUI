@@ -393,3 +393,24 @@ mod tests {
         );
     }
 }
+
+/// Explicit supervised visual demo. Four finite callbacks, no OS clock writes,
+/// network changes, game launch or permanent animation timer.
+pub fn day_demo(ui: &Home, state: &Rc<RefCell<State>>) {
+    for (seconds, hour) in [(0, 10), (20, 14), (40, 18), (60, 22)] {
+        let ui = ui.as_weak();
+        let state = Rc::downgrade(state);
+        slint::Timer::single_shot(Duration::from_secs(seconds), move || {
+            let (Some(ui), Some(state)) = (ui.upgrade(), state.upgrade()) else { return; };
+            let mut state = state.borrow_mut();
+            let Some(at) = state.clock.now().date().and_hms_opt(hour, 0, 0) else { return; };
+            state.clock.set(at);
+            if let Err(error) = state.sync_context(&ui) {
+                eprintln!("DAY_DEMO failed: {error}");
+                let _ = slint::quit_event_loop();
+                return;
+            }
+            println!("DAY_DEMO simulated={at} scene={} palette={} os_clock_unchanged=true", ui.get_scene_id(), ui.global::<crate::DaycycleAssets>().get_palette_index());
+        });
+    }
+}

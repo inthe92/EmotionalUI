@@ -1,6 +1,17 @@
-## Fase 16 — estado vigente de los avisos (21-10-2026)
+## Beta 0.2.0-beta.1 — 27-10-2026
 
-Resolución Cargo ARM64 con linuxkms-gpu y lock intacto: 367 paquetes inventariados en docs/dependency-licenses.tsv, incluidos build/optativos; no se afirma que todos estén enlazados en los ELF. docs/dependency-notices.txt reúne los textos locales y los recuperados de commits upstream exactos. docs/dependency-notice-sources.json registra URLs y SHA-256. Los 17 huecos de términos legibles están documentados: 15 mediante textos upstream de commits exactos; drm-fourcc 2.2.0 (runtime) y simd_helpers 0.1.0 (proc-macro de compilación) conservan sus manifests originales y README con la declaración SPDX MIT. No suministran archivo de licencia ni aviso Copyright específico: no se inventa titular/año ni se afirma haber recibido ese aviso. Se adjuntan por separado los términos canónicos MIT como suplemento estándar identificado, con placeholders intactos, en docs/licenses/MIT-standard.txt. Trazabilidad en docs/dependency-notices-supplements.json. El campo license es una expresión SPDX según https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields ; texto estándar: https://spdx.org/licenses/MIT.html .
+La beta recupera la integración GPU existente y añade la proyección del último
+Atlas exportado. No añade dependencias Rust: glow 0.16.0 y Slint 1.13.1 ya están
+inventariados. El paquete incluye los avisos DejaVu, los textos de dependencias y
+el aviso independiente de Atlas. El código mantiene GPL-3.0-only; el catálogo
+retiene atribuciones y condiciones por fuente, incluidas CC-BY-SA-4.0 cuando
+corresponde. Véanse assets/atlas/BETA-NOTICE.md y assets/materials/gpu/README.md.
+No se incluyen drivers, ROMs, BIOS ni arte comercial de juegos. Las notas siguientes
+son históricas y no acreditan la prueba física de esta beta.
+
+## Fase 16 — estado de los avisos (21-10-2026)
+
+El inventario ARM64 anterior contiene 367 paquetes en docs/dependency-licenses.tsv, incluidos build/optativos; no se afirma que todos estén enlazados en los ELF. La beta.4 añade qrcodegen 1.8.0, identificado en la tabla y con el aviso MIT de su archivo fuente incluido al final de docs/dependency-notices.txt. Ese inventario histórico todavía no incluye esta incorporación. docs/dependency-notice-sources.json registra las fuentes y SHA-256 anteriores. Los 17 huecos de términos legibles están documentados: 15 mediante textos upstream de commits exactos; drm-fourcc 2.2.0 (runtime) y simd_helpers 0.1.0 (proc-macro de compilación) conservan sus manifests originales y README con la declaración SPDX MIT. No suministran archivo de licencia ni aviso Copyright específico: no se inventa titular/año ni se afirma haber recibido ese aviso. Se adjuntan por separado los términos canónicos MIT como suplemento estándar identificado, con placeholders intactos, en docs/licenses/MIT-standard.txt. Trazabilidad en docs/dependency-notices-supplements.json. El campo license es una expresión SPDX según https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields ; texto estándar: https://spdx.org/licenses/MIT.html .
 
 La variante GPU añade FemtoVG 0.17.0 (MIT/Apache-2.0), gbm 0.18.0 y gbm-sys 0.4.0 (MIT), drm 0.14.1 / drm-sys 0.8.1 (MIT), glutin_egl_sys 0.7.1 (Apache-2.0). Slint 1.13.1 se mantiene bajo la opción GPL-3.0-only. El backend parcheado de vendor y sus avisos deben acompañar la fuente correspondiente. No se redistribuye el driver Mali ni se sustituyen bibliotecas del sistema.
 
@@ -22,6 +33,7 @@ El código y las ilustraciones originales de EmotionalUI se ofrecen bajo GPL-3.0
 | SQLite bundled | mediante libsqlite3-sys del lockfile | Dominio público según SQLite |
 | toml | 0.8.23 | MIT OR Apache-2.0 |
 | image | 0.25.8 | MIT OR Apache-2.0 |
+| qrcodegen | 1.8.0 | MIT (Project Nayuki; aviso íntegro en `docs/dependency-notices.txt`) |
 
 `Cargo.lock` fija las dependencias transitivas. `docs/dependency-licenses.tsv` recoge el inventario declarado por Cargo, incluidos paquetes de otras plataformas y dependencias opcionales presentes en la resolución. No equivale a una revisión legal ni indica que todos formen parte del binario de escritorio. Antes de distribuir: seleccionar las opciones de licencia pertinentes, entregar avisos y textos requeridos, facilitar el código correspondiente y revisar las licencias con identificadores LicenseRef y las dependencias incluidas en el binario final.
 

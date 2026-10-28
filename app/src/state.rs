@@ -17,6 +17,17 @@ pub(super) struct State {
     pub(super) system_focus: bool,
     pub(super) system_return_dock: Option<usize>,
     pub(super) system_open: bool,
+    pub(super) system_index: usize,
+    pub(super) system_service: Option<emotional_services::system::Runtime>,
+    pub(super) system_snapshot: Option<emotional_services::system::Snapshot>,
+    pub(super) system_note: Option<String>,
+    pub(super) drop_session: Option<crate::rom_drop::Session>,
+    pub(super) drop_open: bool,
+    pub(super) drop_ready: bool,
+    pub(super) drop_refresh: bool,
+    pub(super) drop_message: String,
+    pub(super) drop_image: slint::Image,
+    pub(super) drop_profile: Option<std::path::PathBuf>,
     pub(super) dock_focus: Option<usize>,
     pub(super) dock_return: usize,
     pub(super) trial_mode: bool,
@@ -32,8 +43,11 @@ pub(super) struct State {
     pub(super) continuity_preferences:
         std::collections::BTreeMap<String, emotional_core::continuity::Preference>,
     pub(super) game_options: Option<usize>,
+    pub(super) artwork_picker: Option<crate::artwork_picker::Picker>,
     pub(super) game_option_index: usize,
     pub(super) game_explained: bool,
+    pub(super) atlas_observations: Vec<emotional_core::atlas::Observation>,
+    pub(super) atlas_habits: emotional_core::atlas::Habits,
     pub(super) history: emotional_core::product::History,
     pub(super) privacy: emotional_core::product::Privacy,
     pub(super) demo_history: bool,
@@ -43,16 +57,19 @@ pub(super) struct State {
     pub(super) resume_focus: usize,
     pub(super) emotional_focus: usize,
     pub(super) imported: bool,
-    pub(super) calendar: emotional_core::editorial::Calendar,
     #[cfg(any(debug_assertions, feature = "simulator"))]
     pub(super) moment_index: Option<usize>,
     pub(super) games: Vec<Game>,
+    pub(super) library_browser: crate::library_browser::Browser,
     pub(super) order: Vec<usize>,
     pub(super) selected: usize,
     pub(super) library_index: usize,
     pub(super) library: bool,
     pub(super) menu: bool,
     pub(super) menu_index: usize,
+    pub(super) options_open: bool,
+    pub(super) options_browser: crate::settings_browser::Browser,
+    pub(super) system_options: Vec<emotional_services::system_options::Entry>,
     pub(super) menu_from_library: bool,
     pub(super) native_held: bool,
     pub(super) audio: emotional_services::ambient_audio::AmbientAudioEngine,
@@ -123,7 +140,7 @@ impl State {
         Context {
             mood: d.map(Mood::at).unwrap_or(Mood::Shelter),
             minutes: self.config.session_minutes,
-            raining: d.is_some() && self.weather == Weather::Rain,
+            raining: crate::atlas_classic::raining(&self.clock,&self.ambient,self.weather),
             slot: d
                 .map(|d| (d.and_utc().timestamp().max(0) as u64) / 21600)
                 .unwrap_or(0),
@@ -133,45 +150,11 @@ impl State {
     pub(super) fn rerank(&mut self) -> Result<(), Box<dyn Error>> {
         let focused = (self.layout == 4).then(|| self.focus_snapshot());
         let date = self.clock.known_now().map(|d| d.date());
-        let signals = emotional_core::editorial::Signals {
-            date,
-            events: self.calendar.active(date, &self.config.region),
-            ..Default::default()
-        };
-        let context = self.context();
-        self.order = if let Some(cache) = &mut self.discovery_reserve {
-            let context_key = format!(
-                "{}:{:?}:{:?}:{:?}:{}",
-                date.map(emotional_core::editorial::season_id)
-                    .unwrap_or("unknown"),
-                context.mood,
-                self.weather,
-                signals.events,
-                context.minutes
-            );
-            let selected = cache.select(
-                &self.games,
-                context,
-                &signals,
-                self.privacy.personalized,
-                &context_key,
-                self.refresh > 0,
-            );
-            self.writer.reserve(cache)?;
-            selected
-        } else {
-            emotional_core::recommendation::rank_affinity(
-                &self.games,
-                context,
-                &signals,
-                self.privacy.personalized,
-                &self
-                    .continuity_preferences
-                    .iter()
-                    .map(|(id, p)| (id.clone(), p.affinity))
-                    .collect(),
-            )
-        };
+        self.atlas_habits=emotional_core::atlas::Habits::learn(&self.games,&self.atlas_observations,crate::atlas_classic::now(&self.clock));
+        let signals = emotional_core::editorial::Signals {date,habits:Some(&self.atlas_habits),..Default::default()};
+        self.order = crate::atlas_classic::eligible_order(emotional_core::recommendation::rank_affinity(
+            &self.games,self.context(),&signals,self.privacy.personalized,
+            &self.continuity_preferences.iter().map(|(id,p)|(id.clone(),p.affinity)).collect()),&self.games,self.imported);
         let ids = self
             .order
             .iter()
@@ -225,6 +208,7 @@ impl State {
                 .into(),
         );
         ui.set_game_options_open(self.game_options.is_some());
+        ui.set_artwork_picker_open(self.artwork_picker.is_some());
         ui.set_game_option_index(self.game_option_index as i32);
         if let Some(i) = self.game_options {
             let p = self
@@ -279,6 +263,7 @@ impl State {
                 } else {
                     "¿Por qué este juego?"
                 },
+                "SteamGridDB · Carátula",
                 "Volver",
             ];
             ui.set_game_option_labels(
@@ -294,6 +279,7 @@ impl State {
         ui.set_resume_view(self.resume);
         ui.set_has_recent(self.recent.is_some());
         ui.set_statistics_on(self.privacy.statistics);
+        ui.set_record_history(self.privacy.record_history);
         ui.set_personalized(self.privacy.personalized);
         ui.set_neutral(self.privacy.neutral);
         ui.set_ambient_motion(self.privacy.ambient_motion);
@@ -316,101 +302,31 @@ impl State {
             ui.set_recent_title("Tu lugar para volver".into());
         }
         ui.set_selected(self.selected as i32);
-        let conditions = match self.weather {
-            Weather::Clear => emotional_core::scene::Conditions::Clear,
-            Weather::Rain => emotional_core::scene::Conditions::Rain,
-            Weather::Cloud => emotional_core::scene::Conditions::Cloud,
-            Weather::Fog => emotional_core::scene::Conditions::Fog,
-            Weather::Snow => emotional_core::scene::Conditions::Snow,
-            _ => emotional_core::scene::Conditions::Unknown,
-        };
-        use emotional_core::ambient::{WeatherKind, WeatherSource};
-        let demo_weather = match self.weather {
-            Weather::Clear => WeatherKind::Clear,
-            Weather::Rain => WeatherKind::Rain,
-            Weather::Cloud => WeatherKind::Cloud,
-            Weather::Fog => WeatherKind::Fog,
-            Weather::Snow => WeatherKind::Snow,
-            _ => WeatherKind::Unknown,
-        };
-        let ambient = self
-            .ambient
-            .capture(&self.clock, demo_weather, self.config.reduced_motion);
+        // The product has exactly two user-selected appearances. Clock-based
+        // recommendations stay independent; weather, seasons and events cannot
+        // alter the painting, materials or ambient audio.
+        let ambient = self.ambient.capture(&self.clock, emotional_core::ambient::WeatherKind::Unknown, self.config.reduced_motion);
         let environmental = ambient.scene();
-        let theme = emotional_core::ambient_art::AmbientTheme::resolve(
-            &ambient,
-            &self.ambient.settings,
-            self.privacy.neutral,
-        );
-        let at = environmental
-            .time
-            .local
-            .filter(|_| environmental.time.reliable);
-        let date = at.map(|d| d.date());
-        let events = self.calendar.active(date, &self.config.region);
-        let scene =
-            emotional_core::scene::Scene::select(at, conditions, &events, self.privacy.neutral);
-        let selected = emotional_core::environment::SceneResolver::resolve(
-            &environmental,
-            self.privacy.neutral,
-        );
-        ui.set_scene_id(selected.id.into());
-        ui.set_scene_moment(environmental.moment.map(|m| m.index() as i32).unwrap_or(-1));
-        ui.set_scene_background(selected.background as i32);
-
+        let index = if self.privacy.dark_mode { 6 } else { 3 };
+        ui.global::<crate::FocusDesign>().set_light(!self.privacy.dark_mode);
+        let theme = emotional_core::ambient_art::AmbientTheme {
+            day: emotional_core::ambient_art::Blend::still(index), season: None,
+            weather: emotional_core::ambient::WeatherKind::Unknown,
+            event: emotional_core::ambient_art::EditorialEvent::None, event_id: None,
+        };
+        let phase = if self.privacy.dark_mode { emotional_core::scene::Phase::Night } else { emotional_core::scene::Phase::Noon };
+        ui.set_scene_id(if self.privacy.dark_mode { "dark" } else { "light" }.into());
+        ui.set_scene_moment(index as i32);
+        ui.set_scene_background(index as i32);
         ui.set_ambient_clock_reliable(ambient.time.reliable);
-        ui.set_ambient_season_known(ambient.season.is_some());
-        let season_name = match ambient.season {
-            Some(emotional_core::calendar::Season::Spring) => "Primavera",
-            Some(emotional_core::calendar::Season::Summer) => "Verano",
-            Some(emotional_core::calendar::Season::Autumn) => "Otoño",
-            Some(emotional_core::calendar::Season::Winter) => "Invierno",
-            None => {
-                if ambient.time.reliable {
-                    "Estación sin configurar"
-                } else {
-                    "Reloj no fiable"
-                }
-            }
-        };
-        let label = if ambient.time.source == emotional_core::environment::TimeSource::Simulated
-            || ambient.weather.source == WeatherSource::Demo
-            || self.ambient.demo_season.is_some()
-            || self.ambient.demo_context()
-        {
-            format!(
-                "DEMO · {season_name} · Clima {}",
-                match ambient.weather.source {
-                    WeatherSource::Demo => "DEMO",
-                    WeatherSource::Cached => "CACHED",
-                    WeatherSource::Live => "LIVE",
-                    WeatherSource::Stale => "STALE",
-                    WeatherSource::Unknown => "UNKNOWN",
-                }
-            )
-        } else if ambient.weather.source == WeatherSource::Cached {
-            if self.ambient.weather_attributed() {
-                "CACHED · https://open-meteo.com (modelo)".into()
-            } else {
-                "Clima en caché · no es observación en directo".into()
-            }
-        } else if ambient.weather.source == WeatherSource::Live {
-            "LIVE · https://open-meteo.com (modelo)".into()
-        } else if ambient.weather.source == WeatherSource::Stale {
-            "STALE · clima caducado, sin efecto actual".into()
-        } else if self.ambient.weather_configured() {
-            "UNKNOWN · clima sin datos vigentes".into()
-        } else {
-            String::new()
-        };
-        ui.set_ambient_label(label.into());
-        let [r, g, b, a] = selected.tint_rgba;
-        ui.set_scene_tint(slint::Color::from_argb_u8(a, r, g, b));
-        ui.set_scene_lamp(selected.lamp);
-        ui.set_scene_season(theme.season_index());
-        ui.set_scene_phase(scene.phase.index());
-        ui.set_scene_weather(theme.weather_index());
-        ui.set_scene_decoration(theme.event.decoration());
+        ui.set_ambient_season_known(false);
+        ui.set_ambient_label("".into());
+        ui.set_scene_tint(slint::Color::from_argb_u8(0, 0, 0, 0));
+        ui.set_scene_lamp(if self.privacy.dark_mode { 0.9 } else { 0.1 });
+        ui.set_scene_season(4);
+        ui.set_scene_phase(phase.index());
+        ui.set_scene_weather(0);
+        ui.set_scene_decoration(0);
         crate::scene_raster::refresh(ui);
         crate::ambient_motion::update(
             ui,
@@ -423,8 +339,8 @@ impl State {
         crate::scene_raster::refresh_near(ui);
         crate::scene_cache::refresh(ui);
         self.audio.context(emotional_core::audio::Context {
-            phase: scene.phase,
-            weather: scene.weather,
+            phase,
+            weather: emotional_core::scene::Conditions::Unknown,
         });
         ui.set_audio_open(self.audio_panel);
         ui.set_audio_index(self.audio_index as i32);
@@ -438,60 +354,17 @@ impl State {
             self.layout == 4 && self.privacy.ambient_motion && !self.privacy.neutral,
         );
         ui.set_imported(self.imported);
-        let count = if self.history_panel {
-            self.history.sessions.len()
-        } else {
-            self.games.len()
-        };
-        let offset = self
-            .library_index
-            .saturating_sub(3)
-            .min(count.saturating_sub(6));
-        if ui.get_library_offset() != offset as i32 {
-            let titles: Vec<slint::SharedString> = if self.history_panel {
-                self.history
-                    .sessions
-                    .iter()
-                    .skip(offset)
-                    .take(6)
-                    .map(|s| {
-                        format!(
-                            "{} · {}",
-                            self.games
-                                .iter()
-                                .find(|g| g.id == s.game_id)
-                                .map(|g| g.title.as_str())
-                                .unwrap_or("Juego no disponible"),
-                            chrono::DateTime::from_timestamp(s.started_utc, 0)
-                                .map(|t| t.format("%d/%m/%Y %H:%M UTC").to_string())
-                                .unwrap_or_else(|| "Fecha desconocida".into())
-                        )
-                        .into()
-                    })
-                    .collect()
-            } else {
-                self.games
-                    .iter()
-                    .skip(offset)
-                    .take(6)
-                    .map(|g| g.title.as_str().into())
-                    .collect()
-            };
-            ui.set_library_titles(slint::ModelRc::new(slint::VecModel::from(titles)));
-            ui.set_library_offset(offset as i32);
-        }
+        self.paint_library(ui);
         let known = environmental
             .time
             .local
             .filter(|_| environmental.time.reliable);
         let mood = known.map(Mood::at).unwrap_or(Mood::Shelter);
-        ui.set_rain(known.is_some() && self.weather == Weather::Rain);
+        ui.set_rain(false);
         ui.set_season(known.map(|d| ((d.month() % 12) / 3) as i32).unwrap_or(0));
         ui.set_editorial_caption(
             if known.is_none() {
                 "Sin reloj. A tu ritmo."
-            } else if self.weather == Weather::Rain {
-                "Afuera llueve. Aquí hay un camino."
             } else {
                 match mood {
                     Mood::Dawn => "La primera luz. Un mundo por abrir.",
@@ -549,12 +422,7 @@ impl State {
                 &self.config.region,
                 &self.config.holidays,
             );
-            let weather = match self.weather {
-                Weather::Rain => " · Lluvia",
-                Weather::Cloud => " · Nubes",
-                Weather::Wind => " · Brisa",
-                _ => "",
-            };
+            let weather = "";
             ui.set_atmosphere(
                 format!(
                     "{} · {}{}{}",
@@ -607,9 +475,10 @@ impl State {
         ui.set_library_open(self.library);
         ui.set_menu_open(self.menu);
         ui.set_menu_index(self.menu_index as i32);
+        self.paint_settings(ui);
+        self.paint_system(ui);
         ui.set_sound_on(self.audio_preferences.interface_enabled);
         ui.set_sound_available(self.audio.status().error.is_none());
-        ui.set_library_index(self.library_index as i32);
         if self.order.is_empty() {
             ui.set_hero_title("Tu próxima aventura".into());
             ui.set_hero_detail("Cuando añadas juegos disponibles, aparecerán aquí.".into());
@@ -621,42 +490,20 @@ impl State {
         }
         let hero = &self.games[self.order[0]];
         ui.set_hero_category(hero.genre.clone().into());
-        let explicit = self.continuity_preferences.get(&hero.id);
-        let reason = if self.privacy.personalized && explicit.is_some_and(|p| p.affinity > 0) {
-            "Has indicado que este juego te interesa. Puedes darle otro momento."
-        } else if let Some(text) = self.atlas_explanations.get(&hero.id) {
-            text.as_str()
-        } else if hero.favorite {
-            "Está entre tus favoritos. Puedes elegirlo también para este momento."
-        } else if hero.editorial.exploration.is_some_and(|v| v >= 70) {
-            "Su ficha editorial propone explorar sin perder la curiosidad."
-        } else if hero.editorial.mystery.is_some_and(|v| v >= 70) {
-            "Su ficha propone una experiencia de misterio. Puedes descubrirla a tu ritmo."
-        } else {
-            "Una propuesta de tu colección. Tú eliges si este es su momento."
-        };
+        let signals=emotional_core::editorial::Signals {date:self.clock.known_now().map(|d|d.date()),habits:Some(&self.atlas_habits),..Default::default()};
+        let reason=emotional_core::recommendation::explain(hero,self.context(),&signals,self.privacy.personalized,self.continuity_preferences.get(&hero.id).map_or(0,|p|p.affinity));
         ui.set_editorial_reason(reason.into());
+        ui.set_hero_category(format!("{} · {}",hero.system.to_uppercase(),hero.genre).trim_matches([' ','·']).into());
         ui.set_hero_title(hero.title.clone().into());
         ui.set_hero_detail(hero.subtitle.clone().into());
-        ui.set_hero_tag(
-            format!(
-                "{}   ·   {} MIN",
-                if hero.started {
-                    "TU AVENTURA SIGUE"
-                } else {
-                    "PARA ESTE MOMENTO"
-                },
-                hero.session_minutes
-            )
-            .into(),
-        );
+        ui.set_hero_tag(hero.editorial.session_minutes.map(|m|format!("RATOS DE ~{m} MIN")).unwrap_or_else(||"A TU RITMO".into()).into());
         ui.set_play_label(if hero.started { "Continuar" } else { "Jugar" }.into());
         ui.set_artwork_index(self.order[0] as i32);
         for (slot, index) in [1, 2].into_iter().enumerate() {
             let game = self.order.get(index).map(|i| &self.games[*i]);
             let title = game.map(|g| g.title.clone()).unwrap_or_default();
             let detail = game
-                .map(|g| format!("{} · {} min", g.genre, g.session_minutes))
+                .map(|g|format!("{} · {}",g.system.to_uppercase(),emotional_core::recommendation::explain(g,self.context(),&signals,self.privacy.personalized,self.continuity_preferences.get(&g.id).map_or(0,|p|p.affinity))))
                 .unwrap_or_default();
             if slot == 0 {
                 ui.set_alt_one(title.into());
@@ -671,15 +518,29 @@ impl State {
         if self.modal_active() {
             return Ok(());
         }
+        let index = if self.library && self.grouped_library() && index >= 10 {
+            match self.library_browser.choose(index-10,&self.games) {
+                crate::library_browser::Choice::Game(game) => {self.library_index=game;10+game},
+                crate::library_browser::Choice::Changed => {
+                    self.dock_focus=None;self.system_focus=false;self.sync_library_game();
+                    ui.set_library_offset(-1);self.paint(ui);return Ok(());
+                }
+                crate::library_browser::Choice::None => return Ok(()),
+            }
+        } else {index};
+        if self.layout==4 && !self.resume && !self.library && !self.menu && index==4 {
+            if let Some(&i)=self.order.get(2) {self.launch_game(ui,i);}
+            return Ok(());
+        }
         if (self.launch.is_some() || self.trial_mode)
             && !self.menu
             && !self.history_panel
-            && ((self.library && index >= 10) || (!self.library && index == 0 && !self.resume))
+            && ((self.library && index >= 10) || (!self.library && index <= 1 && !self.resume))
         {
             let game = if self.library {
                 Some(index - 10)
             } else {
-                self.order.first().copied()
+                self.order.get(index).copied()
             };
             if let Some(i) = game {
                 self.launch_game(ui, i);
@@ -720,6 +581,10 @@ impl State {
         if index >= 10 {
             let i = index - 10;
             if self.games.get(i).is_some_and(|g| g.available) {
+                if self.imported && self.games[i].editorial.knowledge.id.is_empty() {
+                    self.notify(ui,"Este juego sigue en tu biblioteca. Su ficha todavía está pendiente.");
+                    return Ok(());
+                }
                 self.promote(i);
                 self.library = false;
                 if self.layout == 4 {
@@ -738,10 +603,10 @@ impl State {
                 self.promote(i);
             } else {
                 let mood = self.clock.known_now().map(Mood::at);
-                if self.privacy.personalized {
+                if self.privacy.personalized && self.privacy.record_history {
                     self.games[i].choices = self.games[i].choices.saturating_add(1);
                 }
-                if let Some(m) = mood.filter(|_| self.privacy.personalized) {
+                if let Some(m) = mood.filter(|_| self.privacy.personalized && self.privacy.record_history) {
                     let count = &mut self.games[i].choices_by_mood[m.index() as usize];
                     *count = count.saturating_add(1);
                 }
@@ -876,6 +741,10 @@ impl State {
             return Ok(());
         }
         use emotional_services::feedback::Cue;
+        if self.artwork_picker.is_some() {
+            self.artwork_picker_action(ui,action);
+            return Ok(());
+        }
         // B belongs to the top modal only and closes it synchronously. No
         // transition timer or underlying section can consume the same input.
         if self.game_options.is_some() || self.audio_panel || self.system_open {
@@ -898,6 +767,7 @@ impl State {
             self.status_action(ui, action);
             return Ok(());
         }
+        if self.library_search_action(ui, action) {return Ok(());}
         // Global shoulders operate independently of dock/status focus and of
         // visual transitions; each accepted press advances one logical section.
         if self.layout == 4 && matches!(action, Action::Previous | Action::Next) {
@@ -913,7 +783,7 @@ impl State {
         }
         let before = (
             self.selected,
-            self.library_index,
+            self.library_cursor(),
             self.menu_index,
             self.library,
             self.menu,
@@ -930,10 +800,10 @@ impl State {
                         (Some(i), _) => (i + 1) % count,
                         (None, _) => 0,
                     };
-                    let (clock, weather) = crate::moments::context(crate::moments::NAMES[index])?;
+                    let (clock, _) = crate::moments::context(crate::moments::NAMES[index])?;
                     self.moment_index = Some(index);
                     self.clock = clock;
-                    self.weather = weather;
+                    self.weather = Weather::Unknown;
                     self.sync_context(ui)?;
                 }
             }
@@ -948,11 +818,14 @@ impl State {
                     self.menu_index = match direction {
                         Direction::Up => self.menu_index.saturating_sub(1),
                         Direction::Down => {
-                            (self.menu_index + 1).min(if self.layout == 4 { 9 } else { 2 })
+                            (self.menu_index + 1).min(self.settings_count().saturating_sub(1))
                         }
                         _ => self.menu_index,
                     };
                 } else if self.library {
+                    if self.grouped_library() {
+                        self.library_browser.move_row(action);self.sync_library_game();
+                    } else {
                     let count = if self.history_panel {
                         self.history.sessions.len()
                     } else {
@@ -964,6 +837,7 @@ impl State {
                             Direction::Down => (self.library_index + 1).min(count - 1),
                             _ => self.library_index,
                         };
+                    }
                     }
                 } else {
                     self.selected = if self.layout == 4 {
@@ -988,7 +862,9 @@ impl State {
             }
             Action::Confirm => {
                 if self.menu {
-                    if self.layout == 4 {
+                    if self.options_open {
+                        self.activate_system_option(ui);
+                    } else if self.layout == 4 {
                         match self.menu_index {
                             0 => self.config.reduced_motion = !self.config.reduced_motion,
                             1 => {
@@ -1003,7 +879,9 @@ impl State {
                                 }
                                 self.rerank()?;
                             }
-                            4 => self.privacy.neutral = !self.privacy.neutral,
+                            4 => self.privacy.dark_mode = !self.privacy.dark_mode,
+                            11 => { self.options_open = true; self.options_browser.reset(); self.menu_index = 0; },
+                            12 => self.begin_modal(crate::navigation::Modal::System),
                             5 => self.privacy.ambient_motion = !self.privacy.ambient_motion,
                             6 => {
                                 self.menu = false;
@@ -1016,6 +894,8 @@ impl State {
                                 if self.clear_armed {
                                     self.writer.clear_history()?;
                                     self.history.sessions.clear();
+                                    self.atlas_observations.clear();
+                                    self.atlas_habits=Default::default();
                                     self.statistics = self.history.summary(&self.games, true);
                                     self.continuity_activity.clear();
                                     if let Some(cache) = &mut self.discovery_reserve {
@@ -1035,6 +915,7 @@ impl State {
                                     self.clear_armed = true;
                                 }
                             }
+                            10 => self.privacy.record_history = !self.privacy.record_history,
                             9 => self.open_game_options(ui),
                             _ => {
                                 ui.hide()?;
@@ -1061,13 +942,20 @@ impl State {
                     self.activate(
                         ui,
                         if self.library {
-                            10 + self.library_index
+                            10 + self.library_cursor()
                         } else {
                             self.selected
                         },
                     )?;
                 }
                 cue = Some(Cue::Confirm);
+            }
+            Action::Back if self.options_open && self.menu => {
+                let outcome = self.options_browser.back();
+                self.apply_settings_outcome(ui, outcome);
+            }
+            Action::Back if self.library && self.grouped_library() && self.library_browser.back(&self.games) => {
+                self.sync_library_game();ui.set_library_offset(-1);
             }
             Action::Back if self.layout == 4 && (self.menu || self.library) => {
                 let target = if self.menu && self.menu_from_library {
@@ -1215,7 +1103,7 @@ impl State {
         }
         let after = (
             self.selected,
-            self.library_index,
+            self.library_cursor(),
             self.menu_index,
             self.library,
             self.menu,

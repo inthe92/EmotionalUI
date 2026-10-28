@@ -2,7 +2,7 @@
 # EmotionalUI
 **Less searching. More playing.**
 
-> **Experimental preview:** [v0.1.0-preview.1 downloads](https://github.com/inthe92/EmotionalUI/releases/tag/v0.1.0-preview.1) · [Install and return safely](PREVIEW_INSTALL.md). RG353V / tested dArkOS only; trial mode cannot launch games.
+> **New functional beta:** [v0.2.0-beta.2](https://github.com/inthe92/EmotionalUI/releases/tag/v0.2.0-beta.2) · [Beta installation and limits](BETA.md). Blue/gold GPU atmosphere, game launching, resume and experimental offline Atlas. RG353V / dArkOS ARM64; separate Ports entry, no boot replacement. Installed on RG353V with files, loader and launcher planning checked; physical graphics/game validation remains pending. The [previous interface-only preview](https://github.com/inthe92/EmotionalUI/releases/tag/v0.1.0-preview.1) remains available.
 
 
 ### Games for every moment.

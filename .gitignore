@@ -83,6 +83,9 @@ user.db-shm
 *.weather-private.toml
 /assets/scenes/lofi-room-v2/master.png
 /assets/scenes/room-v1/master.png
+# Unselected local art explorations are retained privately, outside this beta.
+/assets/scenes/japanese-room-v1/
+/assets/scenes/original-room-v1/
 /ARTWORK_IMPLEMENTATION_REPORT.md
 
 # Regenerable music previews and duplicated candidate renders.

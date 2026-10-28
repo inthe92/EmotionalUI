@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0-beta.6",
+  "binary_sha256": "5688fbf9eb1ea5ba23aeddc1cc77856c933ce7cf6c89455339cbcfc2b5463197",
+  "zip_sha256": "5e4126381fa70d7ec5696d26f93ecd104825e916d32c409a427b4114033e9dc2",
+  "owned_files_verified": 21,
+  "loader_verified": true,
+  "player_profiles": 114,
+  "player_skipped": 16,
+  "prior_entries_preserved": true,
+  "prior_entry_count": 14,
+  "es_active_after": true,
+  "es_pid_unchanged": true,
+  "graphics_started": false,
+  "game_started": false,
+  "boot_modified": false,
+  "device_system_services_modified": false,
+  "application_tests_passed": 129,
+  "library_browser_tests_passed": 7,
+  "synthetic_game_cycle": [
+    {
+      "resume": false
+    },
+    {
+      "resume": true
+    }
+  ],
+  "search_return_context_restored": true,
+  "original_save_unchanged": true,
+  "glibc_max": "2.35",
+  "physical_validated": false
+}

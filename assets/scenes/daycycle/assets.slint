@@ -121,6 +121,13 @@ export global DaycycleAssets {
         @image-url("selected-room-v1/noche.png"), // noche
         @image-url("selected-room-v1/anochecer.png"), // neutro
     ];
+    private property <[image]> frost-values:[@image-url("materials/madrugada/room-frost.png"),@image-url("materials/manana_temprana/room-frost.png"),@image-url("materials/media_manana/room-frost.png"),@image-url("materials/primera_tarde/room-frost.png"),@image-url("materials/media_tarde/room-frost.png"),@image-url("materials/anochecer/room-frost.png"),@image-url("materials/noche/room-frost.png"),@image-url("materials/neutro/room-frost.png")];
+    out property <image> frost:self.frost-values[self.index];
+    out property <image> frost-next:self.frost-values[self.next-index];
+    out property <float> frost-opacity:1.0;
+    out property <float> glass-wash-scale:0.2;
+    private property <[float]> glass-coverages:[0.26471,0.25294,0.25882,0.25686,0.2451,0.26078,0.27255,0.2451];
+    out property <float> glass-coverage:self.glass-coverages[self.next-index];
     private property <[image]> material-values:[@image-url("materials/madrugada/room-material.png",nine-slice(16)),@image-url("materials/manana_temprana/room-material.png",nine-slice(16)),@image-url("materials/media_manana/room-material.png",nine-slice(16)),@image-url("materials/primera_tarde/room-material.png",nine-slice(16)),@image-url("materials/media_tarde/room-material.png",nine-slice(16)),@image-url("materials/anochecer/room-material.png",nine-slice(16)),@image-url("materials/noche/room-material.png",nine-slice(16)),@image-url("materials/neutro/room-material.png",nine-slice(16))];
     out property <image> material:self.material-values[self.index];
     out property <image> material-next:self.material-values[self.next-index];
@@ -148,6 +155,18 @@ export global DaycycleAssets {
     private property <[image]> status-focus-values:[@image-url("materials/madrugada/room-status-focus.png"),@image-url("materials/manana_temprana/room-status-focus.png"),@image-url("materials/media_manana/room-status-focus.png"),@image-url("materials/primera_tarde/room-status-focus.png"),@image-url("materials/media_tarde/room-status-focus.png"),@image-url("materials/anochecer/room-status-focus.png"),@image-url("materials/noche/room-status-focus.png"),@image-url("materials/neutro/room-status-focus.png")];
     out property <image> status-focus:self.status-focus-values[self.index];
     out property <image> status-focus-next:self.status-focus-values[self.next-index];
+    private property <[image]> tab-values:[@image-url("materials/madrugada/room-tab.png"),@image-url("materials/manana_temprana/room-tab.png"),@image-url("materials/media_manana/room-tab.png"),@image-url("materials/primera_tarde/room-tab.png"),@image-url("materials/media_tarde/room-tab.png"),@image-url("materials/anochecer/room-tab.png"),@image-url("materials/noche/room-tab.png"),@image-url("materials/neutro/room-tab.png")];
+    out property <image> tab:self.tab-values[self.index];
+    out property <image> tab-next:self.tab-values[self.next-index];
+    private property <[image]> tab-focus-values:[@image-url("materials/madrugada/room-tab-focus.png"),@image-url("materials/manana_temprana/room-tab-focus.png"),@image-url("materials/media_manana/room-tab-focus.png"),@image-url("materials/primera_tarde/room-tab-focus.png"),@image-url("materials/media_tarde/room-tab-focus.png"),@image-url("materials/anochecer/room-tab-focus.png"),@image-url("materials/noche/room-tab-focus.png"),@image-url("materials/neutro/room-tab-focus.png")];
+    out property <image> tab-focus:self.tab-focus-values[self.index];
+    out property <image> tab-focus-next:self.tab-focus-values[self.next-index];
+    private property <[image]> hint-values:[@image-url("materials/madrugada/room-hint.png"),@image-url("materials/manana_temprana/room-hint.png"),@image-url("materials/media_manana/room-hint.png"),@image-url("materials/primera_tarde/room-hint.png"),@image-url("materials/media_tarde/room-hint.png"),@image-url("materials/anochecer/room-hint.png"),@image-url("materials/noche/room-hint.png"),@image-url("materials/neutro/room-hint.png")];
+    out property <image> hint:self.hint-values[self.index];
+    out property <image> hint-next:self.hint-values[self.next-index];
+    private property <[image]> hint-focus-values:[@image-url("materials/madrugada/room-hint-focus.png"),@image-url("materials/manana_temprana/room-hint-focus.png"),@image-url("materials/media_manana/room-hint-focus.png"),@image-url("materials/primera_tarde/room-hint-focus.png"),@image-url("materials/media_tarde/room-hint-focus.png"),@image-url("materials/anochecer/room-hint-focus.png"),@image-url("materials/noche/room-hint-focus.png"),@image-url("materials/neutro/room-hint-focus.png")];
+    out property <image> hint-focus:self.hint-focus-values[self.index];
+    out property <image> hint-focus-next:self.hint-focus-values[self.next-index];
     private property <[image]> dock-selection-active-values:[@image-url("materials/madrugada/room-dock-selection-active.png"),@image-url("materials/manana_temprana/room-dock-selection-active.png"),@image-url("materials/media_manana/room-dock-selection-active.png"),@image-url("materials/primera_tarde/room-dock-selection-active.png"),@image-url("materials/media_tarde/room-dock-selection-active.png"),@image-url("materials/anochecer/room-dock-selection-active.png"),@image-url("materials/noche/room-dock-selection-active.png"),@image-url("materials/neutro/room-dock-selection-active.png")];
     out property <image> dock-selection-active:self.dock-selection-active-values[self.index];
     out property <image> dock-selection-active-next:self.dock-selection-active-values[self.next-index];

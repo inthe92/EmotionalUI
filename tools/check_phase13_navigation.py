@@ -167,6 +167,9 @@ def cases():
     panels.press("up", dock_cursor=3)
     panels.press("up", system_focused=True)
     panels.press("confirm", system_open=True)
+    # Real controls now own five rows; Settings is the explicit sixth row.
+    for _ in range(5):
+        panels.press("down", system_open=True)
     panels.press("confirm", system_open=False, audio_open=False, game_options=False,
                  active_section=3, dock_cursor=3)
     return [cycle.finish(), game.finish(), panels.finish()]

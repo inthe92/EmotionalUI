@@ -1,0 +1,30 @@
+// One focus identity for every selectable object, on GPU and software.
+export global FocusDesign {
+    in-out property <bool> light:false;
+    in-out property <bool> gpu:false;
+    in-out property <angle> rotation:110deg;
+    // Gold, peach and rose complement the blue/gold daylight backdrop.
+    out property <color> start:self.light ? #f2d28d : #4fdac8;
+    out property <color> middle:self.light ? #eda98b : #7791ff;
+    out property <color> end:self.light ? #cf9bbc : #ba86ed;
+    out property <brush> color:@linear-gradient(self.rotation,self.start,self.middle,self.end);
+    out property <length> width:2px;
+    pure callback outline(int,int,int,color,color,color) -> image;
+    pure callback contour(int,int,int) -> string;
+}
+export component FocusOutline inherits Rectangle {
+    in property <length> radius:12px;
+    background:transparent;
+    if FocusDesign.gpu: Path {
+        width:parent.width;height:parent.height;
+        commands:FocusDesign.contour(round(root.width/1px),round(root.height/1px),round(root.radius/1px));
+        fill:transparent;stroke:FocusDesign.color;stroke-width:FocusDesign.width;
+    }
+    // The software renderer does not implement Path. Cache an exact-size SVG
+    // raster instead, preserving circular corners and a transparent interior.
+    if !FocusDesign.gpu: Image {
+        width:parent.width;height:parent.height;
+        source:FocusDesign.outline(round(root.width/1px),round(root.height/1px),round(root.radius/1px),FocusDesign.start,FocusDesign.middle,FocusDesign.end);
+        image-fit:fill;
+    }
+}

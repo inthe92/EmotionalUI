@@ -5,17 +5,21 @@ use serde::{Deserialize, Serialize};
 #[serde(default, deny_unknown_fields)]
 pub struct Privacy {
     pub statistics: bool,
+    pub record_history: bool,
     pub personalized: bool,
     pub neutral: bool,
     pub ambient_motion: bool,
+    pub dark_mode: bool,
 }
 impl Default for Privacy {
     fn default() -> Self {
         Self {
             statistics: true,
+            record_history: true,
             personalized: true,
             neutral: false,
             ambient_motion: true,
+            dark_mode: true,
         }
     }
 }
@@ -183,6 +187,10 @@ pub fn spatial_focus(
         (2, Down) if resume && !hero && original == 2 => 3,
         (2, Down) if !resume && original == 2 => 3,
         (1, Down) if !resume && count > 1 => 3,
+        (1, Right) if !resume && count > 2 => 4,
+        (4, Left) if !resume && count > 2 => 1,
+        (4, Up) if !resume && count > 2 => 0,
+        (4, Down) if !resume && count > 2 => 3,
         (3, Up) if !resume => 2,
         (3, Up) if resume && !hero => 2,
         (2, Right) => secondary.unwrap_or(2),
@@ -240,6 +248,7 @@ mod visual_navigation_tests {
                                     || (f == 0 && if resume { recent } else { count > 0 })
                                     || f == 3
                                     || (f == 1 && !resume && count > 1)
+                                    || (f == 4 && !resume && count > 2)
                             );
                         }
                     }
@@ -255,6 +264,7 @@ pub fn clamp_focus(current: usize, resume: bool, count: usize, has_recent: bool)
         || (current == 0 && if resume { has_recent } else { count > 0 })
         || current == 3
         || (current == 1 && !resume && count > 1)
+        || (current == 4 && !resume && count > 2)
     {
         current
     } else {

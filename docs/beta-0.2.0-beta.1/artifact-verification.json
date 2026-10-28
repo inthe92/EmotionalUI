@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0-beta.1",
+  "elf": {
+    "format": "ELF64 little-endian AArch64",
+    "binary_sha256": "549ae2922571da029891a8dda06a0c2847c31869ee10f0bce0a428722d3f0db4",
+    "bytes": 27344664,
+    "needed": [
+      "libxkbcommon.so.0",
+      "libudev.so.1",
+      "libinput.so.10",
+      "libmali.so.1",
+      "libm.so.6",
+      "libc.so.6"
+    ],
+    "max_glibc": "2.35",
+    "runpath": [],
+    "physical_current_beta_verified": false,
+    "gpu_driver_bundled": false
+  },
+  "manifest_files_verified": 18,
+  "zip_crc_ok": true,
+  "launcher_syntax_ok": true,
+  "own_file_install_and_reuse": true,
+  "modified_file_protected": true,
+  "gpu_changed_pixel_bounds": {
+    "light": [
+      36,
+      380,
+      604,
+      420
+    ],
+    "dark": [
+      36,
+      380,
+      604,
+      420
+    ]
+  },
+  "device_modified": false
+}

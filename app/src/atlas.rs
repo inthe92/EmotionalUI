@@ -104,6 +104,10 @@ impl Atlas {
                 };
                 if let Some(profile) = profile {
                     let mut profile = profile;
+                    // Keep this exact SQLite version authoritative. Otherwise the
+                    // prepared fallback can silently mix attributes from an older card.
+                    profile.knowledge.id = id.clone();
+                    profile.knowledge.provenance = self.version.clone();
                     macro_rules! local {($($name:ident),*)=>{$(if g.editorial.$name.is_some(){profile.$name=g.editorial.$name;})*};}
                     local!(
                         calm,
@@ -146,6 +150,26 @@ mod tests {
     use super::*;
     fn path() -> std::path::PathBuf {
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../assets/atlas/emotional-atlas-0.1.0-pilot.db")
+    }
+    #[test]
+    fn beta_export_keeps_exact_sqlite_version_and_unknowns() {
+        let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../assets/atlas/emotional-atlas.db");
+        let atlas = Atlas::open_channel(&path, true).unwrap();
+        assert!(atlas.version.starts_with("0.4.0-ai-experimental.5-snes-research.2:"));
+        let store = Store::open(Path::new(":memory:")).unwrap();
+        store.0.execute("INSERT INTO imported_games VALUES('demo-0','/synthetic/non-rom','/synthetic/gamelist','unused')",[]).unwrap();
+        store.atlas_link("demo-0", "atlas:snes:000005").unwrap();
+        let mut games = emotional_core::library::demo_catalog();
+        games[0].system = "snes".into();
+        games[0].title = "Super Metroid".into();
+        assert_eq!(atlas.apply(&store, &mut games).unwrap(), 1);
+        assert_eq!(games[0].editorial.knowledge.id, "atlas:snes:000005");
+        assert_eq!(games[0].editorial.exploration, Some(100));
+        assert_eq!(games[0].editorial.session_minutes, None);
+        let before = toml::to_string(&games[0].editorial).unwrap();
+        crate::atlas_classic::apply(&mut games).unwrap();
+        assert_eq!(toml::to_string(&games[0].editorial).unwrap(), before);
+        assert!(atlas.db.execute("DELETE FROM games", []).is_err());
     }
     #[test]
     fn pilot_is_read_only_and_never_guesses_a_filename() {
@@ -200,5 +224,80 @@ mod tests {
         assert_eq!(s.reserve().unwrap().unwrap().pool, r.pool);
         s.clear_usage().unwrap();
         assert!(s.reserve().unwrap().is_none());
+    }
+    #[test]
+    fn evidence_catalog_keeps_opt_in_unknowns_and_local_preferences() {
+        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../assets/atlas/emotional-atlas-0.2.0-experimental.2.db");
+        let stable = Atlas::open(&path).unwrap();
+        let experimental = Atlas::open_channel(&path, true).unwrap();
+        let store = Store::open(Path::new(":memory:")).unwrap();
+        store.0.execute("INSERT INTO imported_games VALUES('demo-0','/synthetic/non-rom','/synthetic/gamelist','unused')", []).unwrap();
+        store.atlas_link("demo-0", "atlas:snes:000001").unwrap();
+        let mut games = emotional_core::library::demo_catalog();
+        games[0].editorial = Default::default();
+        stable.apply(&store, &mut games).unwrap();
+        assert_eq!(games[0].editorial.exploration, None);
+        experimental.apply(&store, &mut games).unwrap();
+        assert_eq!(games[0].editorial.exploration, Some(60));
+        assert_eq!(games[0].editorial.intensity, Some(60));
+        assert_eq!(games[0].editorial.nostalgia, None);
+        assert_eq!(games[0].editorial.calm, None);
+        assert_eq!(games[0].editorial.session_minutes, None);
+        games[0].editorial.exploration = Some(93);
+        experimental.apply(&store, &mut games).unwrap();
+        assert_eq!(games[0].editorial.exploration, Some(93));
+        assert!(stable.explanations(&store).unwrap().is_empty());
+        assert!(experimental.explanations(&store).unwrap()["demo-0"].contains("rutas secretas"));
+        assert!(experimental
+            .db
+            .execute("DELETE FROM research_claims", [])
+            .is_err());
+    }
+    #[test]
+    fn compact_identity_export_and_optional_scale_fixture_use_existing_reader() {
+        let small = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../assets/atlas/exports/emotional-atlas-0.3.0-metadata-pilot.db");
+        let stable = Atlas::open(&small).unwrap();
+        let experimental = Atlas::open_channel(&small, true).unwrap();
+        assert!(stable.contains("atlas:snes:000005").unwrap());
+        // The new metadata candidate is unresolved and has no emotional profile.
+        assert!(experimental.contains("atlas:snes:000053").unwrap());
+        let count: i64 = experimental
+            .db
+            .query_row("SELECT count(*) FROM profiles_experimental", [], |r| {
+                r.get(0)
+            })
+            .unwrap();
+        assert_eq!(count, 21);
+        let store = Store::open(Path::new(":memory:")).unwrap();
+        store.0.execute("INSERT INTO imported_games VALUES('demo-0','/synthetic/non-rom','/synthetic/gamelist','unused')", []).unwrap();
+        store.atlas_link("demo-0", "atlas:snes:000053").unwrap();
+        let mut games = emotional_core::library::demo_catalog();
+        games[0].editorial = Default::default();
+        experimental.apply(&store, &mut games).unwrap();
+        assert_eq!(games[0].editorial.calm, None);
+        assert!(experimental.explanations(&store).unwrap().is_empty());
+        assert!(experimental.db.execute("DELETE FROM games", []).is_err());
+        // Optional large fixture is generated in development, never shipped as real data.
+        if let Some(path) = std::env::var_os("EMOTIONAL_ATLAS_SCALE_FIXTURE") {
+            let large = Atlas::open_channel(Path::new(&path), true).unwrap();
+            let kind: String = large
+                .db
+                .query_row("SELECT value FROM meta WHERE key='dataset_kind'", [], |r| {
+                    r.get(0)
+                })
+                .unwrap();
+            assert_eq!(kind, "synthetic");
+            let count: i64 = large
+                .db
+                .query_row("SELECT count(*) FROM games", [], |r| r.get(0))
+                .unwrap();
+            assert_eq!(count, 20000);
+            store.atlas_link("demo-0", "atlas:snes:000001").unwrap();
+            large.apply(&store, &mut games).unwrap();
+            assert_eq!(games[0].editorial.calm, Some(80));
+            assert!(large.db.execute("DELETE FROM profiles", []).is_err());
+        }
     }
 }

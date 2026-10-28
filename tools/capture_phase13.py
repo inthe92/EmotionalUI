@@ -16,8 +16,12 @@ def main():
     parser.add_argument('--seed', type=Path, required=True)
     parser.add_argument('--rom-root', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--settle-ms', type=int, default=3000, help='Allow async artwork to settle before capture')
+    parser.add_argument('--at', default='2026-10-19T18:30', help='Simulated local time; never changes the OS clock')
     parser.add_argument('--cases', nargs='+', help='Only regenerate affected captures')
     args = parser.parse_args()
+    if not 1500 <= args.settle_ms <= 20000:
+        parser.error('--settle-ms must be 1500..20000')
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=False)
     cases = [('continuar', 'resume', []), ('tu-momento', 'emotional', []),
@@ -51,12 +55,12 @@ def main():
             steps.extend([dict(at_ms=500+i*100, text=key, pressed=True),
                           dict(at_ms=508+i*100, text=key, pressed=False)])
         replay = out / (name + '.toml')
-        steps.append(dict(at_ms=1500, capture=str(out / (name+'.png'))))
+        steps.append(dict(at_ms=args.settle_ms, capture=str(out / (name+'.png'))))
         replay.write_text('keyboard=true\n[mapping]\n'+''.join(
             '\n[[steps]]\n'+''.join(k+'='+json.dumps(v)+'\n' for k,v in step.items()) for step in steps))
         cmd = [str(args.binary.resolve()), '--db', str(db), '--view', view,
-               '--at', '2026-10-19T18:30', '--audio-mode', 'silence', '--reduced-motion',
-               '--smoke-test', '--smoke-seconds', '2', '--sim-replay', str(replay)]
+               '--at', args.at, '--audio-mode', 'silence', '--reduced-motion',
+               '--smoke-test', '--smoke-seconds', str(args.settle_ms//1000+1), '--sim-replay', str(replay)]
         cmd += ['--demo-count', '0'] if name == 'vacio' else ['--library-root', str(args.rom_root.resolve())]
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=25,
                                 env=dict(os.environ, SLINT_SCALE_FACTOR='1',

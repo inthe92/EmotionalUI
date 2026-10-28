@@ -18,13 +18,19 @@ def verify_bundle(bundle):
     bundle=safe_path(bundle)
     if bundle.is_symlink():raise ValueError('Symlink bundle is forbidden')
     manifest=json.loads((bundle/'phase12-manifest.json').read_text())
-    if manifest.get('kind')!='phase12-private-preview':raise ValueError('Unexpected manifest')
+    beta = manifest.get('kind')=='emotional-ui-beta' and manifest.get('public_release') is True and manifest.get('beta') is True
+    if manifest.get('kind')!='phase12-private-preview' and not beta:raise ValueError('Unexpected manifest')
     for name,digest in manifest['files'].items():
         if not re.fullmatch(r'[A-Za-z0-9_.-]+',name):raise ValueError('Unsafe payload name')
         p=bundle/name
         if p.is_symlink() or hashlib.sha256(p.read_bytes()).hexdigest()!=digest:raise ValueError('Payload checksum mismatch')
     if 'emotional-ui' not in manifest['files']:raise ValueError('Missing frontend')
     return manifest
+
+def functional_bundle(manifest):
+    private = manifest.get('kind')=='phase12-private-preview' and manifest.get('private_demo') and not manifest.get('public_release')
+    beta = manifest.get('kind')=='emotional-ui-beta' and manifest.get('public_release') is True and manifest.get('beta') is True
+    return bool(private or beta)
 
 def check_backlight(values):
     if not values or not any(value>0 for value in values):

@@ -1,0 +1,79 @@
+{
+  "note": "Restrained color grading; celebrations are optional cultural overlays, not universal public holidays.",
+  "seasons": [
+    "#a4bfd5",
+    "#9bb6a0",
+    "#c6ba9d",
+    "#c2a285",
+    "#000000"
+  ],
+  "weather": [
+    "#000000",
+    "#adb9c4",
+    "#9cafbf",
+    "#bdc9c9",
+    "#c2d2df"
+  ],
+  "celebrations": [
+    "#000000",
+    "#bca68c",
+    "#d6bd95",
+    "#c7c9d6"
+  ],
+  "season_weight": 0.1,
+  "weather_weight": 0.14,
+  "celebration_weight": 0.045,
+  "surface_wash": 0.035,
+  "secondary_text_weight": 0.025,
+  "weather_window_tints": [
+    "#00000000",
+    "#82959c66",
+    "#1a2d488c",
+    "#bdcdd7c0",
+    "#c2d7e0a6"
+  ],
+  "accent_brightness": 0.035,
+  "interior_day_tints": [
+    "#1024375c",
+    "#98b6b02c",
+    "#a3bfb82a",
+    "#3d5c6520",
+    "#1b354524",
+    "#182d4518",
+    "#142a3f30",
+    "#00000000"
+  ],
+  "interior_weather_tints": [
+    "#00000000",
+    "#35495428",
+    "#13294066",
+    "#1c344b9c",
+    "#23425a88"
+  ],
+  "interior_season_tints": [
+    "#243c5526",
+    "#53676908",
+    "#607e7708",
+    "#3d404508",
+    "#00000000"
+  ],
+  "interior_weather_mix": 0.65,
+  "interior_season_mix": 0.25,
+  "panel_profile": {
+    "top_rgb_scale": 0.82,
+    "bottom_rgb_scale": 0.9,
+    "top_alpha_reduction": 175,
+    "bottom_alpha_reduction": 170,
+    "stroke_width": 0.75,
+    "focus_stroke_width": 1.0,
+    "border_alpha_scale": 0.65,
+    "focus_alpha_scale": 0.8
+  },
+  "glass_profile": {
+    "underlay_opacity": 1.0,
+    "brightness": 1.0,
+    "blur_radius_at_half_resolution": 5.0,
+    "context_wash_scale": 0.2
+  },
+  "capsule_alpha_reduction": 60
+}

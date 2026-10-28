@@ -1,17 +1,25 @@
 mod ambient_motion;
 mod artwork;
+mod artwork_picker;
 mod atlas;
+mod atlas_classic;
 mod audio_settings;
 mod capture;
 mod controls;
 mod discovery_presentation;
 mod game_options;
+mod focus;
+#[cfg(feature = "gpu-material")]
+mod gpu_material;
 mod launch_ui;
+mod library_browser;
+mod library_ui;
 #[cfg(any(debug_assertions, feature = "simulator"))]
 mod moments;
 mod motion;
 mod navigation;
 mod performance;
+mod rom_drop;
 #[cfg(test)]
 mod pipeline_audit_tests;
 mod scene_cache;
@@ -22,6 +30,9 @@ mod smoke;
 mod state;
 mod store;
 mod supervisor;
+mod system_settings;
+mod settings_menu;
+mod settings_browser;
 mod trial;
 mod trial_replay;
 use chrono::{Datelike, NaiveDateTime};
@@ -29,7 +40,7 @@ use emotional_core::{
     input::RepeatGate,
     library::demo_catalog,
     mood::Mood,
-    recommendation::{restore_ranked, Context},
+    recommendation::Context,
 };
 use emotional_services::{clock::Clock, weather::Weather};
 use serde::Deserialize;
@@ -37,6 +48,21 @@ use slint::ComponentHandle;
 use state::State;
 use std::{cell::RefCell, error::Error, path::PathBuf, rc::Rc, time::Instant};
 slint::include_modules!();
+/// Publish a prepared cover in one event-loop turn; never clear it while decoding.
+fn present_artwork(ui: &Home, slot: usize, image: Option<slint::Image>, id: &str) {
+    let available = image.is_some();
+    let image = image.unwrap_or_default();
+    match slot {
+        0 => { ui.set_local_cover(image); ui.set_local_art_available(available); ui.set_local_art_id(id.into()); }
+        1 => { ui.set_alternative_cover(image); ui.set_alternative_art_available(available); }
+        2 => { ui.set_resume_two_cover(image); ui.set_resume_two_art_available(available); }
+        3 => { ui.set_resume_three_cover(image); ui.set_resume_three_art_available(available); }
+        4 => { ui.set_resume_cover(image); ui.set_resume_art_available(available); }
+        5 => { ui.set_third_cover(image); ui.set_third_art_available(available); }
+        6 => { ui.set_launch_cover(image); ui.set_launch_cover_available(available); }
+        _ => unreachable!("bounded artwork slot"),
+    }
+}
 #[derive(Deserialize)]
 #[serde(default, deny_unknown_fields)]
 struct Config {
@@ -65,6 +91,20 @@ impl Default for Config {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
+    if std::env::args().nth(1).as_deref() == Some("--version") {
+        println!("EmotionalUI v{}", include_str!("../VERSION").trim());
+        return Ok(());
+    }
+    let inspect_args: Vec<String> = std::env::args().collect();
+    if inspect_args.iter().any(|a| a == "--system-settings-check") {
+        if inspect_args.len() != 3 || inspect_args[1] != "--system-settings-check" || !PathBuf::from(&inspect_args[2]).is_absolute() {
+            return Err("Use --system-settings-check with one absolute installed tools root".into());
+        }
+        use emotional_services::system_options;
+        let entries = system_options::discover(std::path::Path::new(&inspect_args[2]))?;
+        println!("{}", system_options::inventory_report(&entries));
+        return Ok(());
+    }
     let result = supervisor::dispatch().and_then(|handled| if handled { Ok(()) } else { run() });
     smoke::emit(
         "process_exit",
@@ -86,6 +126,8 @@ fn run() -> Result<(), Box<dyn Error>> {
     let mut config_path = None;
     let mut weather_config_path = None;
     let mut demo_count = None;
+    let mut functional_mode = false;
+    let mut launcher_profile = None;
     let mut unknown_time = false;
     let mut import_xml = None;
     let mut rom_root = None;
@@ -131,11 +173,17 @@ fn run() -> Result<(), Box<dyn Error>> {
                     args.next().ok_or("DEV environment needs a file")?,
                 ))
             }
-            "--launcher-config" | "--launch-child" | "--sim-return-replay" => {
+            "--launcher-config" => {
+                launcher_profile = Some(PathBuf::from(
+                    args.next().ok_or("Missing launcher argument")?,
+                ));
+            }
+            "--launch-child" | "--sim-return-replay" => {
                 args.next().ok_or("Missing launcher argument")?;
             }
             "--launch-physical-supervised" => {}
             "--trial" => trial_mode = true,
+            "--functional" => functional_mode = true,
             "--atlas-experimental" => atlas_experimental = true,
             "--atlas" => {
                 atlas_path = Some(PathBuf::from(
@@ -234,6 +282,7 @@ fn run() -> Result<(), Box<dyn Error>> {
                 println!(
                     r#"EmotionalUI 0.2.0
   --launcher-config PROFILE.toml --db ABSOLUTE.sqlite --library-root ROM_ROOT
+  --functional                 controles reales explícitos; incompatible con --trial
   --audio-mode minimal|ambient|silence --audio-volume 0..100
   --audio-assets DIR (recursos opcionales locales)
   --view resume|emotional --demo-history (solo desarrollo; no persiste)
@@ -333,6 +382,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             "--snapshot" => snapshot = Some(args.next().ok_or("--snapshot necesita ruta")?),
             _ => return Err(format!("Opción desconocida: {arg}").into()),
         }
+    }
+    if trial_mode && functional_mode {
+        return Err("Trial mode cannot enable functional system controls".into());
     }
     let gpu_replay = trial_replay::configured(trial_mode)?;
     #[cfg(feature = "linuxkms-gpu")]
@@ -449,11 +501,15 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         .as_deref()
         .map(|s| NaiveDateTime::parse_from_str(s, "%Y-%m-%dT%H:%M"))
         .transpose()?;
+    let day_demo = std::env::var("EMOTIONAL_DAY_DEMO").ok();
+    if day_demo.is_some() && (day_demo.as_deref() != Some("four-hours-v1") || !trial_mode || simulated.is_none() || unknown_time) {
+        return Err("Day demo requires --trial, --at and EMOTIONAL_DAY_DEMO=four-hours-v1".into());
+    }
     let mut clock = Clock::new(simulated);
     if unknown_time {
         clock.unknown();
     }
-    let mut weather = Weather::parse(&config.weather)?;
+    let weather = Weather::Unknown;
     let mut ambient = emotional_services::ambient::Runtime::new(config.ambient.clone())?;
     #[cfg(any(debug_assertions, feature = "simulator"))]
     if let Some(case) = &dev_environment {
@@ -474,24 +530,14 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     }
     #[cfg(any(debug_assertions, feature = "simulator"))]
     if let Some(name) = &dev_moment {
-        let (c, w) = moments::context(name)?;
+        let (c, _) = moments::context(name)?;
         clock = c;
-        weather = w;
     }
     if unknown_time {
         clock.unknown();
     }
-    if let Some(age) = dev_weather_age {
-        if !(-10080..=10080).contains(&age) {
-            return Err("Weather age must be -10080..10080 minutes".into());
-        }
-        let now = clock.now().and_utc();
-        weather = emotional_services::weather::Observation {
-            condition: weather,
-            updated: now - chrono::Duration::minutes(age),
-        }
-        .fresh(now)
-        .unwrap_or(Weather::Unknown);
+    if dev_weather_age.is_some_and(|age| !(-10080..=10080).contains(&age)) {
+        return Err("Weather age must be -10080..10080 minutes".into());
     }
     let path = if let Some(p) = db_path {
         PathBuf::from(p)
@@ -511,19 +557,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             }
         }
     }
-    if let Some(private_path) = weather_config_path {
-        match emotional_services::open_meteo::Config::read(std::path::Path::new(&private_path)) {
-            Ok(private) => ambient.configure_weather(
-                private,
-                emotional_services::ambient::Runtime::cache_path(&path),
-            ),
-            Err(reason) => eprintln!("Weather disabled; continuing offline: {reason}"),
-        }
-    } else if ambient.settings.location.is_some() && !ambient.demo_context() {
-        let cache = emotional_services::ambient::Runtime::cache_path(&path);
-        if cache.is_file() && ambient.load_cache(&cache).is_err() {
-            eprintln!("Ambient weather cache unavailable; continuing offline");
-        }
+    if weather_config_path.is_some() {
+        eprintln!("Weather is disabled: the interface uses light/dark appearance only");
     }
     let mut store = store::Store::open(&path)?;
     match store.last_valid_time() {
@@ -623,6 +658,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             atlas.apply(&store, &mut games)?
         );
     }
+    let classic_matches = atlas_classic::apply(&mut games)?;
+    println!("ATLAS_CLASSIC version=1.0.0 classified={classic_matches} installed={} offline=true",games.len());
+    let atlas_observations = store.atlas_observations()?;
     let privacy = store.privacy()?;
     let mut audio_preferences = store.audio()?;
     if let Some(mode) = audio_mode {
@@ -747,98 +785,25 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     let context = Context {
         mood: known.map(Mood::at).unwrap_or(Mood::Shelter),
         minutes: config.session_minutes,
-        raining: known.is_some() && weather == Weather::Rain,
+        raining: atlas_classic::raining(&clock,&ambient,weather),
         slot: known
             .map(|d| (d.and_utc().timestamp().max(0) as u64) / 21600)
             .unwrap_or(0),
         refresh: 0,
     };
-    let saved = store.session(&slot)?.unwrap_or_default();
+    let atlas_habits = emotional_core::atlas::Habits::learn(&games,&atlas_observations,atlas_classic::now(&clock));
     let signals = emotional_core::editorial::Signals {
         date: known.map(|d| d.date()),
         events: calendar.active(known.map(|d| d.date()), &config.region),
+        habits: Some(&atlas_habits),
         ..Default::default()
     };
-    let affinities = continuity_preferences
-        .iter()
-        .filter(|(_, p)| p.affinity != 0)
-        .map(|(id, p)| (id.clone(), p.affinity))
-        .collect::<std::collections::BTreeMap<_, _>>();
-    let order = if atlas.is_none() {
-        let ranked = emotional_core::recommendation::rank_affinity(
-            &games,
-            context,
-            &signals,
-            privacy.personalized,
-            &affinities,
-        );
-        let order = if saved.is_empty() {
-            ranked
-        } else {
-            restore_ranked(&games, &saved, ranked)
-        };
-        store.save_session(
-            &slot,
-            &order
-                .iter()
-                .map(|i| games[*i].id.clone())
-                .collect::<Vec<_>>(),
-        )?;
-        order
-    } else {
-        Vec::new()
-    };
-    let (discovery_reserve, order) = if let Some(atlas) = &atlas {
-        let cache_version = format!("{}:{affinities:?}", atlas.version);
-        let day = atlas::day(&clock);
-        let key =
-            emotional_core::reserve::fingerprint(&games, &cache_version, privacy.personalized);
-        let saved = store.reserve()?;
-        let hit = saved.as_ref().is_some_and(|r| r.valid(&key, day));
-        let prior = saved
-            .as_ref()
-            .filter(|c| c.atlas_version == cache_version && c.affinity == affinities)
-            .map(|c| c.selections.clone());
-        let mut cache = if hit {
-            saved.expect("cache hit")
-        } else {
-            emotional_core::reserve::Reserve::prepare_affinity(
-                &games,
-                &cache_version,
-                day,
-                privacy.personalized,
-                affinities.clone(),
-            )
-        };
-        if !hit {
-            if let Some(selections) = prior {
-                cache.selections = selections;
-            }
-        }
-        let context_key = format!(
-            "{}:{:?}:{:?}:{:?}:{}",
-            known
-                .map(|d| emotional_core::editorial::season_id(d.date()))
-                .unwrap_or("unknown"),
-            context.mood,
-            weather,
-            signals.events,
-            context.minutes
-        );
-        let ranked = cache.select(
-            &games,
-            context,
-            &signals,
-            privacy.personalized,
-            &context_key,
-            false,
-        );
-        store.save_reserve(&cache)?;
-        println!("RESERVE cache_hit={hit} pool={}", cache.pool.len());
-        (Some(cache), ranked)
-    } else {
-        (None, order)
-    };
+    let affinities = continuity_preferences.iter().map(|(id,p)|(id.clone(),p.affinity)).collect();
+    // Rank once on context/library changes; keep the full installed set eligible.
+    let order = atlas_classic::eligible_order(
+        emotional_core::recommendation::rank_affinity(&games,context,&signals,privacy.personalized,&affinities),
+        &games, imported);
+    let discovery_reserve = None;
     let selected =
         if concept > 0 && (order.is_empty() || (concept == 4 && resume && recent.is_none())) {
             2
@@ -849,9 +814,22 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         navigation: Default::default(),
         modal_return: None,
         atlas_explanations,
+        atlas_observations,
+        atlas_habits,
         system_focus: false,
         system_return_dock: None,
         system_open: false,
+        system_index: 0,
+        system_service: None,
+        system_snapshot: None,
+        system_note: None,
+        drop_session: None,
+        drop_open: false,
+        drop_ready: false,
+        drop_refresh: false,
+        drop_message: String::new(),
+        drop_image: slint::Image::default(),
+        drop_profile: launcher_profile.clone().filter(|_| functional_mode),
         dock_focus: (selected == 2 && concept == 4).then_some(2),
         dock_return: 0,
         trial_mode,
@@ -876,6 +854,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         continuity_activity,
         continuity_preferences,
         game_options: None,
+        artwork_picker: None,
         game_option_index: 0,
         game_explained: false,
         history,
@@ -890,7 +869,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             .as_ref()
             .and_then(|n| moments::NAMES.iter().position(|v| v == n)),
         imported,
-        calendar,
+        library_browser: library_browser::Browser::new(&games),
         games,
         order,
         selected,
@@ -898,6 +877,12 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         library: false,
         menu: false,
         menu_index: 0,
+        options_open: false,
+        options_browser: settings_browser::Browser::default(),
+        system_options: launcher_profile.as_deref().and_then(|profile| {
+            let config: emotional_services::launcher::configured::Configuration = toml::from_str(&std::fs::read_to_string(profile).ok()?).ok()?;
+            config.system_options_root.and_then(|root| emotional_services::system_options::discover(&root).ok())
+        }).unwrap_or_default(),
         menu_from_library: false,
         native_held: false,
         audio: emotional_services::ambient_audio::AmbientAudioEngine::start(
@@ -933,19 +918,39 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         start: Instant::now(),
     };
     if let Some(back) = &returned {
-        state.resume = back.position.resume;
+        // A newly constructed empty/ranking model may have focused the dock.
+        // Returning from a game/tool must restore the content that launched it.
+        state.dock_focus = None;
+        state.system_focus = false;
+        let position = launch_ui::restore_position(&back.position, &state.games, &state.continuity_order);
+        if let Some(tool) = &position.system_option {
+            state.menu = true;
+            state.options_open = true;
+            state.menu_index = state.options_browser.show_tool(tool, &state.system_options, false);
+        }
+        state.resume = position.resume;
         state.selected = emotional_core::continuity::clamp(
-            back.position.selected,
+            position.selected,
             state.resume,
             state.order.len(),
             state.recent.is_some(),
             state.continuity_order.len(),
         );
-        state.library = back.position.library;
-        state.library_index = back
-            .position
+        state.library = position.library;
+        state.library_index = position
             .library_index
             .min(state.games.len().saturating_sub(1));
+        if position.library {
+            if let Some(view)=&position.library_view {
+                state.library_browser.restore_saved(view,&state.games,Some(&position.game_id));
+            } else {
+                // Older request files predate grouped navigation. Open all
+                // games, then recover the selected game by its stable ID.
+                state.library_browser.choose(1,&state.games);
+                state.library_browser.restore(position.library_index,Some(&position.game_id));
+            }
+            state.sync_library_game();
+        }
     }
     state.order = discovery_presentation::presentation_order(
         &state.order,
@@ -954,9 +959,23 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     );
     #[cfg(feature = "simulator")]
     simulator::install()?;
+    #[cfg(feature = "gpu-material")]
+    gpu_material::select_renderer()?;
     let ui = Home::new().inspect_err(|error| {
         smoke::emit("window_init_error", None, None, Some(&error.to_string()))
     })?;
+    focus::install(&ui);
+    ui.set_app_version(format!("v{}", include_str!("../VERSION").trim()).into());
+    scene_raster::install_glass(&ui);
+    #[cfg(feature = "gpu-material")]
+    gpu_material::install(&ui);
+    let system_weak = ui.as_weak();
+    state.system_service = Some(emotional_services::system::Runtime::start_with_notify(
+        functional_mode,
+        move || {
+            let _ = system_weak.upgrade_in_event_loop(|ui| ui.invoke_system_refresh());
+        },
+    ));
     let _performance = performance::start(&ui);
     ui.set_concept(concept);
     ui.set_trial_mode(trial_mode);
@@ -981,7 +1000,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             eprintln!("Clock checkpoint skipped: {e}");
         }
     }
-    println!("ENV scene={} moment={} source={:?} artwork=provisional-private; palette={}; offline-capable=true; weather=optional-private-provider-or-demo",ui.get_scene_id(),ui.get_scene_moment(),state.clock.context().source,ui.global::<DaycycleAssets>().get_palette_index());
+    println!("ENV scene={} moment={} source={:?} artwork=provisional-private; palette={}; offline-capable=true; weather=disabled; appearance=light-or-dark",ui.get_scene_id(),ui.get_scene_moment(),state.clock.context().source,ui.global::<DaycycleAssets>().get_palette_index());
     if library_unavailable {
         state.notify(
             &ui,
@@ -990,6 +1009,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     }
     if let Some(back) = &returned {
         if !library_unavailable {
+            ui.set_launch_result_message(back.message.clone().into());
             state.notify(&ui, &back.message);
         }
     }
@@ -1004,8 +1024,72 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         ui.set_message("Modo prueba · Buscando tu colección sin cambiar el sistema…".into());
     }
     let shared = Rc::new(RefCell::new(state));
+    {
+        let weak = ui.as_weak();
+        let state = shared.clone();
+        ui.on_system_refresh(move || {
+            if let Some(ui) = weak.upgrade() {
+                state.borrow_mut().refresh_system(&ui);
+            }
+        });
+    }
+    {
+        let weak = ui.as_weak();
+        let state = shared.clone();
+        ui.on_system_select(move |index| {
+            if let Some(ui) = weak.upgrade() {
+                let mut state = state.borrow_mut();
+                state.system_index = index.clamp(0, 6) as usize;
+                state.system_action(&ui, emotional_core::controls::Action::Confirm);
+            }
+        });
+    }
+    {
+        let weak = ui.as_weak();
+        let state = shared.clone();
+        ui.on_system_adjust(move |index, forward| {
+            if let Some(ui) = weak.upgrade() {
+                let mut state = state.borrow_mut();
+                state.system_index = index.clamp(0, 6) as usize;
+                state.system_action(
+                    &ui,
+                    if forward {
+                        emotional_core::controls::Action::Right
+                    } else {
+                        emotional_core::controls::Action::Left
+                    },
+                );
+            }
+        });
+    }
+    {
+        let weak = ui.as_weak();
+        let state = shared.clone();
+        ui.on_system_level(move |index, value| {
+            if let Some(ui) = weak.upgrade() {
+                let mut state = state.borrow_mut();
+                if matches!(index, 2 | 3) && (0..=100).contains(&value) {
+                    state.set_system_level(index as usize, value as u8);
+                    state.paint(&ui);
+                }
+            }
+        });
+    }
     // Start work only after window/model construction. No XML/thumbnail decode in callbacks.
-    let trial_updates = trial_mode.then(|| {
+    let drop_refresh_profile = launcher_profile.clone().filter(|_| functional_mode);
+    let drop_refresh_db = path.clone();
+    let drop_refresh_root = trial_root.clone();
+    let drop_refresh_atlas = atlas_path.clone();
+    let trial_updates = (trial_mode || functional_mode).then(|| {
+        if let Some(profile) = launcher_profile.filter(|_| functional_mode) {
+            return trial::start_functional(
+                path.clone(),
+                trial_root.clone(),
+                atlas_path.clone(),
+                atlas_experimental,
+                profile,
+            );
+        }
         trial::start(
             path.clone(),
             trial_root.clone(),
@@ -1014,13 +1098,24 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         )
     });
     let trial_timer = slint::Timer::default();
-    if let Some(updates) = trial_updates {
+    if let Some(mut updates) = trial_updates {
         let weak = ui.as_weak();
         let s = shared.clone();
+        let return_notice=returned.as_ref().map(|back|back.message.clone());
         trial_timer.start(
             slint::TimerMode::Repeated,
             std::time::Duration::from_millis(50),
             move || {
+                let refresh = {
+                    let mut state = s.borrow_mut();
+                    std::mem::take(&mut state.drop_refresh)
+                };
+                if refresh {
+                    if let Some(profile) = drop_refresh_profile.clone() {
+                        updates = trial::start_functional(drop_refresh_db.clone(), drop_refresh_root.clone(),
+                            drop_refresh_atlas.clone(), atlas_experimental, profile);
+                    }
+                }
                 if let (Some(ui), Ok(update)) = (weak.upgrade(), updates.try_recv()) {
                     let mut state = s.borrow_mut();
                     match update {
@@ -1052,9 +1147,10 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             }
                             state.atlas_explanations = update.explanations;
                             state.games = update.games;
+                            state.rebuild_library();
+                            ui.set_library_offset(-1);
                             state.local_art = update.art;
                             ui.set_artwork_generation(ui.get_artwork_generation().wrapping_add(1));
-                            ui.set_local_art_id("".into());
                             state.discovery_reserve = None;
                             state.library_index = focused
                                 .and_then(|id| state.games.iter().position(|g| g.id == id))
@@ -1074,7 +1170,16 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             }
                             state.restore_remembered_focus();
                             state.paint(&ui);
-                            state.notify(&ui, &update.message);
+                            let message = if functional_mode {
+                                update.message.strip_prefix("Modo prueba · ").unwrap_or(&update.message)
+                            } else {
+                                &update.message
+                            };
+                            // Background catalog refresh must not immediately hide
+                            // the result of a failed launch or a completed session.
+                            if return_notice.as_ref().is_none_or(|notice|ui.get_message().as_str()!=notice) {
+                                state.notify(&ui, message);
+                            }
                             println!("TRIAL catalog_ready games={}", state.games.len());
                         }
                         Err(e) => {
@@ -1094,8 +1199,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     let weak = ui.as_weak();
     let s = shared.clone();
     let mut pending: Option<String> = None;
-    let mut shown: [Option<String>; 5] = Default::default();
-    let mut requested: [Option<String>; 5] = Default::default();
+    let mut shown: [Option<String>; 7] = Default::default();
+    let mut shown_games: [Option<String>; 7] = Default::default();
+    let mut requested: [Option<String>; 7] = Default::default();
     art_timer.start(
         slint::TimerMode::Repeated,
         std::time::Duration::from_millis(30),
@@ -1110,8 +1216,11 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                 state.continuity_order.get(1).copied(),
                 state.continuity_order.get(2).copied(),
                 state.recent,
+                state.order.get(2).copied(),
+                state.launch.as_ref().and_then(|c|c.pending.as_ref()).filter(|p|p.request.system_option.is_none())
+                    .and_then(|p|state.games.iter().position(|g|g.id==p.request.game_id)),
             ];
-            let desired: [Option<String>; 5] = std::array::from_fn(|slot| {
+            let desired: [Option<String>; 7] = std::array::from_fn(|slot| {
                 indices[slot].and_then(|i| state.games.get(i)).map(|g| {
                     format!(
                         "{slot}:{}:{}:{}",
@@ -1121,31 +1230,15 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                     )
                 })
             });
-            for slot in 0..5 {
+            for slot in 0..7 {
                 if shown[slot] != desired[slot] {
-                    match slot {
-                        0 => {
-                            ui.set_local_cover(slint::Image::default());
-                            ui.set_local_art_available(false);
-                            ui.set_local_art_id("".into());
-                        }
-                        1 => {
-                            ui.set_alternative_cover(slint::Image::default());
-                            ui.set_alternative_art_available(false);
-                        }
-                        2 => {
-                            ui.set_resume_two_cover(slint::Image::default());
-                            ui.set_resume_two_art_available(false);
-                        }
-                        3 => {
-                            ui.set_resume_three_cover(slint::Image::default());
-                            ui.set_resume_three_art_available(false);
-                        }
-                        _ => {
-                            ui.set_resume_cover(slint::Image::default());
-                            ui.set_resume_art_available(false);
-                        }
+                    let game = indices[slot].and_then(|i| state.games.get(i)).map(|g| g.id.clone());
+                    // Keep a same-game cover on screen while its new revision is
+                    // decoded. A generation change is not a change of game.
+                    if shown_games[slot] != game {
+                        present_artwork(&ui, slot, None, "");
                     }
+                    shown_games[slot] = game;
                     shown[slot] = desired[slot].clone();
                     requested[slot] = None;
                 }
@@ -1161,29 +1254,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                 &p.pixels, p.width, p.height,
                             );
                         let image = slint::Image::from_rgba8(buffer);
-                        match slot {
-                            0 => {
-                                ui.set_local_cover(image);
-                                ui.set_local_art_available(true);
-                                ui.set_local_art_id(thumbnail.id.clone().into());
-                            }
-                            1 => {
-                                ui.set_alternative_cover(image);
-                                ui.set_alternative_art_available(true);
-                            }
-                            2 => {
-                                ui.set_resume_two_cover(image);
-                                ui.set_resume_two_art_available(true);
-                            }
-                            3 => {
-                                ui.set_resume_three_cover(image);
-                                ui.set_resume_three_art_available(true);
-                            }
-                            _ => {
-                                ui.set_resume_cover(image);
-                                ui.set_resume_art_available(true);
-                            }
-                        }
+                        present_artwork(&ui, slot, Some(image), &thumbnail.id);
                         smoke::emit(
                             "local_art_ready",
                             Some(p.width),
@@ -1193,16 +1264,22 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                 p.mode, p.cache_hit
                             )),
                         );
+                    } else {
+                        // Missing/invalid replacement must return to the real
+                        // fallback, rather than keeping a stale manual choice.
+                        present_artwork(&ui, slot, None, "");
                     }
                 }
                 pending = None;
             }
             if pending.is_none() {
                 // Only visible or immediately adjacent cards, never the entire catalog.
-                let slots: &[usize] = if state.resume {
-                    &[4, 2, 3, 0, 1]
+                let slots: &[usize] = if indices[6].is_some() {
+                    &[6,4,2,3,0,1,5]
+                } else if state.resume {
+                    &[4, 2, 3, 0, 1, 5]
                 } else {
-                    &[0, 1, 4, 2, 3]
+                    &[0, 1, 5, 4, 2, 3]
                 };
                 for &slot in slots {
                     if requested[slot] == desired[slot] {
@@ -1212,7 +1289,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                         .as_ref()
                         .zip(indices[slot].and_then(|i| state.games.get(i)))
                     {
-                        let (width, height) = if slot == 0 || slot == 4 {
+                        let (width, height) = if slot == 6 {
+                            (160,240)
+                        } else if slot == 0 || slot == 4 {
                             (
                                 if slot == 4 {
                                     ui.get_prepared_resume_width()
@@ -1243,7 +1322,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                                     .unwrap_or_default(),
                                 width,
                                 height,
-                                presentation: if slot == 0 || slot == 4 {
+                                presentation: if slot == 0 || slot == 4 || slot == 6 {
                                     artwork::Presentation::Hero
                                 } else {
                                     artwork::Presentation::Tile
@@ -1251,6 +1330,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             })
                             .is_ok()
                         {
+                            smoke::emit("local_art_request", Some(width), Some(height), Some(&format!("slot={slot}; resources={}",state.local_art.get(&game.id).map_or(0,Vec::len))));
                             pending = Some(id.clone());
                             requested[slot] = Some(id.clone());
                         }
@@ -1261,6 +1341,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             }
         },
     );
+    if day_demo.is_some() {
+        trial_replay::day_demo(&ui, &shared);
+    }
     #[cfg(feature = "simulator")]
     let _simulation = simulation
         .map(|path| simulator::replay(&path, &ui, shared.clone()))
@@ -1324,6 +1407,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     });
     let weak = ui.as_weak();
     let s = shared.clone();
+    ui.on_library_search_key(move |key| {
+        if let Some(ui)=weak.upgrade() {
+            if key>=0 {s.borrow_mut().library_search_key(&ui,key as usize);}
+        }
+    });
+    let weak = ui.as_weak();
+    let s = shared.clone();
     ui.on_system_toggle(move || {
         if let Some(ui) = weak.upgrade() {
             let mut state = s.borrow_mut();
@@ -1349,7 +1439,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
     ui.on_game_option_select(move |index| {
         if let Some(ui) = weak.upgrade() {
             let mut state = s.borrow_mut();
-            if state.game_options.is_some() && (0..6).contains(&index) {
+            if state.game_options.is_some() && (0..7).contains(&index) {
                 state.game_option_index = index as usize;
                 if let Err(e) =
                     state.game_options_action(&ui, emotional_core::controls::Action::Confirm)
@@ -1366,7 +1456,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             let mut state = s.borrow_mut();
             if state.menu
                 && !state.modal_active()
-                && (0..if state.layout == 4 { 10 } else { 3 }).contains(&index)
+                && (0..state.settings_count() as i32).contains(&index)
             {
                 state.dock_focus = None;
                 state.system_focus = false;
@@ -1461,6 +1551,21 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         None
     };
     let launch_timer = slint::Timer::default();
+    {
+        let weak=ui.as_weak();let state=shared.clone();
+        ui.on_artwork_picker_command(move |index| {if let Some(ui)=weak.upgrade() {
+            let action=match index {0=>emotional_core::controls::Action::Confirm,1=>emotional_core::controls::Action::Refresh,2=>emotional_core::controls::Action::Library,_=>emotional_core::controls::Action::Back};
+            state.borrow_mut().artwork_picker_action(&ui,action);
+        }});
+    }
+    {
+        let weak=ui.as_weak();let state=shared.clone();
+        ui.on_artwork_picker_choose(move |index| {if let Some(ui)=weak.upgrade() {state.borrow_mut().artwork_picker_choose(&ui,index);}});
+    }
+    {
+        let weak=ui.as_weak();let state=shared.clone();
+        ui.on_artwork_picker_key_chosen(move |key| {if let Some(ui)=weak.upgrade() {if key>=0 {state.borrow_mut().artwork_picker_key(&ui,key as usize);}}});
+    }
     let weak = ui.as_weak();
     let st = shared.clone();
     launch_timer.start(
@@ -1468,7 +1573,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         std::time::Duration::from_millis(20),
         move || {
             if let Some(ui) = weak.upgrade() {
-                st.borrow_mut().launch_tick(&ui);
+                let mut state=st.borrow_mut();state.launch_tick(&ui);state.artwork_picker_tick(&ui);
             }
         },
     );
@@ -1486,20 +1591,14 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         std::time::Duration::from_secs(1),
         move || {
             if let Some(ui) = weak.upgrade() {
-                let mut st = s.borrow_mut();
-                let clock = st.clock.clone();
-                let demo = st.weather != Weather::Unknown;
-                let neutral = st.privacy.neutral;
-                if st.ambient.weather_tick(&clock, demo, neutral) {
-                    st.paint(&ui);
-                }
+                let st = s.borrow();
                 ui.set_audio_status(st.audio_status().into());
                 if let Some(error) = st.writer.error() {
                     eprintln!("Persistence failed: {error}");
                     ui.set_message("No pudimos guardar tu elección.".into());
                 }
-                // Ambient expiry and solar light must also update while panels
-                // are open; ranking remains deferred by its existing contract.
+                // Keep the clock visible in open panels without changing the
+                // selected light/dark appearance or querying weather.
                 let ambient_context = st
                     .clock
                     .known_now()
@@ -1532,7 +1631,9 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             }
         },
     );
-    if snapshot.is_some() && snapshot_view != "home" {
+    if (snapshot.is_some() || std::env::var_os("EMOTIONAL_GLASS_CAPTURE").is_some())
+        && snapshot_view != "home"
+    {
         let weak = ui.as_weak();
         slint::Timer::single_shot(std::time::Duration::from_millis(500), move || {
             if let Some(ui) = weak.upgrade() {
@@ -1624,6 +1725,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             },
         );
     }
+    #[cfg(feature = "gpu-material")]
+    gpu_material::arm_capture(&ui);
     ui.run()?;
     #[cfg(feature = "simulator")]
     if let Some(replay) = &_simulation {
@@ -1651,6 +1754,16 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         let state = shared.borrow();
         if let Some(client) = &state.launch {
             if let Some(request) = &client.committed {
+                #[cfg(feature = "gpu-material")]
+                if supervisor::frame_bridge_enabled() && request.system_option.is_none() {
+                    if let Some(frame) = gpu_material::take_launch_frame() {
+                        use std::io::Write;
+                        let result=std::fs::OpenOptions::new().write(true).create_new(true)
+                            .open(client.directory.join("launch.rgba"))
+                            .and_then(|mut file|file.write_all(&frame));
+                        if let Err(error)=result {eprintln!("LAUNCH_FRAME staging unavailable: {error}");}
+                    }
+                }
                 supervisor::write(&client.directory.join("request.toml"), request)?;
             }
         }

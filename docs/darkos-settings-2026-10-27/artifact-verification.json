@@ -1,0 +1,9 @@
+{
+  "binary_sha256": "1e4d68e85a4d59091c5af696ec9fbef2ef0012a887aaec3d0cb334c999bb4bb5",
+  "zip_sha256": "7b69a7dfd03af44b9c8d4557fe7450bdd899e16bbf63fa9e99826f862521473d",
+  "architecture": "aarch64",
+  "glibc_max": "2.35",
+  "rpath": false,
+  "drivers_included": false,
+  "settings_changed_in_audit": false
+}

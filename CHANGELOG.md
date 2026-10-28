@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.2.0-beta.3 — experimental settings candidate, not a published release
+
+Adds categorized dArkOS tools, Spanish labels, cancelable confirmation and capsule
+links to the original Wi-Fi/Bluetooth managers. A transient tool service retains
+the host access needed by settings and backups without weakening game isolation;
+frontend ownership and session-bound recovery remain explicit. Reads ES sibling-node
+XML preferences and preserves explicit emulator/core choices without substitution.
+
+Prepared as a separate Ports trial. Full Start-menu parity, real tool handoff,
+advanced selectors and default-frontend migration remain pending. See SYSTEM_SETTINGS.md.
+
+## 0.2.0-beta.2 — 2026-10-27
+
+Fixes the beta package's missing transitive `menu.py` launcher dependency, found
+by the device preflight before a Ports entry was registered or graphics started.
+The package builder now imports all entry modules in an isolated Python process
+and verifies they resolve from the payload. A regression test removes `menu.py`
+and confirms packaging verification rejects the incomplete delivery.
+
+Visuals, rotating gradients, Atlas data and game-launch logic are unchanged.
+Supersedes the incomplete beta.1 ZIP; existing installations remain preserved.
+
+## 0.2.0-beta.1 — 2026-10-27
+
+Restores the blue/gold GPU build while retaining its Slint screens and navigation.
+Adds the existing supervised player launcher, resume, isolated progress and return
+to the frontend. Unprofiled games remain launchable from Biblioteca. Appearance
+stays manual and persistent; light-mode focus now uses warm amber/linen, with the
+previous night focus retained. Focus colours rotate on GPU; reduced motion freezes
+the gradient and the software fallback stays static.
+
+Connects the latest completed experimental Atlas export: 1,841 provisional
+identities and 274 proposed profiles, with unknown dimensions preserved and no
+claim of complete review. Exact metadata/platform matching uses the existing
+reader; explicit SQLite profiles cannot be mixed silently with an older fallback.
+
+Ships as a separate, reversible ARM64 Ports beta. No ROMs, BIOS, drivers, personal
+history or boot/service configuration changes. Current-beta hardware acceptance,
+full legacy visual-suite reconciliation and sustained-FPS validation remain open.
+
 ## 0.1.0-preview.1 — 2026-10-22
 
 First experimental interface preview for Anbernic RG353V / the tested dArkOS environment. Four sections, original ambient room, contextual recommendations, existing-library import and preserved phase13–15 navigation, 360 ms interruptible transitions, parallax and composition cache.

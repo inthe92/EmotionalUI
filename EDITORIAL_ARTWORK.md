@@ -37,7 +37,9 @@ path = "/ruta/absoluta/arte-autorizado.png"
 root = "/ruta/absoluta/arte-autorizado"
 ```
 
-Configurar `EMOTIONAL_ARTWORK_OVERRIDES=/ruta/overrides.toml`. Máximo 256 KiB, cargado en el worker al iniciar. El recurso elegido tiene prioridad, conserva proporciones y debe superar las mismas validaciones. El ID no se deduce del título. La configuración expresa la autorización para leer esa raíz; no certifica derechos de redistribución.
+Configurar `EMOTIONAL_ARTWORK_OVERRIDES=/ruta/overrides.toml`. Máximo 4 MiB, cargado en el worker al iniciar (ampliado desde 256 KiB para bibliotecas de varios sistemas). El recurso elegido tiene prioridad, conserva proporciones y debe superar las mismas validaciones. El ID no se deduce del título. La configuración expresa la autorización para leer esa raíz; no certifica derechos de redistribución.
+
+Preparación opcional de carátulas verticales de SteamGridDB: [STEAMGRIDDB_ARTWORK.md](STEAMGRIDDB_ARTWORK.md). Usa este mismo mecanismo; no añade red al frontend ni cambia la home, los XML o las carátulas originales.
 
 ## Límites y seguridad
 
@@ -48,3 +50,13 @@ No hay watcher del sistema de archivos: los cambios se comprueban al solicitar d
 ## Estado
 
 Implementados selección, preparación, fallback e integración en las dos vistas y baldosas. El logo aislado todavía no se compone visualmente: se usa texto. Las ilustraciones de pruebas son gráficos procedurales originales provisionales, no arte editorial definitivo. Las rutas y formatos verificados en escritorio/Docker no certifican una biblioteca física diferente.
+
+## Revisión de estabilidad · 28-10-2026
+
+Durante la prueba RG353V del binario `474cdc2bf5a7`, el propietario confirmó apertura/regreso del juego y aplicación de una carátula SteamGridDB. También observó desaparición/reaparición rápida de carátulas en Biblioteca, incluso con movimiento reducido.
+
+Se corrigió un vaciado prematuro en la presentación: cambiar la generación del catálogo conserva la carátula del mismo juego mientras el worker prepara su reemplazo. Cambiar de juego sí descarta la imagen anterior; un reemplazo inválido retorna al fallback. No cambia geometría, materiales, fuentes, lanzadores o datos originales.
+
+`tools/verify_artwork_stability.py` usa un archivo de texto propio y una imagen sintética, retrasa 650 ms la carga y comprueba dos invalidaciones con ocho capturas intermedias. La variante de control con el vaciado anterior falla en la primera actualización; la revisión mantiene iguales los píxeles de la carátula. Pasan los 27 tests de artwork y el flujo nativo de selección/aplicación/restauración/cancelación de SteamGridDB con proveedor simulado. Esto verifica el fallo de refresco reproducido en software; no certifica aún que explique todo el parpadeo observado en el LCD.
+
+Candidato ARM64 privado `da2f29084dbc3a0ca07e3ac8406576de6468360af9bce588204538aceac4dadf`, GLIBC máxima 2.35, sin RPATH. Preparado como entrada independiente «EmotionalUI - Caratulas estables prueba», conservando la anterior. Comprobación física posterior: el propietario abrió esta entrada y confirmó «Las carátulas ya permanecen estables» tras la indicación de dejar la pantalla quieta y navegar entre juegos. Queda validada la corrección observada del parpadeo en esta revisión; no acredita FPS medidos, estabilidad prolongada ni una nueva prueba de apertura/SteamGridDB del candidato corregido.

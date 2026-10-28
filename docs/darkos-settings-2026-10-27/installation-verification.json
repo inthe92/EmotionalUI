@@ -1,0 +1,266 @@
+{
+  "version": "0.2.0-beta.3",
+  "binary_sha256": "1e4d68e85a4d59091c5af696ec9fbef2ef0012a887aaec3d0cb334c999bb4bb5",
+  "owned_files_verified": 20,
+  "loader_verified": true,
+  "player_check": {
+    "profiles": 114,
+    "skipped": 16,
+    "options": true,
+    "unmatched_launcher_preferences": 2,
+    "physical_validated": false,
+    "graphics_started": false
+  },
+  "prior_entries_preserved": true,
+  "prior_entry_count": 12,
+  "emulationstation": "active",
+  "es_pid_unchanged": true,
+  "os_settings_unchanged": true,
+  "graphics_started": false,
+  "game_started": false,
+  "boot_modified": false,
+  "persistent_services_modified": false,
+  "personal_data_modified": false,
+  "settings_inventory": {
+    "categories": [
+      {
+        "count": 8,
+        "title": "Red y conexiones"
+      },
+      {
+        "count": 4,
+        "title": "Pantalla y energía"
+      },
+      {
+        "count": 1,
+        "title": "Sonido del sistema"
+      },
+      {
+        "count": 12,
+        "title": "Mandos y emuladores"
+      },
+      {
+        "count": 8,
+        "title": "Almacenamiento"
+      },
+      {
+        "count": 7,
+        "title": "Mantenimiento"
+      },
+      {
+        "count": 40,
+        "title": "Herramientas"
+      }
+    ],
+    "graphics_started": false,
+    "kind": "darkos-settings-inventory",
+    "tools": [
+      {
+        "category": "Red y conexiones",
+        "relative": "Wifi.sh",
+        "title": "Configurar Wi-Fi"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "System Info.sh",
+        "title": "Información del sistema"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Bluetooth.sh",
+        "title": "Dispositivos Bluetooth"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Network Info.sh",
+        "title": "Información de red"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "351Files.sh",
+        "title": "351Files"
+      },
+      {
+        "category": "Pantalla y energía",
+        "relative": "Advanced/Enable Quick Mode.sh",
+        "title": "Activar Quick Mode"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Enable Remote Services.sh",
+        "title": "Activar servicios remotos"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Advanced/Wifi On.sh",
+        "title": "Activar Wi-Fi"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "Update.sh",
+        "title": "Actualizar dArkOS"
+      },
+      {
+        "category": "Pantalla y energía",
+        "relative": "Advanced/Sleep - Switch to Light sleep support.sh",
+        "title": "Cambiar a suspensión ligera"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Change Password.sh",
+        "title": "Cambiar contraseña del sistema"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Controller Tester.sh",
+        "title": "Comprobar mandos"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "Advanced/Backup dArkOS Settings.sh",
+        "title": "Copia de seguridad de dArkOS"
+      },
+      {
+        "category": "Pantalla y energía",
+        "relative": "Advanced/Disable Low Battery Warning.sh",
+        "title": "Desactivar aviso de batería baja"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Disable Remote Services.sh",
+        "title": "Desactivar servicios remotos"
+      },
+      {
+        "category": "Red y conexiones",
+        "relative": "Advanced/Wifi Off.sh",
+        "title": "Desactivar Wi-Fi"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "USB Drive Unmount.sh",
+        "title": "Desmontar unidad USB"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "Remove ._ Files.sh",
+        "title": "Eliminar archivos auxiliares de macOS"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "File Manager.sh",
+        "title": "Gestor de archivos"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "USB Drive Mount.sh",
+        "title": "Montar unidad USB"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "Tools/PortMaster.sh",
+        "title": "PortMaster"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "PS1 - Delete m3u files.sh",
+        "title": "PS1: borrar listas M3U"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "PS1 - Generate m3u files.sh",
+        "title": "PS1: crear listas M3U"
+      },
+      {
+        "category": "Sonido del sistema",
+        "relative": "Advanced/Fix Audio.sh",
+        "title": "Reparar audio"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Restore Default BigPEmu Settings.sh",
+        "title": "Restaurar ajustes de BigPEmu"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Reset Retroarch Core Settings.sh",
+        "title": "Restaurar ajustes de cores RetroArch"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Reset Retroarch32 Core Settings.sh",
+        "title": "Restaurar ajustes de cores RetroArch32"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Restore Default Drastic Settings.sh",
+        "title": "Restaurar ajustes de DraStic"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Restore Default GZdoom Settings.sh",
+        "title": "Restaurar ajustes de GZDoom"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Restore Default LZdoom Settings.sh",
+        "title": "Restaurar ajustes de LZDoom"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Reset Retroarch Settings.sh",
+        "title": "Restaurar ajustes de RetroArch"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Reset Retroarch32 Settings.sh",
+        "title": "Restaurar ajustes de RetroArch32"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Fix Global Hotkeys.sh",
+        "title": "Restaurar atajos globales"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Restore Default PPSSPP Controls.sh",
+        "title": "Restaurar controles de PPSSPP"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "Advanced/Restore dArkOS Settings.sh",
+        "title": "Restaurar copia de dArkOS"
+      },
+      {
+        "category": "Mandos y emuladores",
+        "relative": "Advanced/Restore ECWolf Joystick.sh",
+        "title": "Restaurar mando de ECWolf"
+      },
+      {
+        "category": "Pantalla y energía",
+        "relative": "Tools/ThemeMaster.sh",
+        "title": "ThemeMaster (EmulationStation)"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "Tools/Install.PortMaster.sh",
+        "title": "Tools › Install.PortMaster"
+      },
+      {
+        "category": "Almacenamiento",
+        "relative": "Advanced/Switch to Main SD for Roms.sh",
+        "title": "Usar tarjeta principal para los juegos"
+      },
+      {
+        "category": "Mantenimiento",
+        "relative": "Advanced/Clear Last Played Collection.sh",
+        "title": "Vaciar colección de últimos juegos"
+      }
+    ]
+  },
+  "zip_sha256": "7b69a7dfd03af44b9c8d4557fe7450bdd899e16bbf63fa9e99826f862521473d",
+  "zip_bytes": 16154176,
+  "ports_entry_name": "EmotionalUI - Ajustes prueba",
+  "frontend_default_changed": false,
+  "full_settings_parity": false,
+  "graphical_validation": false
+}
