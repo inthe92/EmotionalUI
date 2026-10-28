@@ -65,6 +65,9 @@ export component Home inherits Window {
     in property <int> system-selected;
     in property <string> system-help:"Consultando el sistema…";
     in property <bool> system-controls-enabled;
+    in property <bool> drop-open;
+    in property <image> drop-image;
+    in property <string> drop-message;
 
     out property <int> active-section:root.menu-open?3:root.library-open?2:root.resume-view?0:1;
     callback navigate(int);
@@ -156,10 +159,18 @@ export component Home inherits Window {
     in property <int> library-offset:-1;
     in property <bool> imported:false;
     in property <int> library-index:0;
+    in property <string> library-heading:"Elige una consola o busca un juego";
+    in property <string> library-empty-text:"Tu biblioteca está vacía.";
+    in property <bool> library-search-open;
+    in property <string> library-query;
+    in property <int> library-key;
+    callback library-search-key(int);
     in property <bool> menu-open:false;
     in property <int> menu-index:0;
     in property <int> menu-offset:0;
     in property <bool> options-open:false;
+    in property <string> settings-title:"Ajustes de dArkOS";
+    in property <string> settings-hint;
     in property <[string]> menu-titles:["Movimiento reducido", "Sonido", "Estadísticas", "Personalización", "Apariencia", "Movimiento ambiental"];
     in property <[string]> menu-values:[];
     in property <bool> sound-on:false;
@@ -287,7 +298,9 @@ export component Home inherits Window {
         opacity:show;visible:show>0;
         x:24px+root.page-offsets[2]*1px;y:root.concept==4?152px:60px;width:592px;height:root.concept==4?280px:392px;border-radius:root.concept==4?AtmosphereDesign.radius-l:Design.panel-radius;background:root.concept==4?transparent:root.base;border-width:root.concept==4?0px:1px;border-color:root.concept==4?AtmosphereDesign.glass-focus:root.accent;
         TouchArea {enabled:root.library-open;}
-        if root.library-titles.length==0: Text {x:16px;y:24px;width:560px;height:60px;text:root.history-panel?"Todavía no hay sesiones registradas.":"Tu biblioteca está vacía. Los juegos disponibles aparecerán aquí.";wrap:word-wrap;font-size:15px;color:AtmosphereDesign.muted;}
+        if !root.library-search-open: Rectangle {
+        width:parent.width;height:parent.height;background:transparent;
+        if root.library-titles.length==0: Text {x:16px;y:24px;width:560px;height:60px;text:root.history-panel?"Todavía no hay sesiones registradas.":root.library-empty-text;wrap:word-wrap;font-size:15px;color:AtmosphereDesign.glass-ink;}
         Text {visible:root.concept!=4;x:22px;y:19px;text:root.history-panel?"Tu historial":"Tu biblioteca";font-size:Design.greeting-size;font-weight:600;color:root.ink;}
         Text {visible:root.concept!=4;x:22px;y:54px;text:root.native-controls?"A elegir   ·   B volver":"Z elegir   ·   X volver";font-size:Design.secondary-size;color:root.muted;}
         for name[index] in root.library-titles : Rectangle {
@@ -296,6 +309,22 @@ export component Home inherits Window {
             if root.concept==4&&self.item-focused: FocusOutline {width:parent.width;height:parent.height;radius:AtmosphereDesign.radius-m;}
             Text {x:16px;width:parent.width - 32px;text:name;wrap:word-wrap;color:root.ink;vertical-alignment:center;height:parent.height;font-size:name.character-count>65?AtmosphereDesign.tile-size:Design.action-size;}
             TouchArea {enabled:root.library-open;clicked=>{root.activate(10+index+root.library-offset);}}
+        }
+        }
+        if root.library-search-open: Rectangle {
+            width:parent.width;height:parent.height;background:transparent;
+            Rectangle {x:16px;y:10px;width:560px;height:34px;border-radius:10px;background:AtmosphereDesign.active;
+                Text {x:12px;width:536px;height:parent.height;text:root.library-query==""?"Escribe el nombre del juego…":root.library-query;overflow:elide;font-size:16px;color:AtmosphereDesign.glass-ink;vertical-alignment:center;}
+            }
+            for label[index] in ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9","Espacio","Borrar","Buscar","Volver"]: Rectangle {
+                x:16px+Math.mod(index,8)*70px;y:56px+floor(index/8)*36px;width:64px;height:32px;border-radius:8px;
+                background:root.library-key==index?AtmosphereDesign.active:transparent;
+                border-width:0.5px;border-color:AtmosphereDesign.glass-edge;
+                if root.library-key==index: FocusOutline {width:parent.width;height:parent.height;radius:8px;}
+                Text {width:parent.width;height:parent.height;text:label;font-size:index>=36?10px:15px;font-weight:600;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
+                TouchArea {enabled:root.library-open;clicked=>{root.library-search-key(index);}}
+            }
+            Text {x:16px;y:248px;width:560px;height:22px;text:"A elegir · X borrar · Start buscar · B volver";font-size:12px;color:AtmosphereDesign.glass-ink;horizontal-alignment:center;vertical-alignment:center;}
         }
     }
     AmbientPanel {
@@ -354,14 +383,14 @@ export component Home inherits Window {
 
     if root.concept==4: SectionHeader {
         x:0px;y:0px;width:640px;height:100px;
-        title:root.audio-open?"Sonido":root.game-options-open?"Esta partida":root.menu-open?(root.options-open?"Opciones de dArkOS":"Ajustes"):root.library-open?(root.history-panel?"Historial":"Biblioteca"):root.section-title;
-        subtitle:root.ambient-label!=""?root.ambient-label:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?(root.message!=""?root.message:root.options-open?"Herramientas originales de tu consola.":"A tu manera."):root.library-open?(root.history-panel?"Tus momentos de juego.":"Toda tu colección, a tu ritmo."):root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
+        title:root.audio-open?"Sonido":root.game-options-open?"Esta partida":root.menu-open?(root.options-open?root.settings-title:"Ajustes"):root.library-open?(root.history-panel?"Historial":root.library-search-open?"Buscar juegos":"Biblioteca"):root.section-title;
+        subtitle:root.ambient-label!=""?root.ambient-label:root.message!=""&&!root.menu-open&&!root.library-open?root.message:root.menu-open?(root.message!=""?root.message:root.options-open?root.settings-hint:"A tu manera."):root.library-open?root.library-heading:root.resume-view?"Vuelve a tus partidas.":"Una aventura para este momento.";
         clock:root.clock;date:root.date;
     }
     if root.concept==4: SectionDock {
         x:AtmosphereDesign.dock-x;y:AtmosphereDesign.dock-y;
         active:root.active-section;cursor:root.dock-cursor;reduced:root.reduced;position:root.nav-position;
-        blocked:root.audio-open||root.game-options-open||root.system-open;
+        blocked:root.audio-open||root.game-options-open||root.system-open||root.library-search-open;
         chosen(index)=>{root.navigate(index);}
     }
 
@@ -372,14 +401,20 @@ export component Home inherits Window {
         font-family:AtmosphereDesign.family;font-size:10px;color:AtmosphereDesign.muted;
     }
 
-    if root.concept==4: ControlsFooter {x:24px;y:454px;width:592px;native:root.native-controls;modal:root.system-open||root.audio-open||root.game-options-open;option-count:root.game-options-open?max(0,root.game-option-labels.length - 1):0;}
+    if root.concept==4&&!root.library-search-open: ControlsFooter {x:24px;y:454px;width:592px;native:root.native-controls;modal:root.system-open||root.audio-open||root.game-options-open;option-count:root.game-options-open?max(0,root.game-option-labels.length - 1):0;}
+    if root.concept==4&&root.library-open&&!root.library-search-open: TouchArea {
+        x:24px;y:448px;width:96px;height:32px;
+        enabled:!root.system-open&&!root.audio-open&&!root.game-options-open;
+        clicked=>{root.dismiss();}
+    }
 
     if root.concept==4: SystemControls {
         x:0px;y:0px;
         focused:root.system-focused;expanded:root.system-open;reduced:root.reduced;progress:root.modal-kind==1?root.modal-progress:0;
-        blocked:root.audio-open||root.game-options-open;
+        blocked:root.audio-open||root.game-options-open||root.library-search-open;
         battery-percent:root.system-battery-percent;battery-charging:root.system-battery-charging;
         values:root.system-values;known:root.system-known;active:root.system-active;selected:root.system-selected;help:root.system-help;changes-allowed:root.system-controls-enabled;
+        drop-open:root.drop-open;drop-image:root.drop-image;drop-message:root.drop-message;
         chosen(index)=>{root.system-select(index);}
         adjusted(index,forward)=>{root.system-adjust(index,forward);}
         levels:root.system-levels;level-changed(index,value)=>{root.system-level(index,value);}

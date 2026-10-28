@@ -93,7 +93,8 @@ def main():
         raise ValueError('Expected a functional EmotionalUI package')
     systems, library, options = installed_systems()
     data = recovery.safe_path(Path.home()/'.local/share/emotional-ui-player')
-    plan = profiles.build_plan(systems, Path.home(), library, data/'progress', functional=True)
+    plan = profiles.build_plan(systems, Path.home(), library, data/'progress', functional=True,
+                               include_emulator_catalog=args.check)
     if not plan['report']['included']:
         raise ValueError('No installed compatible emulator/core found; the menu was not stopped')
     if options:
@@ -101,6 +102,9 @@ def main():
     if args.check:
         print(json.dumps({'profiles':len(plan['report']['included']),
             'skipped':len(plan['report']['skipped']), 'options':bool(options),
+            'emulator_selector_systems':len(plan['emulator_catalog']),
+            'emulator_selector_choices':sum(len(s['choices']) for s in plan['emulator_catalog']),
+            'unmatched_launcher_preferences':len(plan['report'].get('unmatched_preferences',[])),
             'physical_validated':False, 'graphics_started':False}))
         return
     functional_menu.preflight(destination/'emotional-ui')

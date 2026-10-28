@@ -51,8 +51,9 @@ def run(binary, output):
     for index in range(8):press(final_steps,1200+index*100,101)
     final_steps.append(dict(at_ms=2100,menu=True,menu_index=8))
     final_steps.append(dict(at_ms=2300,kind=1,code=102,value=1))
-    resume_steps = [dict(at_ms=300,library=True,library_index=1,dock_cursor=-1)]
-    press(resume_steps,600,103)  # Library -> Moment.
+    resume_steps = [dict(at_ms=300,library=True,library_index=1,dock_cursor=-1,library_cursor=0,library_heading_contains='METROID')]
+    press(resume_steps,500,103)  # Search results -> systems.
+    press(resume_steps,650,103)  # Library -> Moment.
     press(resume_steps,900,105)  # Moment -> Continue.
     resume_steps.append(dict(at_ms=1200,resume=True,has_recent=True,resume_count=1))
     press(resume_steps,1400,102)
@@ -95,7 +96,7 @@ time.sleep(2.2)
     for index in range(7):press(settings,2200+index*120,101)
     press(settings,3200,102)
     settings.append(dict(at_ms=3400,options_open=True,menu=True,menu_index=0,capture=str(output/'system-options.png')))
-    press(settings,3600,101);press(settings,3750,101);press(settings,3900,102)
+    press(settings,3600,103)  # B closes categories without opening a system tool.
     settings.append(dict(at_ms=4100,options_open=False,menu_index=11,dark_mode=False))
     for index in range(3):press(settings,4300+index*120,106)
     settings.append(dict(at_ms=4700,menu_index=8))
@@ -119,11 +120,18 @@ time.sleep(2.2)
     execute('appearance-restart',base+['--db',str(settings_db),'--launch-child',str(ipc),'--at','2026-01-15T22:00','--sim-replay',str(sandbox/'persistent.toml')])
     first=[]
     press(first,900,104)
-    first.append(dict(at_ms=1100,library=True,catalog_count=3))
-    press(first,1200,101)
-    first.append(dict(at_ms=1350,library_index=1))
-    press(first,1500,102)
-    first.append(dict(at_ms=2200))
+    first.append(dict(at_ms=1100,library=True,catalog_count=3,library_first_title='Buscar juegos'))
+    first.append(dict(at_ms=1200,library_choose=2,library_heading_contains='Super Nintendo'))
+    first.append(dict(at_ms=1350,library_back=True,library_first_title='Buscar juegos'))
+    first.append(dict(at_ms=1450,library_choose=0,library_search_open=True))
+    first.append(dict(at_ms=1470,library_key_choose=39,library_search_open=False))
+    first.append(dict(at_ms=1500,library_choose=0,library_search_open=True))
+    for index,letter in enumerate('METROID'):
+        first.append(dict(at_ms=1550+index*60,library_key_choose=ord(letter)-ord('A'),library_search_open=True))
+    press(first,2050,100)  # Start performs the search.
+    first.append(dict(at_ms=2200,library_search_open=False,library_index=1,library_first_title='Super Metroid  ·  Super Nintendo'))
+    press(first,2350,102)
+    first.append(dict(at_ms=2900))
     replay(sandbox/'first.toml',first)
     replay(return_replay,[dict(at_ms=100)])  # Real synthetic process replaces this.
     db=sandbox/'flow.sqlite'
@@ -137,6 +145,7 @@ time.sleep(2.2)
     assert launches==2,(launches,sessions)
     result={'kind':'synthetic-functional-app-flow','commands':commands,'sandbox':str(sandbox),
         'normal_then_resume':events,'launch_attempts':launches,'activity_records':sessions,
+        'grouped_library_and_search_launch':True,'search_return_context_restored':True,
         'original_save_unchanged':True,'appearance_persisted_across_clock_change':True,
         'options_discovered_only':True,'physical_emulators_or_tools_executed':False}
     (output/'report.json').write_text(json.dumps(result,indent=2)+'\n')

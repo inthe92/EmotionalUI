@@ -1,0 +1,21 @@
+{
+  "Cargo.toml": "841a0fdccfbfd9ee828a9c6624074fb8e2114f29d89f7ed0242346ed08ece4ee",
+  "Cargo.lock": "8c76107be5259f3bd5d13754024fc3b273a9f8f6964f1578ec2e78b0fdc99c13",
+  "app/VERSION": "3a38051e254e5b30d091ecebc1a17d6955c41f02af48f279ba9df4ff7b2d470b",
+  "app/examples/focus_preview.rs": "96fc5b70437f574598928c96a2923c723ba5e0b5f718caaa3096a660f7a1b5c2",
+  "app/src/main.rs": "cffd5a6353e6be4937b8c38c865cca4db7395773bcb3fff4e63aa89a7fc2cedf",
+  "app/src/settings_browser.rs": "6f1d3b02c853e4679099adec32d51a9061275e997ce3b75e0f62158895907423",
+  "app/src/settings_menu.rs": "4965dd6254703779b7e216d07e1822ea0bcaa723cb7ccb48e90e9472798df9f8",
+  "app/src/state.rs": "67e75729f14b1fbd586bb8508856bee948111689479e1e5325aa38aa888cea75",
+  "app/src/supervisor.rs": "c684210b74b324a1126d1a446c3b5a56938207a66a36b8f6ae9a3e6fec00c30f",
+  "app/src/system_settings.rs": "6ccc7aabedd1336024bc673dfe5854ef7a50b47d9320716754032ac5972a4c75",
+  "app/src/simulator.rs": "031e7798fc13fe5b2754d99b4c347f3be8a1ea0e46041cf1ed0ebd9ef844c414",
+  "app/ui/home.slint": "e323d66a24f6768ef51cc8ee1ea4c2a3577d24de1b12853dc9acf534c42e7ba1",
+  "assets/atlas/BETA-NOTICE.md": "d225e7f44a859484b73f41938a70aaba1e8bef258475b3e81796c9152bef4f2e",
+  "services/src/system.rs": "75c1fa4a531ea622004e421d958c1e257a9951f99a2d0ce95e176a45d1d4c011",
+  "services/src/system_options.rs": "2b1db7215e618a3a9ce132f8b46097cae2b04cfad32a03d50c9bc102a1c7f90a",
+  "tools/darkos_launcher_profiles.py": "6e448396edbe4475690c25bbd0958f8bfe4b2caaebb9da467b3dc93fe9b2b81e",
+  "platform/darkos/player_menu.py": "8766a6fa222c3c706a0623c6c327e213d45d6e12599705c9be47d4f4c8c81024",
+  "tests/test_darkos_launcher_profiles.py": "b14a3f5e9a708e83f17aea22727605f9f667ae36179abc3ef771112f10bba351",
+  "tests/replays/darkos-settings.toml": "ea3b60b2d84589e7393b83909305216ca1bb2292779e1c1007d03b1aba7ad168"
+}

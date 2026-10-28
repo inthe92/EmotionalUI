@@ -1,4 +1,17 @@
-# Active delivery · v0.1.0-preview.1
+# Tarea vigente · ajustes de dArkOS antes del arranque predeterminado
+
+Integrar los controles del sistema en la beta GPU conservando la home y los datos.
+Primera implementación: catálogo por categorías, cápsula Wi-Fi/Bluetooth hacia los
+gestores originales, confirmación y retorno, permisos propios de herramientas y
+lectura de preferencias nativas. Build experimental beta.3 separada de beta.2.
+
+No confundir acceso a Opciones con un port completo del menú Start. Faltan los
+selectores avanzados, paridad de emuladores y validación física del mismo artefacto.
+El arranque continúa en EmulationStation. Contrato y cobertura: [SYSTEM_SETTINGS](SYSTEM_SETTINGS.md).
+
+---
+
+## Entrega anterior conservada · v0.1.0-preview.1
 
 Publish the isolated, reversible RG353V/dArkOS trial preview after exact-ZIP hardware acceptance. Software default, Mali-G52 experimental. No game launching, system-setting changes, boot replacement or sustained30/60FPS promise in this package. Owner has explicitly authorized publication and PUBLIC visibility. Do not resume GPU optimization or add Daily Driver code during this delivery.
 

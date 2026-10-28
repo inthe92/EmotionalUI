@@ -255,6 +255,7 @@ struct Step {
     dock_cursor: Option<i32>,
     system_open: Option<bool>,
     system_focused: Option<bool>,
+    drop_open: Option<bool>,
     active_section: Option<i32>,
     page_at_rest: Option<usize>,
     motion_full_viewport: Option<bool>,
@@ -265,6 +266,9 @@ struct Step {
     menu: Option<bool>,
     library: Option<bool>,
     menu_index: Option<usize>,
+    menu_choose: Option<i32>,
+    system_choose: Option<i32>,
+    settings_title: Option<String>,
     reduced: Option<bool>,
     held: Option<bool>,
     text: Option<String>,
@@ -272,6 +276,13 @@ struct Step {
     mood: Option<i32>,
     atmosphere_contains: Option<String>,
     library_index: Option<usize>,
+    library_cursor: Option<usize>,
+    library_choose: Option<i32>,
+    library_key_choose: Option<i32>,
+    library_back: Option<bool>,
+    library_search_open: Option<bool>,
+    library_heading_contains: Option<String>,
+    library_first_title: Option<String>,
     hero_title: Option<String>,
     resume: Option<bool>,
     scene_phase: Option<i32>,
@@ -374,6 +385,15 @@ pub fn replay(
         let Some(ui) = weak.upgrade() else { return; };
         while index < scenario.steps.len() && start.elapsed().as_millis() >= u128::from(scenario.steps[index].at_ms) {
             let step = &scenario.steps[index];
+            // Invoke the same callbacks used by TouchArea, before borrowing
+            // state; they synchronously route through the production controller.
+            if let Some(index)=step.menu_choose { ui.invoke_menu_select(index); }
+            if let Some(index)=step.system_choose {
+                if ui.get_system_open() { ui.invoke_system_select(index); }
+            }
+            if let Some(index)=step.library_choose { if ui.get_library_open() && index>=0 {ui.invoke_activate(10+index);} }
+            if let Some(index)=step.library_key_choose {if ui.get_library_search_open(){ui.invoke_library_search_key(index);} }
+            if step.library_back==Some(true) && ui.get_library_open() && !ui.get_library_search_open() && !ui.get_system_open() && !ui.get_audio_open() && !ui.get_game_options_open() {ui.invoke_dismiss();}
             if let (Some(text),Some(pressed))=(&step.text,step.pressed) {
                 let text=match text.as_str() {
                     "up"=>char::from(slint::platform::Key::UpArrow).to_string(),
@@ -434,6 +454,7 @@ pub fn replay(
                 step.distinct_protagonists.is_none_or(|v|(ui.get_recent_title()!=ui.get_hero_title())==v),
                 step.system_open.is_none_or(|v|ui.get_system_open()==v),
                 step.system_focused.is_none_or(|v|ui.get_system_focused()==v),
+                step.drop_open.is_none_or(|v|ui.get_drop_open()==v),
                 step.dock_cursor.is_none_or(|v|ui.get_dock_cursor()==v),
                 step.active_section.is_none_or(|v|ui.get_active_section()==v),
                 step.catalog_count.is_none_or(|v|state.games.len()==v),
@@ -449,11 +470,19 @@ pub fn replay(
                 step.menu.is_none_or(|v| state.menu == v),
                 step.library.is_none_or(|v| state.library == v),
                 step.menu_index.is_none_or(|v| state.menu_index == v),
+                step.settings_title.as_ref().is_none_or(|v|ui.get_settings_title().as_str()==v),
                 step.reduced.is_none_or(|v| state.config.reduced_motion == v),
                 step.held.is_none_or(|v| controller.held() == v),
                 step.mood.is_none_or(|v|ui.get_mood()==v),
                 step.atmosphere_contains.as_ref().is_none_or(|v|ui.get_atmosphere().contains(v)),
                 step.library_index.is_none_or(|v|state.library_index==v),
+                step.library_cursor.is_none_or(|v|state.library_cursor()==v),
+                step.library_search_open.is_none_or(|v|ui.get_library_search_open()==v),
+                step.library_heading_contains.as_ref().is_none_or(|v|ui.get_library_heading().contains(v)),
+                step.library_first_title.as_ref().is_none_or(|v|{
+                    use slint::Model;
+                    ui.get_library_titles().row_data(0).is_some_and(|s|s.as_str()==v)
+                }),
                 step.hero_title.as_ref().is_none_or(|v|ui.get_hero_title().as_str()==v),
                 step.resume.is_none_or(|v|state.resume==v),
                 step.scene_phase.is_none_or(|v|ui.get_scene_phase()==v),

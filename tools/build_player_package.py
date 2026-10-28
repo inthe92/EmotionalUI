@@ -21,7 +21,7 @@ def verify_entrypoint_imports(bundle):
 from pathlib import Path
 root=Path(sys.argv[1]).resolve()
 sys.path.insert(0,str(root))
-for name in ['manage','phase12_preview','functional_preview','menu','functional_menu','player_menu','player_bootstrap','darkos_launcher_profiles']:
+for name in ['manage','phase12_preview','functional_preview','menu','functional_menu','player_menu','player_bootstrap','darkos_launcher_profiles','rom_drop']:
     module=importlib.import_module(name)
     assert Path(module.__file__).resolve().parent==root,name
 """
@@ -55,6 +55,7 @@ def build(binary, output):
         'functional_menu.py': ROOT/'platform/darkos/functional_menu.py',
         'player_menu.py': ROOT/'platform/darkos/player_menu.py',
         'player_bootstrap.py': ROOT/'platform/darkos/player_bootstrap.py',
+        'rom_drop.py': ROOT/'platform/darkos/rom_drop.py',
         'darkos_launcher_profiles.py': ROOT/'tools/darkos_launcher_profiles.py',
     }
     for name, source in sources.items():
@@ -70,6 +71,10 @@ def build(binary, output):
         'Salir: Ajustes / Volver a la consola. No borres esta carpeta durante una partida.\n'
         'Atlas experimental: identidades y perfiles no equivalen a ROMs instaladas ni revision humana.\n'
         'Los juegos sin perfil siguen disponibles en Biblioteca.\n'
+        'Biblioteca: elige un sistema o Buscar juegos; X abre el buscador.\n'
+        'Teclado: cruceta y A, X borrar, Start buscar, B volver; tambien tactil.\n'
+        'Emotional Drop: abre la capsula, elige Añadir juegos y escanea el QR en la misma red.\n'
+        'La transferencia es temporal; los archivos existentes no se reemplazan.\n'
         'Requiere emuladores/cores ya instalados y compatibles; no incluye ROMs ni BIOS.\n'
         'La compilacion y las pruebas locales no certifican el hardware de esta beta.\n')
     beta = dict(kind='emotional-ui-beta', beta=True, version=version,

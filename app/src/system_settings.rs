@@ -2,7 +2,7 @@
 use crate::{state::State, Home};
 use emotional_core::controls::Action;
 use emotional_services::system::{self, BatteryState, BluetoothState, WifiState};
-use slint::{Model, ModelRc, SharedString, VecModel};
+use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 
 fn percent(value: Option<u8>) -> String {
     value
@@ -18,13 +18,14 @@ fn panel_focus(index: usize, action: Action) -> usize {
         (0 | 1, Action::Up) => index,
         (2, Action::Up) => 0,
         (_, Action::Up) => index.saturating_sub(1),
-        (_, Action::Down) => (index + 1).min(5),
+        (_, Action::Down) => (index + 1).min(6),
         _ => index,
     }
 }
 
 impl State {
     pub(super) fn refresh_system(&mut self, ui: &Home) {
+        let drop_changed = self.poll_drop();
         if let Some(next) = self
             .system_service
             .as_ref()
@@ -36,6 +37,7 @@ impl State {
                 self.paint_system(ui);
             }
         }
+        if drop_changed { self.paint_system(ui); }
     }
 
     pub(super) fn paint_system(&self, ui: &Home) {
@@ -147,18 +149,27 @@ impl State {
         ui.set_system_selected(self.system_index as i32);
         ui.set_system_help(help.into());
         ui.set_system_controls_enabled(enabled);
+        ui.set_drop_open(self.drop_open);
+        ui.set_drop_image(self.drop_image.clone());
+        ui.set_drop_message(self.drop_message.clone().into());
     }
 
     pub(super) fn system_action(&mut self, ui: &Home, action: Action) {
+        if self.drop_open {
+            if action == Action::Confirm { self.stop_drop(); }
+            self.paint(ui);
+            return;
+        }
         match action {
             Action::Up | Action::Down => self.system_index = panel_focus(self.system_index, action),
             Action::Left | Action::Right if self.system_index < 2 => {
                 self.system_index = panel_focus(self.system_index, action);
             }
-            Action::Confirm if self.system_index == 5 => {
+            Action::Confirm if self.system_index == 6 => {
                 self.close_modal();
                 self.navigate(ui, 3);
             }
+            Action::Confirm if self.system_index == 5 => self.start_drop(ui),
             Action::Left | Action::Right if matches!(self.system_index, 2 | 3) => {
                 self.adjust_system(action == Action::Right);
             }
@@ -166,8 +177,7 @@ impl State {
                 self.system_note = Some("Usa izquierda y derecha para ajustar.".into());
             }
             Action::Confirm if matches!(self.system_index, 0 | 1) => {
-                self.system_note =
-                    Some("Estado real. Gestión de conectividad pendiente de validar.".into());
+                self.open_connectivity_settings(ui, self.system_index == 1);
             }
             Action::Confirm => {
                 self.system_note =
@@ -176,6 +186,68 @@ impl State {
             _ => {}
         }
         self.paint(ui);
+    }
+
+    fn start_drop(&mut self, ui: &Home) {
+        self.drop_open = true;
+        self.drop_message = "Preparando la conexión local…".into();
+        self.drop_image = slint::Image::default();
+        self.drop_ready = false;
+        if self.trial_mode || self.drop_session.is_some() {
+            self.drop_message = "La transferencia no está disponible en este momento.".into();
+            return;
+        }
+        let Some(directory) = self.launch.as_ref().map(|c| c.directory.clone()) else {
+            self.drop_message = "La transferencia requiere la versión funcional.".into();
+            return;
+        };
+        let Some(profile) = self.drop_profile.clone() else {
+            self.drop_message = "No hay una biblioteca compatible configurada.".into();
+            return;
+        };
+        let weak = ui.as_weak();
+        self.drop_session = Some(crate::rom_drop::Session::start(directory, profile, move || {
+            let _ = weak.upgrade_in_event_loop(|ui| ui.invoke_system_refresh());
+        }));
+    }
+
+    pub(super) fn stop_drop(&mut self) {
+        self.drop_open = false;
+        self.drop_image = slint::Image::default();
+        if let Some(session) = &self.drop_session { session.stop(); }
+    }
+
+    fn poll_drop(&mut self) -> bool {
+        let mut events = Vec::new();
+        if let Some(session) = &self.drop_session {
+            while let Ok(event) = session.events.try_recv() { events.push(event); }
+        }
+        let changed = !events.is_empty();
+        for event in events {
+            match event {
+                crate::rom_drop::Event::Ready(url) => match crate::rom_drop::qr_image(&url) {
+                    Ok(image) if self.drop_open => {
+                        self.drop_image = image;
+                        self.drop_ready = true;
+                        self.drop_message = "Escanea con el móvil conectado a la misma red.".into();
+                    }
+                    _ => if let Some(session) = &self.drop_session { session.stop(); },
+                },
+                crate::rom_drop::Event::Failed => {
+                    self.drop_message = "No se pudo iniciar. Comprueba la red local.".into();
+                }
+                crate::rom_drop::Event::Closed => {
+                    if self.drop_ready { self.drop_refresh = true; }
+                    self.drop_session = None;
+                    if self.drop_open && self.drop_ready {
+                        self.drop_message = "La conexión se ha cerrado.".into();
+                        self.drop_image = slint::Image::default();
+                    }
+                    self.drop_ready = false;
+                }
+            }
+        }
+        changed
     }
 
     fn adjust_system(&mut self, forward: bool) {
@@ -273,13 +345,13 @@ mod tests {
     }
     #[test]
     fn slider_rows_keep_vertical_order_and_limits() {
-        for index in 2..5 {
+        for index in 2..6 {
             assert_eq!(panel_focus(index, Action::Down), index + 1);
         }
-        for index in 3..=5 {
+        for index in 3..=6 {
             assert_eq!(panel_focus(index, Action::Up), index - 1);
         }
-        assert_eq!(panel_focus(5, Action::Down), 5);
+        assert_eq!(panel_focus(6, Action::Down), 6);
         assert_eq!(panel_focus(2, Action::Right), 2);
     }
 }

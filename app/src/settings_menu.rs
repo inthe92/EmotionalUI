@@ -7,7 +7,7 @@ impl State {
         if self.layout != 4 {
             3
         } else if self.options_open {
-            self.system_options.len() + 1
+            self.options_browser.rows(&self.system_options).len()
         } else {
             13
         }
@@ -16,11 +16,7 @@ impl State {
     pub(super) fn paint_settings(&self, ui: &Home) {
         let on = |value| if value { "Activado" } else { "Desactivado" };
         let rows: Vec<(String, String)> = if self.options_open {
-            self.system_options
-                .iter()
-                .map(|e| (e.title.clone(), "Abrir".into()))
-                .chain(std::iter::once(("Volver a Ajustes".into(), String::new())))
-                .collect()
+            self.options_browser.rows(&self.system_options)
         } else if self.layout == 4 {
             vec![
                 (
@@ -63,7 +59,7 @@ impl State {
                     on(self.privacy.record_history).into(),
                 ),
                 (
-                    "Opciones de dArkOS".into(),
+                    "Ajustes de dArkOS".into(),
                     format!("{} herramientas", self.system_options.len()),
                 ),
                 ("Controles del sistema".into(), String::new()),
@@ -87,6 +83,12 @@ impl State {
         };
         ui.set_menu_offset(offset as i32);
         ui.set_options_open(self.options_open);
+        ui.set_settings_title(self.options_browser.title().into());
+        ui.set_settings_hint(
+            self.options_browser
+                .hint(self.menu_index, &self.system_options)
+                .into(),
+        );
         ui.set_menu_titles(ModelRc::new(VecModel::from(
             rows.iter()
                 .skip(offset)
@@ -104,19 +106,54 @@ impl State {
     }
 
     pub(super) fn activate_system_option(&mut self, ui: &Home) {
-        let Some(entry) = self.system_options.get(self.menu_index) else {
-            self.options_open = false;
-            self.menu_index = 11;
-            self.paint(ui);
+        let outcome = self
+            .options_browser
+            .activate(self.menu_index, &self.system_options);
+        self.apply_settings_outcome(ui, outcome);
+    }
+
+    pub(super) fn apply_settings_outcome(
+        &mut self,
+        ui: &Home,
+        outcome: crate::settings_browser::Outcome,
+    ) {
+        use crate::settings_browser::Outcome;
+        match outcome {
+            Outcome::Focus(index) => {
+                self.menu_index = index;
+                ui.set_message("".into());
+            }
+            Outcome::Close => {
+                self.options_open = false;
+                self.menu_index = 11;
+            }
+            Outcome::Controls => self.begin_modal(crate::navigation::Modal::System),
+            Outcome::Launch(relative) => self.queue_launch(
+                ui,
+                crate::supervisor::Request {
+                    system_option: Some(relative),
+                    selected: self.menu_index,
+                    ..Default::default()
+                },
+            ),
+        }
+    }
+
+    pub(super) fn open_connectivity_settings(&mut self, ui: &Home, bluetooth: bool) {
+        let relative = if bluetooth { "Bluetooth.sh" } else { "Wifi.sh" };
+        if !self.system_options.iter().any(|e| e.relative == relative) {
+            self.system_note =
+                Some("La herramienta original no está disponible en esta instalación.".into());
             return;
-        };
-        self.queue_launch(
-            ui,
-            crate::supervisor::Request {
-                system_option: Some(entry.relative.clone()),
-                selected: self.menu_index,
-                ..Default::default()
-            },
-        );
+        }
+        self.close_modal();
+        self.navigate(ui, 3);
+        self.dock_focus = None;
+        self.system_focus = false;
+        self.options_open = true;
+        ui.set_message("".into());
+        self.menu_index = self
+            .options_browser
+            .show_tool(relative, &self.system_options, true);
     }
 }

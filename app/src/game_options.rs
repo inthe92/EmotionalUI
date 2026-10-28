@@ -42,7 +42,7 @@ impl State {
     }
     pub(super) fn open_game_options(&mut self, ui: &Home) {
         let index = if self.library || self.menu && self.menu_from_library {
-            Some(self.library_index)
+            self.library_game()
         } else if self.resume {
             match self.selected {
                 0 => self.recent,

@@ -147,7 +147,91 @@ def isolation(data, ident, functional=False):
     return base/'isolation.cfg', text, directories
 
 
-def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/retroarch/bin'), functional=False):
+def read_preferences(path):
+    """ES writes XML sibling nodes, not necessarily a single document root.
+
+    Read the native format without rewriting it. Invalid/ambiguous preferences
+    must not silently reset a user's emulator selection to our fallback.
+    """
+    raw = path.read_bytes()
+    if len(raw) > 1024*1024 or b'<!DOCTYPE' in raw.upper() or b'<!ENTITY' in raw.upper():
+        raise ValueError('Invalid EmulationStation preferences; preserved without fallback')
+    text = raw.decode('utf-8-sig')
+    text = re.sub(r'^\s*<\?xml[^>]*\?>', '', text, count=1)
+    try:
+        document = ET.fromstring('<emotional-settings-fragment>'+text+'</emotional-settings-fragment>')
+    except ET.ParseError as error:
+        raise ValueError('Unreadable EmulationStation preferences; preserved without fallback') from error
+    preferences = {}
+    for element in document.iter('string'):
+        name, value = element.get('name'), element.get('value')
+        if not name or value is None or not value.strip():
+            continue
+        if name in preferences:
+            raise ValueError('Ambiguous EmulationStation preferences; preserved without fallback')
+        preferences[name] = value
+    return preferences
+
+
+def emulator_catalog(nodes, home, library_root, retroarch_bin_dir, preferences):
+    """Read-only candidates for a future shared ES/EmotionalUI selector.
+
+    Repeated ES system names share one preference key: only offer combinations
+    declared and usable for *every* active root bearing that exact name.
+    Standalone programs and inferred fixed cores are deliberately excluded.
+    Installed ELF headers do not prove that a game or core actually runs.
+    """
+    grouped = {}
+    for node in nodes:
+        name = (node.findtext('name') or '').strip()
+        if not name or len(name) > 96 or any(ord(c) < 32 for c in name):
+            continue
+        try:
+            root = source_path((node.findtext('path') or '').strip(), home)
+            folder = root.name.lower()
+            if (not root.is_dir() or root == library_root or not root.is_relative_to(library_root)
+                    or folder in BLOCKED_SYSTEMS or name.lower() in BLOCKED_SYSTEMS):
+                continue
+            choices = set()
+            for emu in node.findall('./emulators/emulator'):
+                emulator = emu.get('name', '')
+                if emulator not in RETROARCH:
+                    continue
+                try:
+                    architecture, _ = elf(retroarch_bin_dir/emulator)
+                    cfg = home/'.config'/emulator
+                    validate_base(cfg/'retroarch.cfg')
+                except (OSError, ValueError, UnicodeError):
+                    continue
+                for element in emu.findall('./cores/core'):
+                    core = (element.text or '').strip()
+                    if not re.fullmatch(r'[A-Za-z0-9_+-]{1,96}', core):
+                        continue
+                    try:
+                        core_arch, _ = elf(cfg/'cores'/(core+'_libretro.so'), core=True)
+                        if core_arch != architecture or not extensions(node.findtext('extension') or '', folder, core)[0]:
+                            continue
+                    except (OSError, ValueError):
+                        continue
+                    choices.add((emulator, core))
+            grouped.setdefault(name, []).append(choices)
+        except (OSError, ValueError):
+            continue
+    result = []
+    for name, roots in sorted(grouped.items(), key=lambda item: item[0].casefold()):
+        choices = set.intersection(*roots)
+        if not choices:
+            continue
+        result.append({'system': name, 'roots': len(roots),
+                       'current_emulator': preferences.get(name+'.emulator'),
+                       'current_core': preferences.get(name+'.core'),
+                       'choices': [{'emulator': emulator, 'core': core}
+                                   for emulator, core in sorted(choices)]})
+    return result
+
+
+def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/retroarch/bin'), functional=False,
+               include_emulator_catalog=False):
     """Read-only planning. This never launches content or creates directories."""
     systems = absolute(systems).resolve(strict=True)
     home = absolute(home).resolve(strict=True)
@@ -174,12 +258,10 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
     preferences = {}
     settings = home/'.emulationstation/es_settings.cfg'
     if functional and settings.is_file():
-        settings_raw = settings.read_bytes()
-        if len(settings_raw) <= 1024*1024 and b'<!DOCTYPE' not in settings_raw.upper() and b'<!ENTITY' not in settings_raw.upper():
-            try:
-                preferences = {e.get('name'): e.get('value') for e in ET.fromstring(settings_raw).iter('string')}
-            except ET.ParseError:
-                pass
+        preferences = read_preferences(settings)
+    system_names = {(node.findtext('name') or '').strip() for node in nodes}
+    report['unmatched_preferences'] = sorted(key for key in preferences
+        if key.endswith(('.emulator', '.core')) and key.rsplit('.', 1)[0] not in system_names)
     profiles, append_configs, directories = [], {}, {data}
     seen = set()
     for node in nodes:
@@ -205,6 +287,11 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
             ra_nodes = [e for e in emulators if e.get('name') in RETROARCH]
             preferred_emulator = preferences.get(name+'.emulator', default)
             preferred_core = preferences.get(name+'.core')
+            explicit_emulator = preferences.get(name+'.emulator')
+            if explicit_emulator and explicit_emulator not in RETROARCH:
+                skip('explicit standalone emulator selection is not supported; preserved without substitution'); continue
+            if explicit_emulator:
+                ra_nodes = [e for e in ra_nodes if e.get('name') == explicit_emulator]
             ra_nodes.sort(key=lambda e: e.get('name') != preferred_emulator)
             declared = any(e.findall('./cores/core') for e in ra_nodes)
             if declared:
@@ -217,6 +304,11 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
                     candidates = [(e.get('name'), fixed, 'fixed-map') for e in ra_nodes]
                     candidates += [(e, fixed, 'fixed-map') for e in ('retroarch', 'retroarch32')
                                    if e not in [item[0] for item in candidates]]
+            if preferred_core:
+                candidates = [(emu, [core for core in cores if core == preferred_core], origin)
+                              for emu, cores, origin in candidates]
+            if explicit_emulator:
+                candidates = [candidate for candidate in candidates if candidate[0] == explicit_emulator]
             selected = None
             for emulator, cores, origin in candidates:
                 try:
@@ -323,7 +415,8 @@ def build_plan(systems, home, library_root, data, retroarch_bin_dir=Path('/opt/r
             text += key+' = '+json.dumps(value, ensure_ascii=False)+'\n'
     if len(text.encode('utf-8')) > 512 * 1024:
         raise ValueError('Launcher document exceeds the 512 KiB runtime limit')
-    return {'profiles': text, 'append_configs': append_configs,
+    catalog = emulator_catalog(nodes, home, library_root, retroarch_bin_dir, preferences) if include_emulator_catalog else []
+    return {'profiles': text, 'append_configs': append_configs, 'emulator_catalog': catalog,
             'directories': sorted(map(str, directories)), 'report': report}
 
 

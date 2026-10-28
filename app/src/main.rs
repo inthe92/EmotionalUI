@@ -11,11 +11,14 @@ mod focus;
 #[cfg(feature = "gpu-material")]
 mod gpu_material;
 mod launch_ui;
+mod library_browser;
+mod library_ui;
 #[cfg(any(debug_assertions, feature = "simulator"))]
 mod moments;
 mod motion;
 mod navigation;
 mod performance;
+mod rom_drop;
 #[cfg(test)]
 mod pipeline_audit_tests;
 mod scene_cache;
@@ -28,6 +31,7 @@ mod store;
 mod supervisor;
 mod system_settings;
 mod settings_menu;
+mod settings_browser;
 mod trial;
 mod trial_replay;
 use chrono::{Datelike, NaiveDateTime};
@@ -73,6 +77,16 @@ impl Default for Config {
 fn main() -> Result<(), Box<dyn Error>> {
     if std::env::args().nth(1).as_deref() == Some("--version") {
         println!("EmotionalUI v{}", include_str!("../VERSION").trim());
+        return Ok(());
+    }
+    let inspect_args: Vec<String> = std::env::args().collect();
+    if inspect_args.iter().any(|a| a == "--system-settings-check") {
+        if inspect_args.len() != 3 || inspect_args[1] != "--system-settings-check" || !PathBuf::from(&inspect_args[2]).is_absolute() {
+            return Err("Use --system-settings-check with one absolute installed tools root".into());
+        }
+        use emotional_services::system_options;
+        let entries = system_options::discover(std::path::Path::new(&inspect_args[2]))?;
+        println!("{}", system_options::inventory_report(&entries));
         return Ok(());
     }
     let result = supervisor::dispatch().and_then(|handled| if handled { Ok(()) } else { run() });
@@ -793,6 +807,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         system_service: None,
         system_snapshot: None,
         system_note: None,
+        drop_session: None,
+        drop_open: false,
+        drop_ready: false,
+        drop_refresh: false,
+        drop_message: String::new(),
+        drop_image: slint::Image::default(),
+        drop_profile: launcher_profile.clone().filter(|_| functional_mode),
         dock_focus: (selected == 2 && concept == 4).then_some(2),
         dock_return: 0,
         trial_mode,
@@ -831,6 +852,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
             .as_ref()
             .and_then(|n| moments::NAMES.iter().position(|v| v == n)),
         imported,
+        library_browser: library_browser::Browser::new(&games),
         games,
         order,
         selected,
@@ -839,6 +861,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         menu: false,
         menu_index: 0,
         options_open: false,
+        options_browser: settings_browser::Browser::default(),
         system_options: launcher_profile.as_deref().and_then(|profile| {
             let config: emotional_services::launcher::configured::Configuration = toml::from_str(&std::fs::read_to_string(profile).ok()?).ok()?;
             config.system_options_root.and_then(|root| emotional_services::system_options::discover(&root).ok())
@@ -886,7 +909,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         if let Some(tool) = &position.system_option {
             state.menu = true;
             state.options_open = true;
-            state.menu_index = state.system_options.iter().position(|e| &e.relative == tool).unwrap_or(0);
+            state.menu_index = state.options_browser.show_tool(tool, &state.system_options, false);
         }
         state.resume = position.resume;
         state.selected = emotional_core::continuity::clamp(
@@ -900,6 +923,17 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         state.library_index = position
             .library_index
             .min(state.games.len().saturating_sub(1));
+        if position.library {
+            if let Some(view)=&position.library_view {
+                state.library_browser.restore_saved(view,&state.games,Some(&position.game_id));
+            } else {
+                // Older request files predate grouped navigation. Open all
+                // games, then recover the selected game by its stable ID.
+                state.library_browser.choose(1,&state.games);
+                state.library_browser.restore(position.library_index,Some(&position.game_id));
+            }
+            state.sync_library_game();
+        }
     }
     state.order = discovery_presentation::presentation_order(
         &state.order,
@@ -987,7 +1021,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         ui.on_system_select(move |index| {
             if let Some(ui) = weak.upgrade() {
                 let mut state = state.borrow_mut();
-                state.system_index = index.clamp(0, 5) as usize;
+                state.system_index = index.clamp(0, 6) as usize;
                 state.system_action(&ui, emotional_core::controls::Action::Confirm);
             }
         });
@@ -998,7 +1032,7 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         ui.on_system_adjust(move |index, forward| {
             if let Some(ui) = weak.upgrade() {
                 let mut state = state.borrow_mut();
-                state.system_index = index.clamp(0, 5) as usize;
+                state.system_index = index.clamp(0, 6) as usize;
                 state.system_action(
                     &ui,
                     if forward {
@@ -1024,6 +1058,10 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         });
     }
     // Start work only after window/model construction. No XML/thumbnail decode in callbacks.
+    let drop_refresh_profile = launcher_profile.clone().filter(|_| functional_mode);
+    let drop_refresh_db = path.clone();
+    let drop_refresh_root = trial_root.clone();
+    let drop_refresh_atlas = atlas_path.clone();
     let trial_updates = (trial_mode || functional_mode).then(|| {
         if let Some(profile) = launcher_profile.filter(|_| functional_mode) {
             return trial::start_functional(
@@ -1042,13 +1080,23 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
         )
     });
     let trial_timer = slint::Timer::default();
-    if let Some(updates) = trial_updates {
+    if let Some(mut updates) = trial_updates {
         let weak = ui.as_weak();
         let s = shared.clone();
         trial_timer.start(
             slint::TimerMode::Repeated,
             std::time::Duration::from_millis(50),
             move || {
+                let refresh = {
+                    let mut state = s.borrow_mut();
+                    std::mem::take(&mut state.drop_refresh)
+                };
+                if refresh {
+                    if let Some(profile) = drop_refresh_profile.clone() {
+                        updates = trial::start_functional(drop_refresh_db.clone(), drop_refresh_root.clone(),
+                            drop_refresh_atlas.clone(), atlas_experimental, profile);
+                    }
+                }
                 if let (Some(ui), Ok(update)) = (weak.upgrade(), updates.try_recv()) {
                     let mut state = s.borrow_mut();
                     match update {
@@ -1080,6 +1128,8 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                             }
                             state.atlas_explanations = update.explanations;
                             state.games = update.games;
+                            state.rebuild_library();
+                            ui.set_library_offset(-1);
                             state.local_art = update.art;
                             ui.set_artwork_generation(ui.get_artwork_generation().wrapping_add(1));
                             ui.set_local_art_id("".into());
@@ -1359,6 +1409,13 @@ Desarrollo: F2/F3 escenarios, [/] paletas."#
                 eprintln!("Action failed: {e}");
                 ui.set_message("No pudimos guardar el cambio.".into());
             }
+        }
+    });
+    let weak = ui.as_weak();
+    let s = shared.clone();
+    ui.on_library_search_key(move |key| {
+        if let Some(ui)=weak.upgrade() {
+            if key>=0 {s.borrow_mut().library_search_key(&ui,key as usize);}
         }
     });
     let weak = ui.as_weak();
